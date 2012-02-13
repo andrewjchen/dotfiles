@@ -1,0 +1,13 @@
+#!/bin/bash
+#stalonetray&
+#feh --bg-scale ~/.wallpaper/battleship.png&
+#feh --bg-scale ~/.wallpaper/blazingbristlecone.jpg&
+#feh --bg-scale ~/.wallpaper/tardis.jpg&
+feh --bg-scale ~/.wallpaper/homestuck.bq-exile.png&
+#feh --bg-scale ~/.wallpaper/homestuck.wk.png&
+xsetroot -cursor_name left_ptr
+trayer --edge top --align center --widthtype pixel --width 100 --SetDockType false --SetPartialStrut false  --transparent true --alpha 0 --tint 0x000000 --expand false --heighttype pixel --height 8 &
+#~/bash/networkmanager&
+#synergys
+eject -i 1
+

@@ -1,0 +1,65 @@
+XTerm.color0: #000000
+XTerm.color2: #aece92
+XTerm.color3: #968a38
+
+XTerm*background: #000000
+XTerm*foreground: #ffffff
+XTerm*geometry:  120x30
+
+urxvt*termName: rxvt-unicode
+#urxvt*termName: xterm-color
+#URxvt*transparent: true
+URxvt*scrollBar:   false
+#URxvt*geometry:    124x24    #I don't use the whole screen, if you want a full screen term don't bother with this and see below.
+#URxvt*borderLess:  true
+URxvt*foreground:  #ffffff
+
+URxvt.geometry: 400x30 
+URxvt.buffered: true
+URxvt.background: black
+#URxvt.foreground: green
+URxvt.cursorColor: yellow
+URxvt.underlineColor: green
+URxvt.font:xft:Bitstream Vera Sans Mono:pixelsize=12:antialias=true
+URxvt.perl-ext-common:  default,tabbed
+URxvt.tabbed.tabbar-fg: 2
+URxvt.tabbed.tabbar-bg: -1
+URxvt.tabbed.tab-fg:    3
+URxvt.tabbed.tab-bg:    -1
+
+!------------
+!True Transparency
+!------------
+#set to 32-bit for real transparency (compositing required (see xcompmgr)
+#urxvt*depth:             32
+#transparent=0000 opaque=ffff
+#urxvt*background: rgba:1111/1111/1111/dddd
+#urxvt*background: rgba:1111/1111/1111/0000
+
+
+!------------------
+!False tranparency
+!------------------
+URxvt.transparent: true
+URxvt.shading: 10
+#URxvt.shading: 10
+
+Urxvt.secondaryScroll:  true    # Enable Shift-PageUp/Down in screen
+URxvt*scrollBar:false
+
+!aterm settings-------------------------------------------------------------     
+
+aterm*background:               black
+aterm*foreground:               white
+aterm*transparent:              true
+aterm*shading:                  30
+aterm*cursorColor:              gray
+aterm*saveLines:                2000
+!aterm*tinting:                 gray
+aterm*scrollBar:                false
+!aterm*scrollBar_right:          true
+aterm*transpscrollbar:          true
+aterm*borderwidth:              0
+aterm*geometry:                 80x25
+aterm*fading:			40
+

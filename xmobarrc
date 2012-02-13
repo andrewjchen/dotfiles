@@ -1,0 +1,47 @@
+
+Config { font = "Terminal"
+       , bgColor = "black"
+       , fgColor = "grey"
+       , position = Top
+       --, position = Static { xpos = 0 , ypos = 0, width = 1440, height = 14 }
+       , lowerOnStart = False
+       , commands = [ Run Network "wlan0" [
+					"-L","0",
+					"-H","32",
+					"--normal","green",	
+					"--high","red"] 10
+
+                    , Run Network "eth1" ["-L","0",	
+					"-H","32",
+					"--normal","green",	
+					"--high","red"] 10
+
+                    , Run MultiCpu [ "-t", "<total0> <bar0> <total1> <bar1> ", 
+					"-L", "3",
+					"-H", "50", 	
+					"--normal", "green", 
+					"--high", "read"] 10
+                    
+                    , Run Memory ["-t","Mem:<used> <usedratio>%"] 10
+
+                    , Run Swap [] 10
+                    --, Run Com "uname" ["-s","-r"] "" 36000
+    		    , Run Date "%I:%M:%S" "date" 10
+		    , Run StdinReader
+		    , Run Battery [ "-t","BAT0<left> ", 
+					"-L"," 20",
+					"-H","70",
+					"--normal","green", 
+					"--high","blue", 
+					"--low","red" ] 50
+
+		    , Run Com "cat" ["/proc/loadavg", "| awk '{print $1 }' " ]  "loadavg" 1 
+            , Run Com "acpi" [ "-t", "| grep -o [0-9][0-9].[0-9]" ] "temp" 1
+            
+            ]
+                    
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{ %multicpu% | %memory% * %swap% | LA %loadavg% | %temp%°C | %wlan0% <fc=#ee9a00>%date%</fc> %battery%"
+       }
+
