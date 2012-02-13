@@ -26,7 +26,7 @@ import qualified Data.Map        as M
  
 myBorderWidth   = 1
 main = do
-    xmproc <- spawnPipe "/usr/bin/xmobar /home/ajc/.xmobarrc"
+    xmproc <- spawnPipe "/usr/bin/xmobar /home/grt/.xmobarrc"
     xmonad $ defaultConfig {
         terminal           = "urxvt"
         , modMask            = mod4Mask
