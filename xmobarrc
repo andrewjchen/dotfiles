@@ -42,6 +42,6 @@ Config { font = "Terminal"
                     
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %multicpu% | %memory% * %swap% | LA %loadavg% | %temp%°C | %wlan0% <fc=#ee9a00>%date%</fc> %battery%"
+       , template = "%StdinReader% }{ %multicpu% %hostname% | %memory% * %swap% | LA %loadavg% | %temp%°C | %wlan0% <fc=#ee9a00>%date%</fc> %battery%"
        }
 
