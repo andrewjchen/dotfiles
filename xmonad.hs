@@ -115,8 +115,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask                         , xK_Escape         ), spawn "sleep 1 && xset dpms force off")
     --fan control
     --sounds!
-    , ((modMask                         , xK_F1         ), spawn "mplayer /home/ajc/Media/sounds/found.mp3")
-    , ((modMask                         , xK_F2         ), spawn "mplayer /home/ajc/Media/sounds/tracked.wav")
+    , ((modMask                         , xK_F1         ), spawn "/home/ajc/ros_workspace/gunncs_navigation/windowSession.sh")
+    , ((modMask                         , xK_F2         ), spawn "mplayer /home/ajc/Media/sounds/found.mp3")
     , ((modMask                         , xK_F3         ), spawn "mplayer /home/ajc/Media/sounds/portalgun_shoot_red1.wav")
     , ((modMask                         , xK_F4         ), spawn "mplayer /home/ajc/Media/sounds/wpn_portal_gun_fire_red_01.wav")
     --, ((modMask                         , xK_F5       ), spawn "mplayer /home/ajc/Media/Music/sounds/rocketlaunch.wav")
