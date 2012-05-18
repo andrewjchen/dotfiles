@@ -47,7 +47,6 @@ main = do
                                  ppHidden = xmobarColor "white" ""
                              }
     }
-
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
  
     [ ((modMask              , xK_Return   ), spawn $ XMonad.terminal conf)
@@ -76,7 +75,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((0                    , 0x1008ff30  ), shellPrompt defaultXPConfig)
     , ((0                    , 0x1008ff13  ), spawn "amixer -q set PCM 1dB+")
     , ((0                    , 0x1008ff11  ), spawn "amixer -q set PCM 1dB-")
-    , ((0                    , 0x1008ff12  ), spawn "amixer -q set Master toggle")
+    --, ((0                    , 0x1008ff12  ), spawn "amixer -q set Master toggle")
     , ((0                    , 0x1008ff16  ), spawn "cmus-remote --prev")
     , ((0                    , 0x1008ff17  ), spawn "cmus-remote --next")
     , ((0                    , 0x1008ff14  ), spawn "cmus-remote --pause")
@@ -111,6 +110,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask  .|. controlMask .|. shiftMask, xK_Down ), sendMessage (DecreaseDown  1))
     , ((modMask  .|. controlMask .|. shiftMask, xK_Up   ), sendMessage (DecreaseUp    1))
 
+    , ((modMask                         , xK_Delete         ), spawn "xinput set-prop 12 \"Device Enabled\" 0")
+    , ((modMask                         , xK_Insert         ), spawn "xinput set-prop 12 \"Device Enabled\" 1")
     --screenoff
     , ((modMask                         , xK_Escape         ), spawn "sleep 1 && xset dpms force off")
     --fan control
