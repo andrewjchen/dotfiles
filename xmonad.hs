@@ -44,7 +44,9 @@ main = do
                                  ppOutput = hPutStrLn xmproc,
                                  ppTitle = xmobarColor "green" "" . shorten 50,
                                  ppHiddenNoWindows = xmobarColor "gray" "",
-                                 ppHidden = xmobarColor "white" ""
+                                 ppHidden = xmobarColor "white" "",
+                                 ppVisible = xmobarColor "white" "" . wrap "<" ">",
+                                 ppCurrent = xmobarColor "yellow" "" . wrap "[" "]"
                              }
     }
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
@@ -110,18 +112,21 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask  .|. controlMask .|. shiftMask, xK_Down ), sendMessage (DecreaseDown  1))
     , ((modMask  .|. controlMask .|. shiftMask, xK_Up   ), sendMessage (DecreaseUp    1))
 
+    , ((modMask                         , xK_Home), spawn "sudo /etc/acpi/sleep.sh")
     , ((modMask                         , xK_Delete         ), spawn "xinput set-prop 12 \"Device Enabled\" 0")
+    , ((modMask                         , xK_Insert         ), spawn "xinput set-prop 12 \"Device Enabled\" 1")
     , ((modMask                         , xK_Insert         ), spawn "xinput set-prop 12 \"Device Enabled\" 1")
     --screenoff
     , ((modMask                         , xK_Escape         ), spawn "sleep 1 && xset dpms force off")
     --fan control
     --sounds!
-    , ((modMask                         , xK_F1         ), spawn "/home/ajc/ros_workspace/gunncs_navigation/windowSession.sh")
-    , ((modMask                         , xK_F2         ), spawn "mplayer /home/ajc/Media/sounds/found.mp3")
-    , ((modMask                         , xK_F3         ), spawn "mplayer /home/ajc/Media/sounds/portalgun_shoot_red1.wav")
-    , ((modMask                         , xK_F4         ), spawn "mplayer /home/ajc/Media/sounds/wpn_portal_gun_fire_red_01.wav")
+    , ((modMask                         , xK_F1         ), spawn "/home/ajc/bash/windowSession1.sh")
+    , ((modMask                         , xK_F2         ), spawn "/home/ajc/bash/windowSession2.sh")
+    , ((modMask                         , xK_F3         ), spawn "mplayer /home/ajc/Media/sounds/found.mp3")
+    , ((modMask                         , xK_F4         ), spawn "mplayer /home/ajc/Media/sounds/portalgun_shoot_red1.wav")
+    , ((modMask                         , xK_F5         ), spawn "mplayer /home/ajc/Media/sounds/wpn_portal_gun_fire_red_01.wav")
     --, ((modMask                         , xK_F5       ), spawn "mplayer /home/ajc/Media/Music/sounds/rocketlaunch.wav")
-    , ((modMask                         , xK_F5         ), spawn "mplayer /home/ajc/Media/Music/sounds/thetruth.mp3")
+    --, ((modMask                         , xK_F6         ), spawn "mplayer /home/ajc/Media/Music/sounds/thetruth.mp3")
     , ((modMask                         , xK_F7         ), spawn "mplayer /home/ajc/Media/Music/sounds/elevatorstuck.mp3")
     , ((modMask                         , xK_F8         ), spawn "mplayer /home/ajc/Media/Music/sounds/wakeup.mp3")
     , ((modMask                         , xK_F9         ), spawn "mplayer /home/ajc/Media/sounds/slinky.flv")
@@ -160,7 +165,7 @@ myManageHook = composeAll . concat $
     ]
     where
         myIgnores       = ["panel"]
-        myFloats        = ["feh", "GIMP", "gimp", "gimp-2.4", "Galculator", "VirtualBox", "VBoxSDL", "mplayer", "original-left", "original-right", "disparity", "grayscale", "original"]
-        myOtherFloats   = ["alsamixer", "Bon Echo Preferences", "Mail/News Preferences", "Bon Echo - Restore Previous Session"] 
+        myFloats        = ["feh", "GIMP", "gimp", "gimp-2.4", "Galculator", "VirtualBox", "VBoxSDL", "mplayer", "original-left", "original-right", "disparity", "grayscale", "Processing"]
+        myOtherFloats   = ["alsamixer", "Bon Echo Preferences", "Mail/News Preferences", "Bon Echo - Restore Previous Session", "RXPlot"] 
 
 

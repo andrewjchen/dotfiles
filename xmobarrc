@@ -4,7 +4,7 @@ Config { font = "Terminal"
        , fgColor = "grey"
        , position = Top
        --, position = Static { xpos = 0 , ypos = 0, width = 1440, height = 14 }
-       , lowerOnStart = False
+       , lowerOnStart = True 
        , commands = [ Run Network "wlan0" [
 					"-L","0",
 					"-H","32",
@@ -16,11 +16,11 @@ Config { font = "Terminal"
 					"--normal","green",	
 					"--high","red"] 10
 
-                    , Run MultiCpu [ "-t", "<total0> <bar0> <total1> <bar1> ", 
+                    , Run MultiCpu [ "-t", "<total0> <total1> <total2> <total3> ", 
 					"-L", "3",
 					"-H", "50", 	
 					"--normal", "green", 
-					"--high", "read"] 10
+					"--high", "red"] 1
                     
                     , Run Memory ["-t","Mem:<used> <usedratio>%"] 10
 

@@ -46,6 +46,8 @@ URxvt.shading: 10
 
 Urxvt.secondaryScroll:  true    # Enable Shift-PageUp/Down in screen
 URxvt*scrollBar:false
+URxvt.font: xft:Terminus:size=10
+#URxvt.font: 9x15
 
 !aterm settings-------------------------------------------------------------     
 

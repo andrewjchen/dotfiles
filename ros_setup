@@ -17,6 +17,10 @@ export ROS_IP=localhost
 export ROS_HOSTNAME=broken-poseidon
 export ROS_MASTER_URI=http://broken-poseidon:11311/
 
+#export ROS_IP=192.168.0.100
+#export ROS_HOSTNAME=192.168.0.100
+#export ROS_MASTER_URI=http://192.168.0.99:11311/
+
 #export ROS_IP=10.1.93.30
 #export ROS_HOSTNAME=10.1.93.30
 #export ROS_MASTER_URI=http://10.1.93.30:11311

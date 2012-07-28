@@ -1,11 +1,2 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =9
-let g:netrw_dirhist_1='/media/fdrive/Andrew/tmp/ajc/.config/pcmanfm'
-let g:netrw_dirhist_2='/home/ajc/grt_workspace/grtframeworkv6/src'
-let g:netrw_dirhist_3='/home/ajc/Downloads/mm/clients/samplejava'
-let g:netrw_dirhist_4='/home/ajc/ros_workspace/grt_ai/src'
-let g:netrw_dirhist_5='/opt/ros/electric/stacks/image_pipeline/image_view'
-let g:netrw_dirhist_6='/home/ajc/ros_workspace/grt_ai/nodes'
-let g:netrw_dirhist_7='/home/ajc/ros_workspace'
-let g:netrw_dirhist_8='/home/ajc/.xmonad'
-let g:netrw_dirhist_9='/home/ajc/ros_workspace'
+let g:netrw_dirhist_cnt =0
