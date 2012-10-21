@@ -23,6 +23,7 @@ import Data.Monoid
  
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
+
  
 myBorderWidth   = 1
 main = do
@@ -122,8 +123,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     --sounds!
     , ((modMask                         , xK_F1         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession1.sh")
     , ((modMask                         , xK_F2         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession2.sh")
-    , ((modMask                         , xK_F3         ), spawn "mplayer /home/ajc/git/dotfiles/sounds/found.mp3")
-    , ((modMask                         , xK_F4         ), spawn "mplayer /home/ajc/git/dotfiles//sounds/portalgun_shoot_red1.wav")
+    , ((modMask                         , xK_F3         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession3.sh")
+    , ((modMask                         , xK_F4         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession4.sh")
+    --, ((modMask                         , xK_F4         ), spawn "mplayer /home/ajc/git/dotfiles//sounds/portalgun_shoot_red1.wav")
     , ((modMask                         , xK_F5         ), spawn "mplayer /home/ajc/git/dotfiles/sounds/wpn_portal_gun_fire_red_01.wav")
     --, ((modMask                         , xK_F5       ), spawn "mplayer /home/ajc/Media/Music/sounds/rocketlaunch.wav")
     --, ((modMask                         , xK_F6         ), spawn "mplayer /home/ajc/Media/Music/sounds/thetruth.mp3")
