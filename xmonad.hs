@@ -76,8 +76,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask              , xK_q        ), spawn "xmonad --recompile; xmonad --restart")
     , ((modMask              , xK_F2       ), shellPrompt defaultXPConfig)
     , ((0                    , 0x1008ff30  ), shellPrompt defaultXPConfig)
-    , ((0                    , 0x1008ff13  ), spawn "amixer -q set PCM 1dB+")
-    , ((0                    , 0x1008ff11  ), spawn "amixer -q set PCM 1dB-")
+    , ((0                    , 0x1008ff13  ), spawn "amixer -q set Master 1dB+")
+    , ((0                    , 0x1008ff11  ), spawn "amixer -q set Master 1dB-")
     --, ((0                    , 0x1008ff12  ), spawn "amixer -q set Master toggle")
     , ((0                    , 0x1008ff16  ), spawn "cmus-remote --prev")
     , ((0                    , 0x1008ff17  ), spawn "cmus-remote --next")
@@ -119,12 +119,12 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask                         , xK_Insert         ), spawn "xinput set-prop 12 \"Device Enabled\" 1")
     --screenoff
     , ((modMask                         , xK_Escape         ), spawn "sleep 1 && xset dpms force off")
-    --fan control
+    --fan controlg
     --sounds!
-    , ((modMask                         , xK_F1         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession1.sh")
-    , ((modMask                         , xK_F2         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession2.sh")
-    , ((modMask                         , xK_F3         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession3.sh")
-    , ((modMask                         , xK_F4         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession4.sh")
+    , ((modMask                         , xK_F1         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession.sh")
+    , ((modMask                         , xK_F2         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession1.sh")
+    , ((modMask                         , xK_F3         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession2.sh")
+    , ((modMask                         , xK_F4         ), spawn "/home/ajc/git/dotfiles/scripts/windowSession3.sh")
     --, ((modMask                         , xK_F4         ), spawn "mplayer /home/ajc/git/dotfiles//sounds/portalgun_shoot_red1.wav")
     , ((modMask                         , xK_F5         ), spawn "mplayer /home/ajc/git/dotfiles/sounds/wpn_portal_gun_fire_red_01.wav")
     --, ((modMask                         , xK_F5       ), spawn "mplayer /home/ajc/Media/Music/sounds/rocketlaunch.wav")

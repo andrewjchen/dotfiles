@@ -4,44 +4,46 @@ Config { font = "Terminal"
        , fgColor = "grey"
        , position = Top
        --, position = Static { xpos = 0 , ypos = 0, width = 1440, height = 14 }
-       , lowerOnStart = True 
+       , lowerOnStart = True
        , commands = [ Run Network "wlan0" [
 					"-L","0",
 					"-H","32",
-					"--normal","green",	
+					"--normal","green",
 					"--high","red"] 10
 
-                    , Run Network "eth1" ["-L","0",	
+                    , Run Network "eth1" ["-L","0",
 					"-H","32",
-					"--normal","green",	
+					"--normal","green",
 					"--high","red"] 10
 
-                    , Run MultiCpu [ "-t", "<total0> <total1> <total2> <total3> ", 
+                    , Run MultiCpu [ "-t", "<total0>\t <total1>\t <total2>\t <total3> ",
 					"-L", "3",
-					"-H", "50", 	
-					"--normal", "green", 
-					"--high", "red"] 1
-                    
-                    , Run Memory ["-t","Mem:<used> <usedratio>%"] 10
+					"-H", "50",
+					"--normal", "green",
+					"--high", "red"] 10
+                    , Run Memory ["-t","Mem:<used> <usedratio>%",
+                                        "-L", "3",
+					"-H", "3000",
+					"--normal", "green",
+					"--high", "red"      ] 10
 
-                    , Run Swap [] 10
+                    , Run Swap [ ] 10
                     --, Run Com "uname" ["-s","-r"] "" 36000
     		    , Run Date "%I:%M:%S" "date" 10
 		    , Run StdinReader
-		    , Run Battery [ "-t","BAT0<left> ", 
+		    , Run Battery [ "-t","BAT0<left> ",
 					"-L"," 20",
 					"-H","70",
-					"--normal","green", 
-					"--high","blue", 
+					"--normal","green",
+					"--high","blue",
 					"--low","red" ] 50
 
-		    , Run Com "cat" ["/proc/loadavg", "| awk '{print $1 }' " ]  "loadavg" 1 
-            , Run Com "acpi" [ "-t", "| grep -o [0-9][0-9].[0-9]" ] "temp" 1
-            
+		    , Run Com "cat" ["/proc/loadavg", "| awk '{print $1 }' " ]  "loadavg" 10
+            , Run Com "acpi" [ "-t", "| grep -o [0-9][0-9].[0-9]" ] "temp" 10
             ]
-                    
+
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %multicpu% %hostname% | %memory% * %swap% | LA %loadavg% | %temp%°C | %wlan0% <fc=#ee9a00>%date%</fc> %battery%"
+       , template = "%StdinReader% }{ %multicpu% %hostname% | %memory% - %swap% | LA %loadavg% | %temp%°C | %wlan0% <fc=#ee9a00>%date%</fc> %battery%"
        }
 
