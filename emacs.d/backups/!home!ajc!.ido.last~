@@ -1,0 +1,58 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/ajc/emacs_workspace/" . "emacs.d/")
+ ("/home/ajc/" . "quicklisp/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/ajc/lisp_workspace/"
+ "/home/ajc/.emacs.d/"
+ "/home/ajc/quicklisp/"
+ "/home/ajc/emacs_workspace/slime/"
+ "/home/ajc/scheme_workspace/"
+ "/home/ajc/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "s1.lisp"
+ "hello.lisp"
+ "init.el"
+ "slime-helper.el"
+ "README"
+ "sicp.1.17.scm"
+ ".xmobarrc"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/ajc/lisp_workspace/" (20634 54727) "s5.lisp" "s11.lisp" "s7.lisp" "s8.lisp" "s4.lisp" "hello.fasl" "s3.lisp" "s9.lisp" "s6.lisp" "s2.lisp" "s1.lisp" ".#s1.lisp" "../" "./" "hello.lisp")
+
+ ("/home/ajc/" (20634 52443) "Dropbox/" ".stellarium/" ".pulse/" ".local/" ".pulse-cookie" ".gnome2/" ".java/" ".racket/" "angel-stage_workspace/" "grub" ".odbc.ini" "clojure_workspace/" ".cbp2make/" ".fontconfig/" "Media/" "pie_workspace/" "gtk-3.0/" ".log/" ".baudline/" "sudoers" ".hplip/" ".xscreensaver" ".nv/" "bak/" ".icedtea/" ".swfinfo" ".drirc" ".xmonad/" ".gvfs/" "callgrind.out.14737" "foo" ".ssh/" "roslib" "lisp_workspace/" "berkeley/" ".pki/" ".emacs.d.bak/" ".fehbg" ".aptitude/" "Mail/" "Steam/" ".octave_hist" ".shotwell/" "philosophy/" ".synaptic/" ".xinitrc" ".lein/" ".vimrc" "join-tutorial.pdf" ".mission-control/" "kyle_quicklisp.tar.xz" ".audacity-data/" ".emacs-places" "android_workspace/" ".gconf/" ".gnupg/" ".xpaint/" "astrophotomix_workspace/" ".Skype/" ".cups/" ".jackdrc" "git/" ".bashrc" ".gimp-2.6/" ".kde/" "Music/" ".node-gyp/" ".profile" "callgrind.out.23902" "Assignment 4.doc" ".config/" "mnt/" ".emacs.d/" "ucb-scheme-1.3.6-2-x86_64.pkg.tar.xz" ".ido.last" ".matplotlib/" ".wallpaper/" "steam_workspace/" ".bash_logout" ".dmenu_cache" ".synergy.conf" ".sudo_as_admin_successful" "emacs_workspace/" ".hardinfo/" ".lesshst" ".mozilla/" ".ros/" ".mysql_history" "Downloads/" ".dropbox/" "foo~" ".sage/" ".sylpheed-2.0/" ".dmrc" ".jline-reply.history" ".steampath" ".appdata/" ".gnome2_private/" "octave_workspace/" "nodejs_workspace/" ".gtk-bookmarks" "courtIchiro_workspace/" ".viminfo" ".bashrc.bak" ".ogre/" "schedule.pdf" ".eclipse/" "tmp/" "gigantoraptor_workspace/" "quicklisp/" ".android/" ".emacs.d.pre-prelude.tar" ".swt/" ".xournal/" ".npm/" ".Xresources" "Videos/" ".ICEauthority" "bspoker_workspace/" ".arduino/" ".moc/" ".steam/" ".turtlebot_dashboard" "coverletter.pdf" "paypal-webassign" ".slime-history.eld" ".Xdefaults" "rankmy_workspace/" "iaroc/" "rublargh_workspace/" "output.pdf" "electronics_workspace/" "schedule-visual.pdf" ".muttrc" "sketchbook/" ".mc/" ".gstreamer-0.10/" ".gtkrc-2.0" "PKGBUILD" "opencv_workspace/" "kyle_emacs.tar.xz" ".purple/" ".gegl-0.0/" ".xvidcaprc" "ros_workspace/" "wic_workspace/" ".mysql/" "scheme_workspace/" ".processing/" ".dbus/" "Projects/" ".bash_history" "octave-core" "trajectoryOptimization_workspace/" "vmware/" ".mutt/" ".bash_aliases" ".codeblocks/" "calsol_workspace/" "config.vcg" ".gitconfig" ".PlayOnLinux/" "examples.desktop" ".gitk" ".face" ".quicksynergy/" ".libreoffice/" "optar-1-4-x86_64.pkg.tar.xz" ".irssi/" ".vim/" "Bitcasa/" "node_modules/" ".macromedia/" ".vimperator/" ".vmware/" ".Xauthority" ".dia/" "maths_workspace/" "test-0000.avi" ".steampid" ".sbclrc" "Documents/" ".esd_auth" "Screenshots/" ".mplayer/" ".ipython/" "Pictures/" ".bitcasa/" ".python27_compiled/" ".adobe/" "bin/" ".icons/" "Desktop/" "callgrind.out.12998" "bash/" ".xsession-errors" ".sane/" "domainname.pdf" ".thumbnails/" ".mono/" "netform_workspace/" ".cache/" ".pentadactyl/" "wingMorphing_workspace/" ".recently-used" ".subversion/" "xms" ".VirtualBox/" "cmu_workspace/" ".m2/" ".xmobarrc" ".slime/" ".gksu.lock" ".texmf-var/" ".emacs.d.pre-prelude.tar.bak" ".dropbox.bak/" "callgrind.out.11510" ".ghc/" ".wine/" ".rviz/" "Dropbox.bak/" "../" "./")
+
+ ("/home/ajc/.emacs.d/" (20634 51897) "backups/" "auto-save-list/" "snippets/" "plugins/" "hacklist" "autosaves/" "ac-comphist.dat" "color-theme" "themes/" "../" "./" "init.el")
+
+ ("/home/ajc/quicklisp/" (20633 61843) "dists/" "retired/" "tmp/" "quicklisp/" "cache/" "setup.lisp" "slime-helper.el" "local-projects/" "../" "./" "quicklisp.lisp" "asdf.lisp")
+
+ ("/home/ajc/emacs_workspace/slime/" (20634 46932) "HACKING" "slime.el" "swank-corman.lisp" "swank-loader.lisp" "contrib/" "swank.lisp" "slime-autoloads.el" "swank-scl.lisp" "swank-source-file-cache.lisp" "xref.lisp" "swank-rpc.lisp" "swank.asd" "swank-ecl.lisp" ".#README" "swank-backend.lisp" "ChangeLog" "mkdist.sh" "swank-source-path-parser.lisp" "swank-allegro.lisp" "swank-gray.lisp" "README" "swank-lispworks.lisp" "swank-ccl.lisp" "PROBLEMS" "swank-sbcl.lisp" "nregex.lisp" "start-swank.lisp" "doc/" "swank-cmucl.lisp" "swank-abcl.lisp" "CVS/" "../" "metering.lisp" "sbcl-pprint-patch.lisp" "NEWS" "./" "test.sh" ".cvsignore" "hyperspec.el" "swank-clisp.lisp" "swank-match.lisp")
+
+ ("/home/ajc/emacs_workspace/" (20634 46881) "slime/" "kyle_quicklisp.tar.xz" "portable_quicklisp/" "kyle_emacs.tar.xz" "portable_emacs_d/" "../" "./" "emacs.d/")
+
+ ("/home/ajc/scheme_workspace/" (20628 57532) "sicp.1.8.scm" "sicp.2.18~" "last-pair" "square-list" "ucb-scheme-1.3.6-2-x86_64.pkg.tar.xz" "reverse.scm" "square-list~" "reverse~" "sicp.1.17.scm" "sicp.2.18" "../" "./")
+
+ ("/home/ajc/emacs_workspace/emacs.d/" (20612 52504) "README.md" "savefile/" "auto-save-list/" "elpa/" "snippets/" "personal/" "abbrev_defs" "prelude/" "var/" "utils/" "vendor/" ".gitignore" "themes/" "../" "./" ".git/" "init.el")
+
+ ("/home/ajc/git/" (20407 7131) "pq/" "dotfiles/" "onathacar/" "../" "./")
+
+ ("/home/ajc/git/dotfiles/" (20634 3417) "sounds/" "scripts/" "bashrc" "synergy.conf" "Xdefaults" "ros_setup" "xmobarrc" "xmonad.hs" "gitconfig" "bash_aliases" "../" "vim/" "./" "emacs.d/" "vimrc" ".git/" "xinitrc" "xms")
+
+ ("/home/" (20612 12522) "andrew/" "../" "ajc/" "./")
+
+ ("/home/ajc/.emacs.d.bak/" (20612 12510) ".emacs.d/" ".emacs" "../" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

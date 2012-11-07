@@ -1,0 +1,6 @@
+# name: #ifndef ...
+# key: IFND
+# --
+#ifndef $1
+  $2
+#endif

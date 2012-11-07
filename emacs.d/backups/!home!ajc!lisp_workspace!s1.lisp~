@@ -1,0 +1,127 @@
+;; Put the cursor on the open parens of "(defvar.." and press "C-M-f"
+;; and "C-M-b" a few times to see how you move in units of sexps. Put
+;; the cursor on the second additon in the "(progn" statement and
+;; press "C-M-t" to swap the first addition sexp and the second
+;; one. Put the cursor on the open parens of "(+ x" in defun c and
+;; press "C-M-@" to highlight the entire sexp. Then press "C-M-u" to
+;; expand the selection "upwards" to the enclosing "(let". Pressing
+;; "C-M-d" moves to the next enclosed sexp or (if you are at the
+;; beginning of a line) to the enclosed sexp on the line: 
+
+(defvar a "a variable")
+
+(defun b ()
+  "a function"
+  (+ 2 2))
+
+
+(defun c ()
+  "another function"
+  (let ((x 42))
+    (+ x
+       (+ 2 2)
+       (+ 3 3)
+       (+ 4 4))))
+
+(progn
+  (+ 1 1)
+  (+ 2 2)
+  (+ 3 3))
+
+(+ 2 (+ 3 3))
+(concat "abc" "def")
+(substring "the quick brown fox jumped over the lazy dog" 16 19)
+
+(set 'flowers '(rose violet daisy buttercup))
+flowers
+'flowers
+
+(setq carnivores '(lion tiger leaopard))
+carnivores
+
+(defun square (x)
+  "squares the argument x, a number"
+  (* x x))
+(square 2)
+
+(defclass person ()
+  ((name :accessor person-name
+         :initform 'bill
+         :initarg :name)
+   (age :accessor person-age
+        :initform 10
+        :initarg :age)))
+
+(make-instance 'person :name 'Andrew)
+
+(defun make-person (name age)
+  (make-instance 'person :name name :age age))
+
+(setq p1 (make-person 'jill 100))
+
+(person-name p1)
+(person-age p1)
+
+(setf (person-age p1) 101)
+(person-age p1)
+
+(slot-value p1 'name)
+(setf (slot-value p1 'name) 'jillian)
+(person-name p1)
+
+
+
+(defclass teacher (person)
+  ((subject ::acessor teacher-subject
+            ::initarg :subject)))
+
+(defclass maths-teacher (teacher)
+  ((subject :initform "Maths")))
+
+(+ 2 2)
+
+
+(defun make-maths-teacher (name age)
+  (make-instance 'maths-teacher :name name :age age))
+
+(setq p2 (make-instance 'maths-teacher
+                        :name 'john
+                        :age 34))
+
+(defclass food () ())
+
+
+(defmethod cook :before ((f food))
+  (print "A food is about to be cooked."))
+
+(defmethod cook :after ((f food))
+  (print "A food has been cooked."))
+
+(defclass pie (food)
+  ((filling :accessor pie-filling 
+	    :initarg :filling
+	    :initform 'apple)))
+
+(defmethod cook ((p pie))
+  (print "Cooking a pie.")
+  (setf (pie-filling p) (list 'cooked (pie-filling p))))
+
+(defmethod cook :before ((p pie))
+  (print "A pie is about to be cooked."))
+
+(defmethod cook :after ((p pie))
+b  (print "A pie has been cooked."))
+
+(setq pie-1 (make-instance 'pie :filling 'apple))
+
+(cook pie-1)
+
+
+(defmethod cook :around ((f food))
+  (print "Begin around food.")
+  (let ((result (call-next-method)))
+    (print "End around food.")
+    result))
+
+
+(cook pie-1)
