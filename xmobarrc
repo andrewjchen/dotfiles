@@ -31,12 +31,12 @@ Config { font = "Terminal"
                     --, Run Com "uname" ["-s","-r"] "" 36000
     		    , Run Date "%I:%M:%S" "date" 10
 		    , Run StdinReader
-		    , Run Battery [ "-t","BAT0<left> ",
+		    , Run BatteryP ["BAT0"] [ "-t","BAT0 <left> ",
 					"-L"," 20",
 					"-H","70",
 					"--normal","green",
 					"--high","blue",
-					"--low","red" ] 50
+					"--low","red" ] 10
 
 		    , Run Com "cat" ["/proc/loadavg", "| awk '{print $1 }' " ]  "loadavg" 10
             , Run Com "acpi" [ "-t", "| grep -o [0-9][0-9].[0-9]" ] "temp" 10
