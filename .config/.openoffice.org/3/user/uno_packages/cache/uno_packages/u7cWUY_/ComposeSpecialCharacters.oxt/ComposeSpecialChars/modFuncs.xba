@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modFuncs" script:language="StarBasic">function fncWarningLabel(strDlgType) as String
+
+	dim strWarning as string
+	
+	select case strDlgType
+		case &quot;CSC&quot;
+			strWarning = &quot;Use this dialog to assign Compose Special Characters to a keyboard shortcut.  &quot;
+			strWarning = strWarning + &quot;Do not use this dialog to assign a particular special character to a keyboard shortcut.  &quot;
+			strWarning = strWarning + &quot;The extension only works with the keystroke combinations listed on the main Compose Special Characters dialog.&quot;			
+		case &quot;Unicode&quot;
+			strWarning = &quot;Use this dialog to assign the keyboard shortcut you&apos;ll type before you type your unicode character&apos;s 4-digit code.&quot;
+	end select
+
+	fncWarningLabel = strWarning
+
+end function
+
+function fncInstructionsLabel() as string
+
+	dim strInstrux as string
+	
+	strInstrux = &quot;SPECIAL CHARACTERS&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+				 &quot;Choose from the character list on the left and click &apos;Insert&apos; below.&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+				 &quot;OR&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+				 &quot;type the key combo listed on the left and then your CSC shortcut (see below).&quot;&amp; Chr(13) &amp; Chr(13) &amp; _
+			     &quot;UNICODE CHARACTERS&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+				 &quot;To insert a unicode character type the 4-character unicode number and press your Compose Unicode Character (CUC) keyboard shortcut.  &quot; &amp; _
+				 &quot;The 4-character unicode number is the numbers/letters after &apos;U+&apos; (eg &apos;U+2248&apos; = unicode number &apos;2248&apos;).  For a complete list see www.unicode.org/charts/.&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+				 &quot;SPREADSHEETS&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+				 &quot;In Calc, you&apos;ll need to type a flag character &quot; &amp; _
+				 &quot;before the key combo - set the flag character below.  Don&apos;t type the flag character in a Text document.&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+				 &quot;SET UP SHORTCUTS&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+				 &quot;Use the &apos;CSC shortcut&apos; and &apos;Unicode shortcut&apos; buttons below &quot; &amp; _
+				 &quot;to set up keyboard shortcuts for composing special characters and inserting unicode characters. &quot; &apos;&amp; Chr(13) &amp; Chr(13) &amp; _
+				 &apos;&quot;Remember - you can&apos;t use this extension to set up a shortcut for individual characters, &quot; &amp; _
+				 &apos;&quot;you can only set up shortcuts for the keystrokes that will combine whatever characters you&apos;ve &quot; &amp; _
+				 &apos;&quot;typed into a single special character.&quot; &apos;&amp; Chr(13) &amp; Chr(13) &amp; _
+				 &apos;&quot;If you want to set up keyboard shortcuts for specific special characters you&apos;ll need to write your own macros for that.&quot; 
+
+	fncInstructionsLabel = strInstrux
+	
+end function
+
+function fncGetKeyPressed(intCode as integer) as string
+
+	dim strReturn as string
+	
+	select case intCode
+		Case 256
+			strReturn = &quot;0&quot;
+		Case 257
+			strReturn = &quot;1&quot;
+		Case 258
+			strReturn = &quot;2&quot;
+		Case 259
+			strReturn = &quot;3&quot;
+		Case 260
+			strReturn = &quot;4&quot;
+		Case 261
+			strReturn = &quot;5&quot;
+		Case 262
+			strReturn = &quot;6&quot;
+		Case 263
+			strReturn = &quot;7&quot;
+		Case 264
+			strReturn = &quot;8&quot;
+		Case 265
+			strReturn = &quot;9&quot;
+		Case 512
+			strReturn = &quot;A&quot;
+		Case 513
+			strReturn = &quot;B&quot;
+		Case 514
+			strReturn = &quot;C&quot;
+		Case 515
+			strReturn = &quot;D&quot;
+		Case 516
+			strReturn = &quot;E&quot;
+		Case 517
+			strReturn = &quot;F&quot;
+		Case 518
+			strReturn = &quot;G&quot;
+		Case 519
+			strReturn = &quot;H&quot;
+		Case 520
+			strReturn = &quot;I&quot;
+		Case 521
+			strReturn = &quot;J&quot;
+		Case 522
+			strReturn = &quot;K&quot;
+		Case 523
+			strReturn = &quot;L&quot;
+		Case 524
+			strReturn = &quot;M&quot;
+		Case 525
+			strReturn = &quot;N&quot;
+		Case 526
+			strReturn = &quot;O&quot;
+		Case 527
+			strReturn = &quot;P&quot;
+		Case 528
+			strReturn = &quot;Q&quot;
+		Case 529
+			strReturn = &quot;R&quot;
+		Case 530
+			strReturn = &quot;S&quot;
+		Case 531
+			strReturn = &quot;T&quot;
+		Case 532
+			strReturn = &quot;U&quot;
+		Case 533
+			strReturn = &quot;V&quot;
+		Case 534
+			strReturn = &quot;W&quot;
+			
+		Case 535
+			strReturn = &quot;X&quot;
+		Case 536
+			strReturn = &quot;Y&quot;
+		Case 537
+			strReturn = &quot;Z&quot;
+		Case else
+			strReturn = &quot;|&quot;
+	end select
+
+	fncGetKeyPressed = strReturn
+
+end function
+
+</script:module>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:style-id="0" dlg:id="dlgAttach" dlg:left="139" dlg:top="77" dlg:width="243" dlg:height="254" dlg:closeable="true" dlg:moveable="true" dlg:title="Set shortcut for Compose Special Character">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0" dlg:border="simple" dlg:look="simple" dlg:font-name="Verdana" dlg:font-stylename="Regular" dlg:font-family="swiss"/>
+  <dlg:style dlg:style-id="1" dlg:look="simple"/>
+  <dlg:style dlg:style-id="2" dlg:font-name="Verdana" dlg:font-stylename="Bold" dlg:font-family="swiss" dlg:font-weight="100"/>
+  <dlg:style dlg:style-id="3" dlg:font-name="Verdana" dlg:font-stylename="Regular" dlg:font-family="swiss"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:checkbox dlg:style-id="0" dlg:id="chkAlt" dlg:tab-index="2" dlg:left="9" dlg:top="57" dlg:width="30" dlg:height="10" dlg:value="Alt" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="chkAltGr" dlg:tab-index="3" dlg:left="9" dlg:top="68" dlg:width="30" dlg:height="10" dlg:value="Alt Gr" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="chkCtl" dlg:tab-index="4" dlg:left="9" dlg:top="79" dlg:width="30" dlg:height="10" dlg:value="Ctl" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="chkShift" dlg:tab-index="5" dlg:left="9" dlg:top="90" dlg:width="30" dlg:height="10" dlg:value="Shift" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+  <dlg:menulist dlg:style-id="0" dlg:id="lstOtherKeys" dlg:tab-index="10" dlg:disabled="true" dlg:left="93" dlg:top="57" dlg:width="56" dlg:height="192">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:button dlg:id="cmdOK" dlg:tab-index="12" dlg:left="159" dlg:top="57" dlg:width="43" dlg:height="16" dlg:value="OK" dlg:button-type="ok"/>
+  <dlg:button dlg:id="cmdCancel" dlg:tab-index="13" dlg:left="159" dlg:top="78" dlg:width="43" dlg:height="16" dlg:value="Close" dlg:button-type="cancel"/>
+  <dlg:menulist dlg:style-id="0" dlg:id="lstFnKeys" dlg:tab-index="11" dlg:disabled="true" dlg:left="93" dlg:top="57" dlg:width="27" dlg:height="192">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:radiogroup>
+   <dlg:radio dlg:id="optChar" dlg:tab-index="6" dlg:left="48" dlg:top="57" dlg:width="37" dlg:height="10" dlg:value="Character" dlg:checked="true">
+    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modAttachDialogCode.ChangeOptAttach?language=Basic&amp;location=application" script:language="Script"/>
+   </dlg:radio>
+   <dlg:radio dlg:id="optOther" dlg:tab-index="8" dlg:left="48" dlg:top="78" dlg:width="37" dlg:height="10" dlg:value="Other">
+    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modAttachDialogCode.ChangeOptAttach?language=Basic&amp;location=application" script:language="Script"/>
+   </dlg:radio>
+   <dlg:radio dlg:id="optFn" dlg:tab-index="7" dlg:left="48" dlg:top="68" dlg:width="37" dlg:height="10" dlg:value="Function">
+    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modAttachDialogCode.ChangeOptAttach?language=Basic&amp;location=application" script:language="Script"/>
+   </dlg:radio>
+  </dlg:radiogroup>
+  <dlg:menulist dlg:style-id="0" dlg:id="lstCharKeys" dlg:tab-index="9" dlg:left="93" dlg:top="57" dlg:width="27" dlg:height="192">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:titledbox dlg:id="frmInfo" dlg:tab-index="15" dlg:left="9" dlg:top="10" dlg:width="192" dlg:height="35">
+   <dlg:title dlg:value="Assign shortcut in: (currently assigned function/macro)"/>
+  </dlg:titledbox>
+  <dlg:checkbox dlg:style-id="1" dlg:id="chkWriter" dlg:tab-index="0" dlg:left="16" dlg:top="22" dlg:width="182" dlg:height="10" dlg:value="Writer:  " dlg:checked="true"/>
+  <dlg:checkbox dlg:style-id="1" dlg:id="chkCalc" dlg:tab-index="1" dlg:left="16" dlg:top="33" dlg:width="182" dlg:height="10" dlg:value="Calc: " dlg:checked="true"/>
+  <dlg:text dlg:style-id="2" dlg:id="lblWarning" dlg:tab-index="16" dlg:left="160" dlg:top="121" dlg:width="74" dlg:height="123" dlg:value="xUse this dialog to assign Compose Special Characters to a keyboard shortcut.  Do not use this dialog to assign a particular special character to a keyboard shortcut. The extension only works with the built-in keystroke combinations listed on the main Compose Special Characters dialog." dlg:multiline="true"/>
+  <dlg:text dlg:style-id="3" dlg:id="Label1" dlg:tab-index="17" dlg:left="9" dlg:top="121" dlg:width="76" dlg:height="70" dlg:value="Select one or more of Alt, Alt Gr, Ctrl and/or Shift, then choose a Character, Function or Other key as your shortcut key combination, and click OK." dlg:multiline="true" dlg:nolabel="true"/>
+  <dlg:text dlg:style-id="3" dlg:id="lblInfo" dlg:tab-index="18" dlg:left="9" dlg:top="196" dlg:width="76" dlg:height="51" dlg:value="Depending on your operating system and keyboard language, some key combinations may not be available." dlg:multiline="true" dlg:nolabel="true"/>
+  <dlg:button dlg:id="cmdRemove" dlg:tab-index="14" dlg:left="159" dlg:top="98" dlg:width="43" dlg:height="16" dlg:value="Clear shortcut">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.ClearShortcut?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+ </dlg:bulletinboard>
+</dlg:window>

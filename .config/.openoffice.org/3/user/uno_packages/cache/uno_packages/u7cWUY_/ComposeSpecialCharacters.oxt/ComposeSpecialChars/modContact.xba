@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modContact" script:language="StarBasic">REM  *****  BASIC  *****
+
+Sub SendMailto()
+
+	dim ctl				as object
+	dim objDispatch		as object
+	dim strMailToURL	as string
+	
+	ctl = dlg.getControl(&quot;lblContactURL&quot;)
+	strMailToURL = &quot;mailto:&quot; &amp; ctl.Model.Label &amp; &quot;?subject=Question re Compose Special Characters&quot;
+
+	oDisp = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	oDisp.executeDispatch(ThisComponent.CurrentController.Frame, strMailToURL, &quot;&quot;, 0, Array())
+
+End Sub
+
+Sub OpenHelpURL()
+
+	Dim ogjSvc as object
+	dim strURL as string
+	
+	strURL = &quot;http://www.productivityapps.com/csc.html&quot;
+	objSvc = createUnoService(&quot;com.sun.star.system.SystemShellExecute&quot;)
+	
+	Rem File:
+	&apos;  oSvc.execute(ConvertToUrl(&quot;/usr/share/example-content/Ubuntu_Free_Culture_Showcase/SpiritOfUbuntu.ogv&quot;), &quot;&quot;, 0)
+	Rem Folder:
+	&apos; oSvc.execute(ConvertToUrl(&quot;/usr/share/example-content/&quot;), &quot;&quot;, 0)
+	Rem Web address:
+	objSvc.execute(strURL, &quot;&quot;, 0)
+	Rem Email:
+	&apos; oSvc.execute(&quot;mailto:anonymous@ftp.com&quot;, &quot;&quot;, 0) 
+
+End Sub
+
+
+</script:module>

@@ -1,0 +1,1309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Histories" oor:package="org.openoffice.Office">
+ <node oor:name="Histories">
+  <node oor:name="URLHistory">
+   <node oor:name="ItemList">
+    <node oor:name="file:///home/ajc/Downloads/honors_review_acid_base_equilibrium.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>honors_review_acid_base_equilibrium</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/TAH3-DAssignment0910.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>TAH3-DAssignment0910</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/honors_advanced_ph_calculations.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>honors_advanced_ph_calculations</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/honors_ksp_calculations.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>honors_ksp_calculations</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/ksp_practice_problems_&amp;_solutions.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>ksp_practice_problems_&amp;_solutions</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/honors_review_acid_base_equilibrium_answer_key.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>honors_review_acid_base_equilibrium_answer_key</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/common_ion_buffer_ksp_titration.ppt" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS PowerPoint 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>common_ion_buffer_ksp_titration</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/honors_final_proposal.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>honors_final_proposal</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/honors_calendar_equilibrium_acids_&amp;_bases.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>honors_calendar_equilibrium_acids_&amp;_bases</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/honors_calendar_electrochemistry_redox.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>honors_calendar_electrochemistry_redox</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/chem_unit10.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>chem_unit10</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/chem_finalproposal.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>chem_finalproposal</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_4.26.10.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>spanish_4.26.10</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_5.7.10.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>Text (encoded)</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>spanish_5.7.10</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_4.17.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>spanish_4.17</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_4.9.10.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>spanish_4.9.10</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_4.6.10.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>spanish_4.6.10</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_5.21doc.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>spanish_5.21doc</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/3DPresentation.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>3DPresentation</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_5.21.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>spanish_5.21</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/WTF/honors_ws_oxidation_reduction_01.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>honors_ws_oxidation_reduction_01</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/chem_honors_semester_02_final_exam_review_sheet.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>chem_honors_semester_02_final_exam_review_sheet</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/chem_honors_semester_02_review_concepts.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>chem_honors_semester_02_review_concepts</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/honors_guidelines.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>honors_guidelines</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_5.28.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>spanish_5.28</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Title_self_organization.odp" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>impress8</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Title_self_organization</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Title_self_organization.ppt" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS PowerPoint 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Title_self_organization</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Title_self_organization%20(1).ppt" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS PowerPoint 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Title_self_organization (1)</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/chem_semproject.odp" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>impress8</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>chem_semproject</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Title_self_organization%20(2).ppt" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS PowerPoint 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Title_self_organization (2)</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/WTF/english_final.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>english_final</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/2009-2010/english_final.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>english_final</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/1.5GreatestInteger&amp;PiecewiseA.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>1.5GreatestInteger&amp;PiecewiseA</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Ch5Sec1notesA.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Ch5Sec1notesA</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Ch5sec2notesA.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Ch5sec2notesA</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Ch5sec3notes.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Ch5sec3notes</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Ch5sec4notesA.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Ch5sec4notesA</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Ch5sec5P(theta)&amp;TheUnitCircleA.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Ch5sec5P(theta)&amp;TheUnitCircleA</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Pythagorean%20IndentitiesCday1.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Pythagorean IndentitiesCday1</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/AddingSubtractingDay1A.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>AddingSubtractingDay1A</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/AddingSubtractingAnglesDay2A.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>AddingSubtractingAnglesDay2A</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/HalfAndDoubleAnglesFormulasA.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>HalfAndDoubleAnglesFormulasA</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Trig%20Identities%20Day%202A.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Trig Identities Day 2A</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/TrigIdentitiesNotes.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>TrigIdentitiesNotes</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/TrigInversesNotesc.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>TrigInversesNotesc</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/TrigInversesDay2C.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>TrigInversesDay2C</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/TrigEquationsnotesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>TrigEquationsnotesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/TrigEquationsnotesC(2).doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>TrigEquationsnotesC(2)</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Ch6%20review%20warmupC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Ch6 review warmupC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Ch6Review.ppt" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS PowerPoint 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Ch6Review</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/LawOfSinesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>LawOfSinesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/LawOf%20CosinesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>LawOf CosinesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/LawOfCosinesDay2C.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>LawOfCosinesDay2C</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/ParabolaNotesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>ParabolaNotesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/EllipseNotesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>EllipseNotesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/HyperbolaNotesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>HyperbolaNotesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Rotation%20of%20Axes%20Day2C.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Rotation of Axes Day2C</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/ConicCatchUpNotesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>ConicCatchUpNotesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/ConvertingPolarEq&amp;PolarConicsC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>ConvertingPolarEq&amp;PolarConicsC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/ConvertingPolarEq&amp;PolarConicsC(2).doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>ConvertingPolarEq&amp;PolarConicsC(2)</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/RotationOfAxesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>RotationOfAxesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/PolarCoordinateNotesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>PolarCoordinateNotesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/ConvertingPolarEquationsDay2.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>ConvertingPolarEquationsDay2</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/EccentricyNotesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>EccentricyNotesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/TrigFormDay2C.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>TrigFormDay2C</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Introduction(2).pdf" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>Text (encoded)</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Introduction(2)</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/homer/1984RoughDraft.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>1984RoughDraft</value>
+     </prop>
+    </node>
+   </node>
+   <node oor:name="OrderList">
+    <node oor:name="0" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/homer/1984RoughDraft.doc</value>
+     </prop>
+    </node>
+    <node oor:name="1" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Introduction(2).pdf</value>
+     </prop>
+    </node>
+    <node oor:name="2" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/TrigFormDay2C.doc</value>
+     </prop>
+    </node>
+    <node oor:name="3" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/ConvertingPolarEquationsDay2.doc</value>
+     </prop>
+    </node>
+    <node oor:name="4" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/EccentricyNotesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="5" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/PolarCoordinateNotesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="6" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/RotationOfAxesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="7" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/ConvertingPolarEq&amp;PolarConicsC(2).doc</value>
+     </prop>
+    </node>
+    <node oor:name="8" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/ConvertingPolarEq&amp;PolarConicsC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="9" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/ConicCatchUpNotesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="10" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Rotation%20of%20Axes%20Day2C.doc</value>
+     </prop>
+    </node>
+    <node oor:name="11" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/HyperbolaNotesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="12" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/EllipseNotesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="13" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/ParabolaNotesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="14" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/LawOfCosinesDay2C.doc</value>
+     </prop>
+    </node>
+    <node oor:name="15" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/LawOf%20CosinesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="16" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/LawOfSinesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="17" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Ch6Review.ppt</value>
+     </prop>
+    </node>
+    <node oor:name="18" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Ch6%20review%20warmupC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="19" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/TrigEquationsnotesC(2).doc</value>
+     </prop>
+    </node>
+    <node oor:name="20" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/TrigEquationsnotesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="21" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/TrigInversesDay2C.doc</value>
+     </prop>
+    </node>
+    <node oor:name="22" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/TrigInversesNotesc.doc</value>
+     </prop>
+    </node>
+    <node oor:name="23" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/TrigIdentitiesNotes.doc</value>
+     </prop>
+    </node>
+    <node oor:name="24" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Trig%20Identities%20Day%202A.doc</value>
+     </prop>
+    </node>
+    <node oor:name="25" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/HalfAndDoubleAnglesFormulasA.doc</value>
+     </prop>
+    </node>
+    <node oor:name="26" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/AddingSubtractingAnglesDay2A.doc</value>
+     </prop>
+    </node>
+    <node oor:name="27" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/AddingSubtractingDay1A.doc</value>
+     </prop>
+    </node>
+    <node oor:name="28" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Pythagorean%20IndentitiesCday1.doc</value>
+     </prop>
+    </node>
+    <node oor:name="29" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Ch5sec5P(theta)&amp;TheUnitCircleA.doc</value>
+     </prop>
+    </node>
+    <node oor:name="30" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Ch5sec4notesA.doc</value>
+     </prop>
+    </node>
+    <node oor:name="31" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Ch5sec3notes.doc</value>
+     </prop>
+    </node>
+    <node oor:name="32" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Ch5sec2notesA.doc</value>
+     </prop>
+    </node>
+    <node oor:name="33" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Ch5Sec1notesA.doc</value>
+     </prop>
+    </node>
+    <node oor:name="34" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/1.5GreatestInteger&amp;PiecewiseA.doc</value>
+     </prop>
+    </node>
+    <node oor:name="35" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/english_final.doc</value>
+     </prop>
+    </node>
+    <node oor:name="36" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/WTF/english_final.doc</value>
+     </prop>
+    </node>
+    <node oor:name="37" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Title_self_organization%20(2).ppt</value>
+     </prop>
+    </node>
+    <node oor:name="38" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/chem_semproject.odp</value>
+     </prop>
+    </node>
+    <node oor:name="39" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/TAH3-DAssignment0910.doc</value>
+     </prop>
+    </node>
+    <node oor:name="40" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/chem_honors_semester_02_final_exam_review_sheet.doc</value>
+     </prop>
+    </node>
+    <node oor:name="41" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Title_self_organization%20(1).ppt</value>
+     </prop>
+    </node>
+    <node oor:name="42" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Title_self_organization.ppt</value>
+     </prop>
+    </node>
+    <node oor:name="43" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Title_self_organization.odp</value>
+     </prop>
+    </node>
+    <node oor:name="44" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/spanish_5.28.doc</value>
+     </prop>
+    </node>
+    <node oor:name="45" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/honors_calendar_electrochemistry_redox.doc</value>
+     </prop>
+    </node>
+    <node oor:name="46" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/honors_guidelines.doc</value>
+     </prop>
+    </node>
+    <node oor:name="47" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/chem_finalproposal.doc</value>
+     </prop>
+    </node>
+    <node oor:name="48" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/chem_unit10.doc</value>
+     </prop>
+    </node>
+    <node oor:name="49" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/chem_honors_semester_02_review_concepts.doc</value>
+     </prop>
+    </node>
+    <node oor:name="50" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/WTF/honors_ws_oxidation_reduction_01.doc</value>
+     </prop>
+    </node>
+    <node oor:name="51" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/3DPresentation.doc</value>
+     </prop>
+    </node>
+    <node oor:name="52" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/spanish_5.21.doc</value>
+     </prop>
+    </node>
+    <node oor:name="53" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/spanish_5.21doc.doc</value>
+     </prop>
+    </node>
+    <node oor:name="54" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/spanish_4.6.10.doc</value>
+     </prop>
+    </node>
+    <node oor:name="55" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/spanish_4.26.10.doc</value>
+     </prop>
+    </node>
+    <node oor:name="56" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/spanish_4.9.10.doc</value>
+     </prop>
+    </node>
+    <node oor:name="57" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/spanish_4.17.doc</value>
+     </prop>
+    </node>
+    <node oor:name="58" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/2009-2010/spanish_5.7.10.doc</value>
+     </prop>
+    </node>
+    <node oor:name="59" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/honors_calendar_equilibrium_acids_&amp;_bases.doc</value>
+     </prop>
+    </node>
+    <node oor:name="60" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/honors_final_proposal.doc</value>
+     </prop>
+    </node>
+    <node oor:name="61" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/honors_review_acid_base_equilibrium_answer_key.doc</value>
+     </prop>
+    </node>
+    <node oor:name="62" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/common_ion_buffer_ksp_titration.ppt</value>
+     </prop>
+    </node>
+    <node oor:name="63" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/ksp_practice_problems_&amp;_solutions.doc</value>
+     </prop>
+    </node>
+    <node oor:name="64" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/honors_ksp_calculations.doc</value>
+     </prop>
+    </node>
+    <node oor:name="65" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/honors_advanced_ph_calculations.doc</value>
+     </prop>
+    </node>
+    <node oor:name="66" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/honors_review_acid_base_equilibrium.doc</value>
+     </prop>
+    </node>
+   </node>
+  </node>
+  <node oor:name="PickList">
+   <node oor:name="ItemList">
+    <node oor:name="file:///home/ajc/Downloads/honors_review_acid_base_equilibrium.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/TAH3-DAssignment0910.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/honors_advanced_ph_calculations.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_4.17.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/honors_ksp_calculations.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/ksp_practice_problems_&amp;_solutions.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/common_ion_buffer_ksp_titration.ppt" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/english_logs6.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/honors_review_acid_base_equilibrium_answer_key.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/honors_final_proposal.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/honors_calendar_equilibrium_acids_&amp;_bases.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/honors_calendar_electrochemistry_redox.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/chem_unit10.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/chem_finalproposal.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_4.26.10.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_5.7.10.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_4.9.10.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_4.6.10.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_5.21doc.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_5.21.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/3DPresentation.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/WTF/honors_ws_oxidation_reduction_01.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/english_logs7.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/chem_honors_semester_02_final_exam_review_sheet.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/chem_honors_semester_02_review_concepts.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/WTF/english_final.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/iaroc/sensordata.ods" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/honors_guidelines.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/spanish_5.28.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/english_logs8.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Title_self_organization.ppt" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Title_self_organization%20(1).ppt" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/chem_semproject.ppt" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/chem_final.ppt" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/chem_semproject.odp" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/2009-2010/english_final.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Ch5Sec1notesA.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Ch5sec2notesA.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Ch5sec3notes.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Ch5sec4notesA.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Ch5sec5P(theta)&amp;TheUnitCircleA.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Pythagorean%20IndentitiesCday1.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/AddingSubtractingDay1A.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/AddingSubtractingAnglesDay2A.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/HalfAndDoubleAnglesFormulasA.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Trig%20Identities%20Day%202A.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/TrigIdentitiesNotes.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/TrigInversesNotesc.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/TrigInversesDay2C.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/TrigEquationsnotesC.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/TrigEquationsnotesC(2).doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Ch6%20review%20warmupC.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Ch6Review.ppt" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/LawOfSinesC.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/LawOf%20CosinesC.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/LawOfCosinesDay2C.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/ParabolaNotesC.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/EllipseNotesC.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/HyperbolaNotesC.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/Rotation%20of%20Axes%20Day2C.doc" oor:op="remove"/>
+    <node oor:name="file:///home/ajc/Downloads/ConicCatchUpNotesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>ConicCatchUpNotesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/ConvertingPolarEq&amp;PolarConicsC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>ConvertingPolarEq&amp;PolarConicsC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/ConvertingPolarEq&amp;PolarConicsC(2).doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>ConvertingPolarEq&amp;PolarConicsC(2)</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/RotationOfAxesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>RotationOfAxesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/PolarCoordinateNotesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>PolarCoordinateNotesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/1.5GreatestInteger&amp;PiecewiseA.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>1.5GreatestInteger&amp;PiecewiseA</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/ConvertingPolarEquationsDay2.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>ConvertingPolarEquationsDay2</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/EccentricyNotesC.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>EccentricyNotesC</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/Downloads/Introduction(2).pdf" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>Text (encoded)</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>Introduction(2)</value>
+     </prop>
+    </node>
+    <node oor:name="file:///home/ajc/homer/1984RoughDraft.doc" oor:op="replace">
+     <prop oor:name="Filter" oor:type="xs:string">
+      <value>MS Word 97</value>
+     </prop>
+     <prop oor:name="Password" oor:type="xs:string">
+      <value/>
+     </prop>
+     <prop oor:name="Title" oor:type="xs:string">
+      <value>1984RoughDraft</value>
+     </prop>
+    </node>
+   </node>
+   <node oor:name="OrderList">
+    <node oor:name="0" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/homer/1984RoughDraft.doc</value>
+     </prop>
+    </node>
+    <node oor:name="1" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/Introduction(2).pdf</value>
+     </prop>
+    </node>
+    <node oor:name="2" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/ConvertingPolarEquationsDay2.doc</value>
+     </prop>
+    </node>
+    <node oor:name="3" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/EccentricyNotesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="4" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/1.5GreatestInteger&amp;PiecewiseA.doc</value>
+     </prop>
+    </node>
+    <node oor:name="5" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/PolarCoordinateNotesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="6" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/RotationOfAxesC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="7" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/ConvertingPolarEq&amp;PolarConicsC(2).doc</value>
+     </prop>
+    </node>
+    <node oor:name="8" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/ConvertingPolarEq&amp;PolarConicsC.doc</value>
+     </prop>
+    </node>
+    <node oor:name="9" oor:op="replace">
+     <prop oor:name="HistoryItemRef" oor:type="xs:string">
+      <value>file:///home/ajc/Downloads/ConicCatchUpNotesC.doc</value>
+     </prop>
+    </node>
+   </node>
+  </node>
+ </node>
+</oor:component-data>

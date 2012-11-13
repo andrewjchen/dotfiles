@@ -1,0 +1,3 @@
+A fantastic extension that does everything.
+Copyright (c) 2009 yourself
+

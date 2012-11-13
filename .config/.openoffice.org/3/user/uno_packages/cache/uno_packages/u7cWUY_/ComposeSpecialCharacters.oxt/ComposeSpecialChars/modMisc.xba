@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modMisc" script:language="StarBasic">REM  *****  BASIC  *****
+
+Function Replace(strSource as string, strSearch as string, strNewPart as string) as string
+
+	Dim strResult 		as string
+	Dim lngStartPos 	as long
+	Dim lngCurrentPos 	as long
+	
+	strResult = &quot;&quot;
+	lngStartPos = 1
+	lngCurrentPos = 1
+	
+	if strSearch = &quot;&quot; Then
+	  strResult = strSource
+	else 
+	  Do While lngCurrentPos &lt;&gt; 0
+	    lngCurrentPos = InStr(lngStartPos, strSource, strSearch)
+	    if lngCurrentPos &lt;&gt; 0 Then
+	      strResult = strResult + Mid(strSource, lngStartPos, lngCurrentPos - lngStartPos)
+	      strResult = strResult + strNewPart
+	      lngStartPos = lngCurrentPos + Len(strSearch)
+	    else
+	      strResult = strResult + Mid(strSource, lngStartPos, Len(strSource))
+	    end if                &apos; Position &lt;&gt; 0
+	  Loop 
+	end if 
+
+	Replace = strResult
+
+End Function
+
+
+&apos; adapted from:
+&apos; http://www.oooforum.org/forum/viewtopic.phtml?t=23064&amp;highlight=size+positions+measured+pixels
+
+Sub CenterDialog(objDialog as object)
+
+	dim objDeskTopFrameSize	as object
+	dim objFrame			as object
+	dim lngXPos 			as long
+	dim lngYPos 			as long
+	dim lngFrameWidth		as long
+	dim lngFrameHeight		as long
+	dim lngDlgWidth			as long
+	dim lngDlgHeight		as long
+	
+	objFrame = ThisComponent.getCurrentController().Frame
+	&apos;objFrame = objAppController.Frame
+	
+	if IsNull(objFrame) then
+		Exit Sub&apos; if called at Office loading time
+	end if
+	
+	if IsNull(objFrame.ComponentWindow) then
+		Exit Sub &apos; ComponentWindow may be absent !
+	end if
+	
+	&apos; Size and positions are measured in pixels
+	objDeskTopFrameSize = objFrame.getComponentWindow.PosSize  &apos;StarDesktop.CurrentFrame.ComponentWindow.Size
+	
+	lngFrameWidth = objDeskTopFrameSize.Width
+	lngFrameHeight = objDeskTopFrameSize.Height
+	lngDlgWidth = objDialog.Size.Width
+	lngDlgHeight = objDialog.Size.Height
+
+	lngXPos = (lngFrameWidth/2) - (lngDlgWidth/2)
+	lngYPos = (lngFrameHeight/2) - (lngDlgHeight/2)
+	objDialog.setPosSize(lngXPos, lngYPos, 0, 0, 0)&apos; com.sun.star.awt.PosSize.POS)
+
+End Sub
+
+
+</script:module>

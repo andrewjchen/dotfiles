@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modAttachDialogCode" script:language="StarBasic">Sub DisplayDlgAttachCSC
+
+	DisplayDlgAttach(&quot;CSC&quot;)
+	
+End Sub
+
+Sub DisplayDlgAttachUnicode
+
+	DisplayDlgAttach(&quot;Unicode&quot;)
+	
+End Sub
+
+
+Sub DisplayDlgAttach(strAttachType as string)
+
+	&apos; displays the reference/GUI dialog
+
+	dim strCharKey		as string
+	dim strOtherKey		as string
+	dim strFnKey		as string
+	dim strKey			as string
+	dim intModKeys		as integer
+	dim intCharKey		as integer
+	dim intOtherKeys	as integer
+	dim intFnKey		as integer
+	dim strWarning		as string
+	
+	on error goto Errorhandler
+	
+	strCharKey = &quot;&quot;
+	strOtherKey = &quot;&quot;
+	strFnKey = &quot;&quot;
+	strKey = &quot;&quot;
+	intModKeys = 0
+	intCharKey = 0
+	intOtherKeys = 0
+	intFnKey = 0
+
+ 	DialogLibraries.LoadLibrary(&quot;ComposeSpecialChars&quot;)
+	objDialog = CreateUnoDialog(DialogLibraries.ComposeSpecialChars.dlgAttach)
+
+	CenterDialog(objDialog)
+	
+	lblWarning = objDialog.getControl(&quot;lblWarning&quot;)
+	
+	chkWriter = objDialog.getControl(&quot;chkWriter&quot;)
+	chkCalc = objDialog.getControl(&quot;chkCalc&quot;)
+	chkAlt = objDialog.getControl(&quot;chkAlt&quot;)
+	chkAltGr = objDialog.getControl(&quot;chkAltGr&quot;)
+	chkShift = objDialog.getControl(&quot;chkShift&quot;)
+	chkCtl = objDialog.getControl(&quot;chkCtl&quot;)
+
+	lstCharKeys = objDialog.getControl(&quot;lstCharKeys&quot;)
+	&apos;lstCharKeys.addItem(&quot; &quot;,0)
+	lstCharKeys.addItems(fncAlphaNumList,1)
+	lstCharKeys.setVisible(True)
+	lstCharKeys.setEnable(False)
+		
+	lstOtherKeys = objDialog.getControl(&quot;lstOtherKeys&quot;)
+	&apos;lstOtherKeys.addItem(&quot; &quot;,0)
+	lstOtherKeys.addItems(fncOtherKeysList,1)
+	lstOtherKeys.setVisible(False)
+	
+	lstFnKeys = objDialog.getControl(&quot;lstFnKeys&quot;)
+	&apos;lstFnKeys.addItem(&quot; &quot;,0)
+	lstFnKeys.addItems(fncFnKeysList,1)
+	lstFnKeys.setVisible(False)
+	
+	optChar = objDialog.getControl(&quot;optChar&quot;)
+	optOther = objDialog.getControl(&quot;optOther&quot;)
+	optFn = objDialog.getControl(&quot;optFn&quot;)
+
+	optChar.State = False
+	optOther.State = False
+	optFN.State = False
+
+	strWarning = fncWarningLabel(strAttachType)	
+	lblWarning.Model.Label = strWarning
+	
+	select case strAttachType
+		case &quot;CSC&quot;
+			objDialog.Title = &quot;Set shortcut for composing special characters&quot;
+		case &quot;Unicode&quot;
+			objDialog.Title = &quot;Set shortcut for inserting unicode characters&quot;		
+	end select
+
+	
+DisplayDlg:
+
+	Select Case objDialog.Execute() 
+
+		Case 1
+
+		
+			if optChar.State = True then 
+				if chkAlt.State = 0 and chkAltGr.State = 0 and chkShift.State = 0 and chkCtl.State = 0 then
+					msgbox &quot;You can&apos;t assign anything to any of the character keys by themselves.  Please choose one or more modifiers (Alt / AltGr / Ctl / Shift) in addition to the character key you chose.&quot;, 48, &quot;Modifiers needed&quot;
+					goto DisplayDlg
+				end if
+			end if
+			
+			if optChar.State = false and optOther.State = false and optFn.State = false then 
+				if chkAlt.State = 0 and chkAltGr.State = 0 and chkShift.State = 0 and chkCtl.State = 0 then
+					msgbox &quot;You can&apos;t assign anything to any of the character keys by themselves.  Please choose one or more modifiers (Alt / AltGr / Ctl / Shift) in addition to the character key you chose.&quot;, 48, &quot;Modifiers needed&quot;
+					goto DisplayDlg
+				end if
+			end if
+					
+			if optOther.State = True then
+				if chkAlt.State = 0 and chkAltGr.State = 0 and chkShift.State = 0 and chkCtl.State = 0 then
+					msgbox &quot;You can&apos;t assign anything to any of the &apos;other&apos; keys by themselves.  Please choose one or more modifiers (Alt / AltGr / Ctl / Shift) in addition to the character key you chose.&quot;, 48, &quot;Modifiers needed&quot;
+					goto DisplayDlg
+				end if
+			end if
+			
+			select case msgbox (&quot;Are you sure you want to assign this shortcut?&quot; &amp; chr(13) &amp; chr(13) &amp; &quot;Take care whenever you&apos;re customising your keyboard, whether you&apos;re using OO&apos;s built in Customise feature or this dialog. It&apos;s not a good idea to assign anything to a key that you need by itself, for instance the Backspace key or the letter &quot;&quot;a&quot;&quot; - if you do, then you can&apos;t use those keys for backspace or &quot;&quot;a&quot;&quot; anymore, because they&apos;ll be assigned to something else.&quot; &amp; chr(13) &amp; chr(13) &amp; &quot;Instead always use a combination of keys that you don&apos;t need for anything else, for example Alt+Ctl+Backspace or Alt+Ctl+2 (those are examples, not suggestions!). It&apos;s generally OK to re-assign the function keys by themselves, if you don&apos;t use the functions that are preassigned by OO.&quot; &amp; chr(13) &amp; chr(13) &amp; &quot;Do you want to assign the keyboard shortcut you chose?&quot; &amp; chr(13) &amp; chr(13),49,&quot;Confirm&quot;)
+				case 1
+					&apos;continue
+				case 2
+					&apos;cancel and re-display attach dialog
+					goto DisplayDlg
+			end select
+		
+			if optChar.State = True then 
+				strCharKey = trim(lstCharKeys.SelectedItem)
+			end if
+			
+			if optFn.State = True then
+				strFnKey = trim(lstFnKeys.SelectedItem)
+			end if
+			
+			if optOther.State = True then
+				if chkAlt.State = 0 and chkAltGr.State = 0 and chkShift.State = 0 and chkCtl.State = 0 then
+					msgbox &quot;You can&apos;t assign anything to any of the &apos;other&apos; keys by themselves.  Please choose one or more modifiers (Alt / AltGr / Ctl / Shift) in addition to the character key you chose.&quot;, 48, &quot;Modifiers needed&quot;
+					goto DisplayDlg
+				end if
+				strOtherKey = trim(lstOtherKeys.SelectedItem)
+			end if
+			
+			strKey = trim(strCharKey &amp; strFnKey &amp; strOtherKey)
+
+			if strKey = &quot;&quot; then
+				blnResult = False
+				goto ProcessResult
+			end if
+			
+			if chkAltGr.State = 1 then
+				select case strCharKey
+					case &quot;a&quot;, &quot;e&quot;, &quot;i&quot;, &quot;o&quot;, &quot;u&quot;
+						MsgBox &quot;The Alt Gr key can&apos;t be used in combination with a, e, i, o, u - it will always give you those characters with an acute accent (é).&quot;, 16, &quot;Choose another shortcut&quot;
+						goto DisplayDlg
+				end select
+			end if	
+			
+			intModKeys = 0
+			
+			if chkAlt.State = 1 then
+				intModKeys = 4
+			end if
+			
+			if chkAltGr.State = 1 then
+				intModKeys = intModKeys + 6
+			end if
+			
+			if chkCtl.State = 1 then
+				intModKeys = intModKeys + 2
+			end if
+			
+			if chkShift.State = 1 then
+				intModKeys = intModKeys + 1
+			end if
+			
+			if strCharKey &lt;&gt; &quot;&quot; then
+				intCharKey = fncKeyConstant(strCharKey)
+			else
+				intCharKey = 0
+			end if
+			
+			if strOtherKey &lt;&gt; &quot;&quot; then
+				intOtherKeys = fncKeyConstant(strOtherKey)
+			else
+				intOtherKeys = 0
+			end if
+			
+			if strFnKey &lt;&gt; &quot;&quot; then
+				intFnKeys = fncKeyConstant(strFnKey)
+			else
+				intFnKeys = 0
+			end if
+			
+			intOtherKeys = intCharKey + intOtherKeys + intFnKeys
+			
+			blnResult = fncBindMacroToShortcut(intModKeys, intOtherKeys, strAttachType)
+			
+ProcessResult:
+
+			if blnResult = False then
+				MsgBox &quot;Please choose another shortcut key combination.&quot;, 48, &quot;Macro not assigned to shortcut&quot;
+				goto DisplayDlg
+			end if
+								
+		Case 0 
+			goto FinishUp
+	End Select
+
+FinishUp:
+
+	chkWriter = nothing
+	chkCacl = nothing
+	chkAlt = nothing
+	chkAltGr = nothing
+	chkShift = nothing
+	chkCtl = nothing
+	lstCharKeys = nothing
+	lstOtherKeys = nothing
+	lstFnKeys = nothing
+
+	objDialog.dispose()
+	
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;DisplayDlgAttach&quot;
+		
+End Sub
+
+Sub ChangeOptAttach()
+
+	&apos; enables/disables lists depending on option chosen
+	
+	dim intLstX		as integer
+	dim intLstY		as integer
+
+	if optChar.State = True then
+		lstCharKeys.setVisible(True)
+		lstCharKeys.setEnable(True)
+		lstOtherKeys.setVisible(False)
+		lstOtherKeys.setEnable(False)
+		lstFnKeys.setVisible(False)
+		lstFnKeys.setEnable(False)
+	end if
+	
+	if optOther.State = True then
+		lstCharKeys.setVisible(False)
+		lstCharKeys.setEnable(False)
+		lstOtherKeys.setVisible(True)
+		lstOtherKeys.setEnable(True)
+		lstFnKeys.setVisible(False)
+		lstFnKeys.setEnable(False)
+	end if
+	
+	if optFn.State = True then
+		lstCharKeys.setVisible(False)
+		lstCharKeys.setEnable(False)
+		lstOtherKeys.setVisible(False)
+		lstOtherKeys.setEnable(False)
+		lstFnKeys.setVisible(True)
+		lstFnKeys.setEnable(True)
+	end if
+	
+End Sub
+
+Function fncGetMacroName(str as string) as string
+
+	dim intPos	as integer
+	
+	do
+	 intPos = Instr(str,&quot;.&quot;)
+	 If intPos = 0 then Exit Do
+	 str = right(str,len(str)-intPos)
+	loop 
+	
+	str = &quot;macro - &quot; &amp; str
+	
+Finishup:
+	
+	fncGetMacroName = str
+	
+	Exit Function
+	
+errorhandler:
+
+	str = &quot;unknown&quot;
+	
+	goto Finishup
+
+End Function
+
+
+
+</script:module>

@@ -1,0 +1,8 @@
+#! /bin/sh
+# path: /usr/bin/dmenu_run
+#gorgeous blue: #0066FF
+# original: exe=`dmenu_path | dmenu ${1+"$@"}` && exec $exe
+#exe=`dmenu_path | dmenu ${1+"$@"}` && exec $exe
+exec $(dmenu_path | dmenu -i -nb '#000000' -sb '#0066FF' -sf '#ffffff' -nf '#ffffff')
+
+

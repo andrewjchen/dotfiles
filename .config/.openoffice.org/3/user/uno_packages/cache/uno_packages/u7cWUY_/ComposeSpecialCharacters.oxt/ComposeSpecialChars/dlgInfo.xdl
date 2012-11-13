@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:style-id="1" dlg:id="dlgInfo" dlg:left="0" dlg:top="0" dlg:width="367" dlg:height="308" dlg:page="1" dlg:closeable="true" dlg:moveable="true" dlg:title="Compose Special Characters">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0" dlg:font-name="DejaVu Sans" dlg:font-height="10" dlg:font-stylename="Book" dlg:font-family="swiss"/>
+  <dlg:style dlg:style-id="1" dlg:font-name="Verdana" dlg:font-stylename="Regular" dlg:font-family="swiss"/>
+  <dlg:style dlg:style-id="2" dlg:font-name="Verdana" dlg:font-height="12" dlg:font-stylename="Regular" dlg:font-family="swiss"/>
+  <dlg:style dlg:style-id="3" dlg:text-color="0x80" dlg:font-name="Verdana" dlg:font-height="9" dlg:font-stylename="Regular" dlg:font-family="swiss" dlg:font-weight="100"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:formattedfield dlg:id="FormattedField1" dlg:tab-index="8" dlg:left="92" dlg:top="21" dlg:width="0" dlg:height="5"/>
+  <dlg:menulist dlg:style-id="0" dlg:id="lstCategs" dlg:tab-index="1" dlg:left="5" dlg:top="19" dlg:width="47" dlg:height="284">
+   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modCode.ClickCategsList?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:text dlg:style-id="1" dlg:id="lblCategs" dlg:tab-index="0" dlg:left="6" dlg:top="9" dlg:width="34" dlg:height="9" dlg:value="Categories" dlg:tabstop="false"/>
+  <dlg:text dlg:style-id="1" dlg:id="lblChars" dlg:tab-index="9" dlg:left="58" dlg:top="9" dlg:width="58" dlg:height="9" dlg:value="Char = key combo" dlg:tabstop="true"/>
+  <dlg:text dlg:id="Label6" dlg:tab-index="10" dlg:left="102" dlg:top="12" dlg:width="4" dlg:height="0" dlg:value="Label6"/>
+  <dlg:menulist dlg:style-id="0" dlg:id="lstChars" dlg:tab-index="2" dlg:left="57" dlg:top="19" dlg:width="59" dlg:height="284" dlg:help-text="Note: some characters are available only in certain fonts" dlg:tabstop="true"/>
+  <dlg:button dlg:id="cmdClose" dlg:tab-index="7" dlg:left="319" dlg:top="288" dlg:width="43" dlg:height="14" dlg:default="true" dlg:value="Close" dlg:button-type="ok"/>
+  <dlg:button dlg:id="cmdInsert" dlg:tab-index="3" dlg:left="125" dlg:top="288" dlg:width="34" dlg:height="14" dlg:value="Insert">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modCode.InsertCharacter?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:titledbox dlg:style-id="2" dlg:id="frameInstrux" dlg:tab-index="11" dlg:left="124" dlg:top="7" dlg:width="239" dlg:height="278">
+   <dlg:title dlg:value="Instructions"/>
+  </dlg:titledbox>
+  <dlg:text dlg:style-id="1" dlg:id="Label1" dlg:tab-index="12" dlg:left="130" dlg:top="172" dlg:width="44" dlg:height="9" dlg:page="2" dlg:value="Text document"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label2" dlg:tab-index="13" dlg:left="192" dlg:top="172" dlg:width="132" dlg:height="14" dlg:page="2" dlg:value="Type the key combo and your keyboard shortcut." dlg:multiline="true"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label3" dlg:tab-index="14" dlg:left="130" dlg:top="188" dlg:width="60" dlg:height="9" dlg:page="2" dlg:value="Calc spreadsheet"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label4" dlg:tab-index="15" dlg:left="192" dlg:top="188" dlg:width="154" dlg:height="42" dlg:page="2" dlg:value="Type a &quot;flag&quot; character and the key combo then run the macro.  The flag character should be something that you&apos;re not going to use in a formula or a value.  Choose your flag character below:" dlg:multiline="true"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label5" dlg:tab-index="16" dlg:left="130" dlg:top="231" dlg:width="192" dlg:height="0" dlg:printable="false" dlg:value="You should set up a keyboard shortcut so it&apos;s easier to run the macro.  For example if you attach the macro to Alt+F1 then you can type &quot;a`&quot;, press Alt+F1 and a` will be replaced with à.&#x0a;&#x0a;Click the &quot;Set shortcut&quot; button below to set the keyboard shortcut of your choice.  Or you can set up a keyboard shortcut via Tools &gt; Customise... &gt; Keyboard." dlg:multiline="true"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label7" dlg:tab-index="17" dlg:left="130" dlg:top="26" dlg:width="229" dlg:height="223" dlg:value="Compose Special Characters allows you to type a couple of characters and then run the ComposeSpecialChar macro to turn them into a single accented or special character.  The key combinations are listed over on the left." dlg:multiline="true" dlg:tabstop="false"/>
+  <dlg:text dlg:style-id="3" dlg:id="lblContactURL" dlg:tab-index="18" dlg:left="130" dlg:top="270" dlg:width="215" dlg:height="12" dlg:value="More info! www.productivityapps.com/csc.html">
+   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modContact.OpenHelpURL?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:text>
+  <dlg:text dlg:style-id="1" dlg:id="Label8" dlg:tab-index="19" dlg:left="130" dlg:top="252" dlg:width="75" dlg:height="12" dlg:value="Flag character for Calc:"/>
+  <dlg:button dlg:id="cmdSetFlag" dlg:tab-index="6" dlg:left="223" dlg:top="252" dlg:width="39" dlg:height="12" dlg:value="Set flag">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modCode.SetCalcDelimConst?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:textfield dlg:style-id="1" dlg:id="txtCalcDelim" dlg:tab-index="5" dlg:left="207" dlg:top="252" dlg:width="13" dlg:height="12" dlg:maxlength="1"/>
+  <dlg:checkbox dlg:id="chkReverse" dlg:tab-index="20" dlg:left="134" dlg:top="23" dlg:width="89" dlg:height="12" dlg:printable="false" dlg:page="2" dlg:value="Try vice versa - use key combo in any order (a&apos; or &apos;a = á)" dlg:checked="true"/>
+  <dlg:button dlg:style-id="1" dlg:id="cmdBindCSC" dlg:tab-index="4" dlg:left="162" dlg:top="288" dlg:width="55" dlg:height="14" dlg:value="CSC shortcut">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modAttachDialogCode.DisplayDlgAttachCSC?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:style-id="1" dlg:id="cmdBindUnicode" dlg:tab-index="21" dlg:left="219" dlg:top="288" dlg:width="55" dlg:height="14" dlg:value="Unicode shortcut">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modAttachDialogCode.DisplayDlgAttachUnicode?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+ </dlg:bulletinboard>
+</dlg:window>

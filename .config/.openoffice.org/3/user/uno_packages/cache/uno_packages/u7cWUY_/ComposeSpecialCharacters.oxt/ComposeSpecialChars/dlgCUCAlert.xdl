@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="dlgCUCAlert" dlg:left="155" dlg:top="93" dlg:width="201" dlg:height="187" dlg:closeable="true" dlg:moveable="true">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0" dlg:font-name="Verdana" dlg:font-height="11" dlg:font-stylename="Regular" dlg:font-family="swiss"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:text dlg:style-id="0" dlg:id="lblInfo" dlg:tab-index="0" dlg:left="8" dlg:top="12" dlg:width="182" dlg:height="149" dlg:printable="false" dlg:value="New feature!" dlg:multiline="true" dlg:nolabel="true"/>
+  <dlg:button dlg:id="cmdOK" dlg:tab-index="1" dlg:left="8" dlg:top="166" dlg:width="37" dlg:height="16" dlg:default="true" dlg:value="OK" dlg:button-type="ok"/>
+ </dlg:bulletinboard>
+</dlg:window>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="dlgAttachUnicode" dlg:left="110" dlg:top="49" dlg:width="243" dlg:height="254" dlg:closeable="true" dlg:moveable="true" dlg:title="Set shortcut for Insert Unicode Character">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0" dlg:look="simple"/>
+  <dlg:style dlg:style-id="1" dlg:border="simple" dlg:look="simple" dlg:font-name="Verdana" dlg:font-stylename="Regular" dlg:font-family="swiss"/>
+  <dlg:style dlg:style-id="2" dlg:font-name="Verdana" dlg:font-stylename="Bold" dlg:font-family="swiss" dlg:font-weight="100"/>
+  <dlg:style dlg:style-id="3" dlg:font-name="Verdana" dlg:font-stylename="Regular" dlg:font-family="swiss"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:checkbox dlg:style-id="0" dlg:id="CheckBox1" dlg:tab-index="0" dlg:left="18" dlg:top="23" dlg:width="182" dlg:height="10" dlg:value="Writer:  " dlg:checked="true"/>
+  <dlg:checkbox dlg:style-id="0" dlg:id="CheckBox2" dlg:tab-index="1" dlg:left="18" dlg:top="36" dlg:width="182" dlg:height="10" dlg:value="Calc: " dlg:checked="true"/>
+  <dlg:checkbox dlg:style-id="1" dlg:id="CheckBox3" dlg:tab-index="2" dlg:left="12" dlg:top="58" dlg:width="30" dlg:height="10" dlg:value="Alt" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="1" dlg:id="CheckBox4" dlg:tab-index="3" dlg:left="12" dlg:top="71" dlg:width="30" dlg:height="10" dlg:value="Alt Gr" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="1" dlg:id="CheckBox5" dlg:tab-index="4" dlg:left="12" dlg:top="85" dlg:width="30" dlg:height="10" dlg:value="Ctl" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="1" dlg:id="CheckBox6" dlg:tab-index="5" dlg:left="12" dlg:top="98" dlg:width="30" dlg:height="10" dlg:value="Shift" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+  <dlg:radiogroup>
+   <dlg:radio dlg:id="OptionButton1" dlg:tab-index="6" dlg:left="51" dlg:top="58" dlg:width="37" dlg:height="10" dlg:value="Character" dlg:checked="true">
+    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modCode.ChangeOptAttach?language=Basic&amp;location=application" script:language="Script"/>
+   </dlg:radio>
+   <dlg:radio dlg:id="OptionButton2" dlg:tab-index="7" dlg:left="51" dlg:top="71" dlg:width="37" dlg:height="10" dlg:value="Function">
+    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modCode.ChangeOptAttach?language=Basic&amp;location=application" script:language="Script"/>
+   </dlg:radio>
+   <dlg:radio dlg:id="OptionButton3" dlg:tab-index="8" dlg:left="51" dlg:top="85" dlg:width="37" dlg:height="10" dlg:value="Other">
+    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modCode.ChangeOptAttach?language=Basic&amp;location=application" script:language="Script"/>
+   </dlg:radio>
+  </dlg:radiogroup>
+  <dlg:menulist dlg:style-id="1" dlg:id="ListBox1" dlg:tab-index="9" dlg:left="95" dlg:top="58" dlg:width="27" dlg:height="192">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:menulist dlg:style-id="1" dlg:id="ListBox2" dlg:tab-index="10" dlg:disabled="true" dlg:left="95" dlg:top="58" dlg:width="56" dlg:height="192">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:menulist dlg:style-id="1" dlg:id="ListBox3" dlg:tab-index="11" dlg:disabled="true" dlg:left="95" dlg:top="58" dlg:width="27" dlg:height="192">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.DisplayCommandMappedToKey?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:titledbox dlg:id="FrameControl1" dlg:tab-index="15" dlg:left="12" dlg:top="12" dlg:width="192" dlg:height="41">
+   <dlg:title dlg:value="Assign shortcut in: (currently assigned function/macro)"/>
+  </dlg:titledbox>
+  <dlg:text dlg:style-id="2" dlg:id="Label1" dlg:tab-index="16" dlg:left="162" dlg:top="123" dlg:width="74" dlg:height="123" dlg:value="Use this dialog to assign the key or key combination you&apos;ll type to insert a unicode character (using the unicode character&apos;s 4-character code).  " dlg:multiline="true"/>
+  <dlg:text dlg:style-id="3" dlg:id="Label2" dlg:tab-index="17" dlg:left="12" dlg:top="123" dlg:width="76" dlg:height="70" dlg:value="Select one or more of Alt, Alt Gr, Ctrl and/or Shift, then choose a Character, Function or Other key as your shortcut key combination, and click OK." dlg:multiline="true" dlg:nolabel="true"/>
+  <dlg:text dlg:style-id="3" dlg:id="Label3" dlg:tab-index="18" dlg:left="12" dlg:top="198" dlg:width="76" dlg:height="51" dlg:value="Depending on your operating system and keyboard language, some key combinations may not be available." dlg:multiline="true" dlg:nolabel="true"/>
+  <dlg:button dlg:id="cmdRemove" dlg:tab-index="14" dlg:left="161" dlg:top="100" dlg:width="43" dlg:height="16" dlg:value="Clear shortcut">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ComposeSpecialChars.modKeyBinding.ClearShortcut?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="cmdOKUnicode" dlg:tab-index="12" dlg:left="161" dlg:top="58" dlg:width="43" dlg:height="16" dlg:value="OK" dlg:button-type="ok"/>
+  <dlg:button dlg:id="cmdCancelUnicoode" dlg:tab-index="13" dlg:left="161" dlg:top="79" dlg:width="43" dlg:height="16" dlg:value="Close" dlg:button-type="cancel"/>
+ </dlg:bulletinboard>
+</dlg:window>

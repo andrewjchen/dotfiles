@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modComposeUnicode" script:language="StarBasic">Sub ComposeUnicodeChar
+
+	dim strComp			as string
+	dim objComponent	as object
+	dim objController	as object
+
+	on error goto Errorhandler
+	
+	if len(CSC_OO_MAJOR_VERSION) = 0 then
+		CSC_OO_MAJOR_VERSION = fncOOoVersion()
+	end if
+
+	objComponent = ThisComponent
+	objController = objComponent.CurrentController
+	
+	&apos; determine which component is calling the addin
+	strComp = fncWhichComponent(objComponent)
+	
+	Select Case strComp
+		Case &quot;Text&quot;
+			ComposeUnicodeSCWriter(objController)
+		Case &quot;Spreadsheet&quot;
+			ComposeUnicodeSCCalc(objController)
+		Case &quot;Presentation&quot;
+	End Select
+	
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;ComposeSpecialChar&quot;
+		End Sub
+
+Sub ComposeUnicodeSCWriter(objController as object)
+
+	&apos; for Text documents
+	
+	on error goto ErrorHandler
+
+	dim objViewCursor 		as object
+	dim objText 			as object
+	dim objTextCursor 		as object
+	dim strString 			as string
+	dim strComponentType	as string
+	
+	&apos;REVERSE_VAL = fncGetReverseVal
+	
+	objViewCursor = objController.getViewCursor()
+	objText = objViewCursor.getText()
+	objTextCursor = objText.createTextCursorByRange(objViewCursor)
+	
+	&apos; select and copy four preceding characters
+	objTextCursor.goLeft(4, True)
+	strString = objTextCursor.getString()
+	
+	&apos; compose character only if user has typed 4 character-long unicode code
+	if len(strString) = 4 then
+	
+		dim strAdjusted		as string
+		dim strUnicode		as string
+		dim strUnicodeHex	as string
+		dim strTest			as string
+		dim bln				as boolean
+		
+		strUnicode = strString
+		
+		strTest = left(strUnicode,3)
+		strTest = ucase(strTest)
+
+		select case strTest
+			case &quot;030&quot;,&quot;031&quot;,&quot;032&quot;,&quot;033&quot;,&quot;034&quot;,&quot;035&quot;,&quot;036&quot;,&quot;1DC&quot;,&quot;1DD&quot;,&quot;1DE&quot;,&quot;1DF&quot;,&quot;20D&quot;,&quot;20E&quot;,&quot;20F&quot;,&quot;FE2&quot;
+				if fncGetDisplayV2Notice = true then
+					msgbox &quot;The use of unicode combining characters in the following ranges is not recommended in OpenOffice 2.x.  They may not display properly.&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+					       &quot;Please upgrade to OpenOffice 3.x.&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+					       &quot;This message will not display again.&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+					       &quot;Unicode combining character ranges:&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+					       &quot;030x - 036x&quot; &amp; Chr(13) &amp; _
+					       &quot;1DCx - 1DFx&quot; &amp; Chr(13) &amp; _
+					       &quot;20Dx - 20Fx&quot; &amp; Chr(13) &amp; _
+					       &quot;FE2x&quot; &amp; Chr(13), 48, &quot;Please upgrade OpenOffice&quot;
+					bln = fncSetDisplayV2Notice(false) 
+				end if
+			case else
+		end select
+
+		strUnicodeHex = &quot;&amp;H&quot; &amp; strUnicode
+		
+		if clng(strUnicodeHex) = 0 then
+			msgbox strUnicode &amp; &quot; is not a valid code for a unicode character.&quot;,16,&quot;Invalid code&quot;
+		else
+			strUnicodeChar = chr(clng(strUnicodeHex))
+			objTextCursor.setString(strUnicodeChar)
+			&apos;InsertUnicodeCharacterText0(strUnicodeChar)		
+		end if		
+		
+
+		
+	end if
+	
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;ComposeSCWriter&quot;
+		
+End Sub
+
+Sub ComposeUnicodeSCCalc(objController as object)
+
+	&apos; for Calc spreadsheets
+	
+	on error goto ErrorHandler
+
+	dim objRange		as object
+	dim objActiveCell	as object
+	dim objActiveSheet	as object
+	dim objDispatcher	as object
+	dim strType			as string
+	dim str1			as string
+	dim str2			as string
+	dim str3			as string
+	dim strAdjusted		as string
+	dim strCell			as string
+	dim strString		as string
+	dim strStringFinal	as string
+	dim lngPos			as long
+	dim blnResult		as boolean
+	
+	CALC_DELIM = fncGetCalcDelimConst
+	REVERSE_VAL = fncGetReverseVal
+
+	if len(CALC_DELIM) &lt; 1 or CALC_DELIM = &quot; &quot; then
+		CALC_DELIM = fncGetCalcDelimConst()
+	end if
+	
+	objActiveSheet = objController.getActiveSheet()
+	objRange = ThisComponent.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
+	objController.Select(objRange) 
+	objActiveCell = ThisComponent.CurrentSelection
+	
+	&apos; commit changes to the cell using &quot;select database range&quot;
+
+	objDispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	
+	dim args1(0) as new com.sun.star.beans.PropertyValue
+	args1(0).Name = &quot;DbName&quot;
+	args1(0).Value = &quot;&quot;
+	
+	objDispatcher.executeDispatch(objController.Frame, &quot;.uno:SelectDB&quot;, &quot;&quot;, 0, args1())
+		    	
+	&apos; determine type of cell - getFormula for Formula cells, getString for Text/Empty
+	&apos; Empty type = cells that have not been exited, so data entry type not determined yet
+   	strType = fncGetCellType(objActiveCell)
+   	
+   	Select Case strType
+   	
+   		Case &quot;VALUE&quot;
+   		
+   		CASE &quot;FORMULA&quot;
+   		
+   			strString = objActiveCell.getFormula()
+   		
+		Case &quot;TEXT&quot;, &quot;EMPTY&quot;
+		
+			strString = objActiveCell.getString()
+
+   	End Select
+
+	&apos; lookup composed character only if there are at least 5 characters to process
+	&apos; (4 characters to compose the special character plus the flag character CALC_DELIM
+	&apos; flag character required for Calc, not Writer)
+	if len(strString) &gt; 4 then
+
+		&apos; search the string for the delimiter character (flagged by the CALC_DELIM constant)
+		lngPos = instr(strString, CALC_DELIM)
+
+		&apos; quit if the delimiter is missing or less than 2 characters from end of cell
+		if lngPos = 0 or len(strString) - lngPos &lt; 4 then
+			goto FinishUp
+		end if
+		
+		&apos; parse the string to separate out the delimiter character (flagged by the CALC_DELIM constant)
+		&apos;str1 = left(strString, lngPos-1)
+		&apos;str2 = mid(strString, lngPos+1, 4)
+
+		dim strUnicode		as string
+		dim strUnicodeHex	as string
+		dim strTest			as string
+		dim bln				as boolean
+		
+		strUnicode = mid(strString, lngPos+1, 4)
+		
+		strTest = left(strUnicode,3)
+		strTest = ucase(strTest)
+
+		select case strTest
+			case &quot;030&quot;,&quot;031&quot;,&quot;032&quot;,&quot;033&quot;,&quot;034&quot;,&quot;035&quot;,&quot;036&quot;,&quot;1DC&quot;,&quot;1DD&quot;,&quot;1DE&quot;,&quot;1DF&quot;,&quot;20D&quot;,&quot;20E&quot;,&quot;20F&quot;,&quot;FE2&quot;
+				if fncGetDisplayV2Notice = true then
+					msgbox &quot;The use of unicode combining characters in the following ranges is not recommended in OpenOffice 2.x.  They won&apos;t display properly.&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+					       &quot;Please upgrade to OpenOffice 3.x.&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+					       &quot;This message will not display again.&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+					       &quot;Unicode combining character ranges:&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+					       &quot;030x - 036x&quot; &amp; Chr(13) &amp; _
+					       &quot;1DCx - 1DFx&quot; &amp; Chr(13) &amp; _
+					       &quot;20Dx - 20Fx&quot; &amp; Chr(13) &amp; _
+					       &quot;FE2x&quot; &amp; Chr(13), 48, &quot;Please upgrade OpenOffice&quot;
+					bln = fncSetDisplayV2Notice(false) 
+				end if
+			case else
+		end select
+
+		
+		strUnicodeHex = &quot;&amp;H&quot; &amp; strUnicode
+		
+		if clng(strUnicodeHex) = 0 then
+			msgbox strUnicode &amp; &quot; is not a valid code for a unicode character.&quot;,16,&quot;Invalid code&quot;
+		else
+			strUnicodeChar = chr(clng(strUnicodeHex))
+		
+			&apos; replace composing characters with special characters
+			str3 = CALC_DELIM &amp; strUnicode
+			strStringFinal = replace(strString, str3, strUnicodeChar)
+
+		   	Select Case strType
+		   	
+		   		Case &quot;VALUE&quot;
+		   		
+		   		CASE &quot;FORMULA&quot;
+		   		
+		   			objActiveCell.setFormula(strStringFinal)
+		   			
+				Case &quot;TEXT&quot;, &quot;EMPTY&quot;
+				
+					objActiveCell.setString(strStringFinal)
+		
+		   	End Select
+		
+		end if		
+		
+	end if
+
+FinishUp:
+   	
+   	&apos; switch cell back to input mode
+	blnResult = fncSwitchToInputMode(objController.Frame)
+   	
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;ComposeSCCalc&quot;
+		
+End Sub
+
+
+</script:module>

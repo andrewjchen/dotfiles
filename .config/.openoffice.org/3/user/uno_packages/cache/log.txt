@@ -1,0 +1,43 @@
+###### Progress log entry 2010-05-10 23:40:43 ######
+###### Progress log entry 2010-05-11 01:20:37 ######
+Copying: ComposeSpecialCharacters.oxt
+Enabling: Compose Special Characters
+ Enabling: ComposeSpecialChars
+ Enabling: AddonUI.xcu
+###### Progress log entry 2010-05-13 22:21:45 ######
+###### Progress log entry 2010-05-16 17:38:56 ######
+###### Progress log entry 2010-05-17 02:02:16 ######
+###### Progress log entry 2010-05-17 20:34:29 ######
+###### Progress log entry 2010-05-18 00:32:23 ######
+###### Progress log entry 2010-05-19 01:24:40 ######
+###### Progress log entry 2010-05-19 03:24:15 ######
+###### Progress log entry 2010-05-19 03:28:18 ######
+###### Progress log entry 2010-05-20 22:48:10 ######
+###### Progress log entry 2010-05-22 20:06:43 ######
+###### Progress log entry 2010-05-23 08:34:27 ######
+###### Progress log entry 2010-05-23 21:04:17 ######
+###### Progress log entry 2010-05-23 22:39:49 ######
+###### Progress log entry 2010-05-24 16:22:04 ######
+###### Progress log entry 2010-05-24 18:57:44 ######
+###### Progress log entry 2010-05-24 23:32:52 ######
+###### Progress log entry 2010-05-25 19:43:15 ######
+###### Progress log entry 2010-05-25 22:25:05 ######
+###### Progress log entry 2010-05-27 17:18:29 ######
+###### Progress log entry 2010-05-28 04:38:11 ######
+###### Progress log entry 2010-05-28 10:47:38 ######
+###### Progress log entry 2010-05-28 18:26:16 ######
+###### Progress log entry 2010-05-30 10:18:52 ######
+###### Progress log entry 2010-05-31 21:23:29 ######
+###### Progress log entry 2010-06-01 21:06:10 ######
+###### Progress log entry 2010-06-03 01:28:38 ######
+###### Progress log entry 2010-06-03 19:45:48 ######
+###### Progress log entry 2010-06-04 22:32:31 ######
+###### Progress log entry 2010-06-06 13:19:07 ######
+###### Progress log entry 2010-06-06 13:22:47 ######
+###### Progress log entry 2010-06-06 14:18:07 ######
+###### Progress log entry 2010-06-09 20:55:58 ######
+###### Progress log entry 2010-06-10 02:54:38 ######
+###### Progress log entry 2010-06-10 02:58:22 ######
+###### Progress log entry 2010-06-13 20:51:39 ######
+###### Progress log entry 2010-06-14 22:57:18 ######
+###### Progress log entry 2010-06-16 21:26:57 ######

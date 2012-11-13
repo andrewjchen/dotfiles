@@ -1,0 +1,2673 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modCode" script:language="StarBasic">REM  *****  BASIC  *****
+
+&apos; Compose Special Characters addin for OpenOffice 2.3 and higher
+
+&apos; ComposeSpecialCharacters is an addin for OpenOffice 2.3 
+&apos; and higher that allows users to compose accented/special 
+&apos; characters using two-three keystrokes.  (Thanks to Bill
+&apos; Hibbert for compiling an initial list of keystroke combinations).
+ 
+&apos; This module: Copyright 2008 Charles Henrich
+&apos; All other modules: not copyrighted.
+ 
+&apos; This library is free software; you can redistribute it and/or
+&apos; modify it under the terms of the GNU Lesser General Public
+&apos; License as published by the Free Software Foundation; either
+&apos; version 2.1 of the License, or (at your option) any later version.
+ 
+&apos; This library is distributed in the hope that it will be useful,
+&apos; but WITHOUT ANY WARRANTY; without even the implied warranty of
+&apos; MERCHANTABILITY or FITNESS for A PARTICULAR PURPOSE.  See the GNU
+&apos; Lesser General Public License for more details.
+ 
+&apos; You should have received a copy of the GNU Lesser General Public
+&apos; License along with this library; if not, write to
+
+&apos; Free Software Foundation, Inc.
+&apos; 51 Franklin Street
+&apos; Fifth Floor
+&apos; Boston, MA  02110-1301  
+&apos; USA
+
+&apos; HOW TO USE
+
+&apos; For Text documents: type the two composing characters and run
+&apos; the ComposeSpecialChars macro.
+
+&apos; For Spreadsheet documents:  type a flag character (&quot;¬&quot; is the
+&apos; default) plus the two composing characters, then run the
+&apos; macro.  A flag character is required for spreadsheets because
+&apos; currently there isn&apos;t any way via code to identify where the 
+&apos; insertion point is in an OpenOffice spreadsheet cell.  Since 
+&apos; a user might want to insert a special character anywhere in a
+&apos; cell, not just as the last character, the flag character is
+&apos; necessary.
+
+&apos; The ComposeSpecialChars macro can be bound to Alt+Shift+Z
+&apos; using the BindAltShiftZ macro.  Otherwise users can bind the
+&apos; macro to a key combo shortcut of their choice.
+
+&apos; A dialog is included as a help reference and GUI.  It can be 
+&apos; opened via &quot;Tools &gt; Compose Characters...&quot; in Text and
+&apos; Calc.
+
+&apos; RELEASE NOTES:
+
+&apos; Current version:  2.0.4 2010-03-29
+
+&apos; www.productivityapps.com/cscreleasenotes.html
+
+
+&apos; -----------------------------------------------------------
+&apos; GLOBAL VARIABLES
+&apos; -----------------------------------------------------------
+
+public CSC_OO_MAJOR_VERSION as string
+
+&apos; flag character for Spreadsheets
+&apos; the value is stored in library ComposeSpecialCharsCustomConstants
+public CALC_DELIM as string
+public REVERSE_VAL as boolean
+
+public const CSC_CUSTOM_CONSTS_LIB as string = &quot;ComposeSpecialCharsX&quot;
+public const CSC_CUSTOM_CONSTS_MOD as string = &quot;modCustomConstants&quot;
+public const CSC_CUSTOM_CONSTS_MSG as string = &quot;&apos; These are user defined constants for the Compose Special Characters extension&quot;
+&apos; declare character array as private variable
+&apos; so macro responds quicker - tbe array is populated 
+&apos; the first time the macro runs then is always 
+&apos; available until OpenOffice is closed
+private arrCSCChars() as string
+
+&apos; declare dialogs as global variable
+
+dim dlg					as object
+dim dlgAttach			as object
+dim dlgAttachUnicode	as object
+
+&apos; declare Component and Controller as global variables
+&apos; for performance reasons
+dim objAppComponent		as object
+dim objAppController	as object
+
+&apos; declare Attach dialog controls as global variables
+&apos; for performance reasons
+dim chkWriter			as object
+dim chkCalc				as object
+dim chkAlt 				as object
+dim chkAltGr 			as object
+dim chkShift 			as object
+dim chkCtl 				as object
+dim lstCharKeys 		as object
+dim lstOtherKeys 		as object
+dim lstFnKeys 			as object
+dim optChar				as object
+dim optOther 			as object
+dim optFn				as object
+
+&apos; -----------------------------------------------------------
+&apos; PROCEDURES
+&apos; -----------------------------------------------------------
+
+Sub ComposeSpecialChar
+
+	dim strComp			as string
+	dim objComponent	as object
+	dim objController	as object
+
+	on error goto Errorhandler
+	
+	if fncGetDisplayCUCAlert = True then
+		
+		DisplayCUCAlert()
+		
+		dim blnCUCAlert as boolean
+		
+		blnCUCAlert = fncSetDisplayCUCAlert(False)
+		
+	end if
+
+	&apos; populate array from Function
+	&apos; array used in more than one procedure so it&apos;s built and returned by a Function
+	&apos; arrCSCChars(0,x) = category (&quot;A / a&quot;, &quot;C / c&quot; etc for dialog purposes)
+	&apos; arrCSCChars(1,x) = keystroke combo (&quot;a&apos;&quot;, &quot;c,&quot; etc)
+	&apos; arrCSCChars(2,x) = special character (&quot;à&quot;, &quot;ç&quot; etc)
+
+	&apos; if character array isn&apos;t populated, populate it
+	if ubound(arrCSCChars,1) &lt; 0 then
+		arrCSCChars() = fncCharacterArray
+	end if
+	
+	objComponent = ThisComponent
+	objController = objComponent.CurrentController
+	
+	&apos; determine which component is calling the addin
+	strComp = fncWhichComponent(objComponent)
+	
+	Select Case strComp
+		Case &quot;Text&quot;
+			ComposeSCWriter(objController, arrCSCChars)
+		Case &quot;Spreadsheet&quot;
+			ComposeSCCalc(objController, arrCSCChars)
+		Case &quot;Presentation&quot;
+	End Select
+	
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;ComposeSpecialChar&quot;
+		
+End Sub
+
+
+Sub ComposeSCWriter(objController as object, arrChars as Variant)
+
+	&apos; for Text documents
+
+	&apos; error handling - in Case there&apos;s a problem with the array passing through
+	if not IsArray(arrchars) then
+		MsgBox &quot;Character array not loaded.&quot;,0,&quot;Cannot continue&quot;
+		Exit Sub
+	end if
+	
+	on error goto ErrorHandler
+
+	dim objViewCursor 		as object
+	dim objText 			as object
+	dim objTextCursor 		as object
+	dim strString 			as string
+	dim strComponentType	as string
+	
+	REVERSE_VAL = fncGetReverseVal
+	
+	objViewCursor = objController.getViewCursor()
+	objText = objViewCursor.getText()
+	objTextCursor = objText.createTextCursorByRange(objViewCursor)
+	
+	&apos; select and copy two preceding characters
+	objTextCursor.goLeft(2, True)
+	strString = objTextCursor.getString()
+	
+	&apos; lookup composed character only if there are 2 characters to process
+	if len(strString) = 2 then
+	
+		dim i 				as integer
+		dim x				as integer
+		dim blnFound 		as boolean
+		dim strComposedChar	as string
+		dim strAdjusted		as string
+		
+		blnFound = False
+		
+		strAdjusted = fncAdjustString(strString)
+		
+		&apos; loop through array of characters looking for match
+		for i = 0 To uBound(arrchars,2) &apos; upper limit of array = ubound of 2nd dimension
+			if arrchars(1,i) = strAdjusted Then
+				&apos; match found - exit loop
+				blnFound = true
+				strComposedChar = arrchars(2,i)
+				Exit for
+			end if
+		next i
+	
+		if blnFound = True then
+			if left(strComposedChar,2) = &quot;&amp;H&quot; then
+				dim strX as string
+				strX = strComposedChar
+				strComposedChar = chr(clng(strX))
+			end if
+			&apos; replace composing characters with special characters
+			objTextCursor.setString(strComposedChar)
+		else
+			&apos; no match found, notify user and deselect the characters
+			msgbox &quot;&quot;&quot;&quot; &amp; strstring &amp; &quot;&quot;&quot; is not defined as an accented character.&quot;, 0, &quot;Undefined character&quot;
+			objTextCursor.goRight(2,False)
+		end if
+
+	end if
+	
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;ComposeSCWriter&quot;
+		
+End Sub
+
+
+Sub ComposeSCCalc(objController as object, arrchars as Variant)
+
+	&apos; for Calc spreadsheets
+
+	&apos; error handling - in Case there&apos;s a problem with the array passing through
+	if Not IsArray(arrchars) then
+		MsgBox &quot;Character array not loaded.&quot;,0,&quot;Cannot continue&quot;
+		Exit Sub
+	end if
+	
+	on error goto ErrorHandler
+
+	dim objRange		as object
+	dim objActiveCell	as object
+	dim objActiveSheet	as object
+	dim objDispatcher	as object
+	dim strType			as string
+	dim str1			as string
+	dim str2			as string
+	dim str3			as string
+	dim strAdjusted		as string
+	dim strCell			as string
+	dim strString		as string
+	dim lngPos			as long
+	dim blnResult		as boolean
+	
+	CALC_DELIM = fncGetCalcDelimConst
+	REVERSE_VAL = fncGetReverseVal
+
+	if len(CALC_DELIM) &lt; 1 or CALC_DELIM = &quot; &quot; then
+		CALC_DELIM = fncGetCalcDelimConst()
+	end if
+	
+	objActiveSheet = objController.getActiveSheet()
+	objRange = ThisComponent.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
+	objController.Select(objRange) 
+	objActiveCell = ThisComponent.CurrentSelection
+	
+	&apos; commit changes to the cell using &quot;select database range&quot;
+
+	objDispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	
+	dim args1(0) as new com.sun.star.beans.PropertyValue
+	args1(0).Name = &quot;DbName&quot;
+	args1(0).Value = &quot;&quot;
+	
+	objDispatcher.executeDispatch(objController.Frame, &quot;.uno:SelectDB&quot;, &quot;&quot;, 0, args1())
+		    	
+	&apos; determine type of cell - getFormula for Formula cells, getString for Text/Empty
+	&apos; Empty type = cells that have not been exited, so data entry type not determined yet
+   	strType = fncGetCellType(objActiveCell)
+   	
+   	Select Case strType
+   	
+   		Case &quot;VALUE&quot;
+   		
+   		CASE &quot;FORMULA&quot;
+   		
+   			strString = objActiveCell.getFormula()
+   		
+		Case &quot;TEXT&quot;, &quot;EMPTY&quot;
+		
+			strString = objActiveCell.getString()
+
+   	End Select
+
+	&apos; lookup composed character only if there are at least 3 characters to process
+	&apos; (2 characters to compose the special character plus the flag character CALC_DELIM
+	&apos; flag character required for Calc, not Writer)
+	if len(strString) &gt; 2 then
+	
+		&apos; search the string for the delimiter character (flagged by the CALC_DELIM constant)
+		lngPos = instr(strString, CALC_DELIM)
+
+		&apos; quit if the delimiter is missing or less than 2 characters from end of cell
+		if lngPos = 0 or len(strString) - lngPos &lt; 2 then
+			goto FinishUp
+		end if
+		
+		&apos; parse the string to separate out the delimiter character (flagged by the CALC_DELIM constant)
+		str1 = left(strString, lngPos-1)
+		str2 = mid(strString, lngPos+1, 2)
+
+		strAdjusted = fncAdjustString(str2)
+				
+		&apos; find str2 in the character array
+		dim i 				as integer
+		dim x				as integer
+		dim blnFound 		as boolean
+		dim strComposedChar	as string
+		
+		blnFound = False
+		
+		&apos; loop through array of characters looking for match
+		for i = 0 To uBound(arrchars,2) &apos; upper limit of array = ubound of 2nd dimension
+			if arrchars(1,i) = strAdjusted Then
+				&apos; match found - exit loop
+				blnFound = true
+				strComposedChar = arrchars(2,i)
+				Exit for
+			end if
+		next i
+
+		if blnFound = True then
+			&apos; replace composing characters with special characters
+			str3 = CALC_DELIM &amp; str2
+			strString = replace(strString, str3, strComposedChar)
+
+		   	Select Case strType
+		   	
+		   		Case &quot;VALUE&quot;
+		   		
+		   		CASE &quot;FORMULA&quot;
+		   		
+		   			objActiveCell.setFormula(strString)
+		   			
+				Case &quot;TEXT&quot;, &quot;EMPTY&quot;
+				
+					objActiveCell.setString(strString)
+		
+		   	End Select
+		
+		else
+			&apos; no match found, notify user 
+			msgbox &quot;&quot;&quot;&quot; &amp; str2 &amp; &quot;&quot;&quot; is not defined as an accented character.&quot;, 0, &quot;Undefined character&quot;
+		end if
+
+	end if
+
+FinishUp:
+   	
+   	&apos; switch cell back to input mode
+	blnResult = fncSwitchToInputMode(objController.Frame)
+   	
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;ComposeSCCalc&quot;
+		
+End Sub
+
+
+Function fncGetCellType(objCell)
+
+	&apos; determine type of spreadsheet cell
+	
+	dim strReturn 	as string
+	
+	on error goto ErrorHandler
+	
+	Select Case objCell.getType()
+		Case 0
+			strReturn = &quot;EMPTY&quot;
+		Case 1
+			strReturn = &quot;VALUE&quot;
+		Case 2
+			strReturn = &quot;TEXT&quot;
+		Case 3
+			strReturn = &quot;FORMULA&quot;
+	End Select
+	
+ReturnValue:
+
+	fncGetCellType = strReturn
+	
+	exit Function
+	
+ErrorHandler:
+
+	strReturn = &quot;NOTACELL&quot;
+	
+	goto ReturnValue
+
+end Function
+
+
+Function fncSwitchToInputMode(obj) as boolean
+
+	on error goto ErrorHandler
+	
+	dim dispatcher as object
+	dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	
+	dispatcher.executeDispatch(obj, &quot;.uno:SetInputMode&quot;, &quot;&quot;, 0, Array())
+
+	fncSwitchToInputMode = True
+	
+	exit Function
+	
+Errorhandler:
+
+	fncSwitchToInputMode = False
+
+end Function
+
+
+Function fncCharacterArray() as Array
+
+	&apos; this Function returns the character array
+
+	dim arrChars(2,423)
+
+	arrChars(0,0)=&quot;A / a&quot;
+	arrChars(1,0)=&quot;A`&quot;
+	arrChars(2,0)=&quot;À&quot;
+	arrChars(0,1)=&quot;A / a&quot;
+	arrChars(1,1)=&quot;a`&quot;
+	arrChars(2,1)=&quot;à&quot;
+	arrChars(0,2)=&quot;A / a&quot;
+	arrChars(1,2)=&quot;A\&quot;
+	arrChars(2,2)=&quot;À&quot;
+	arrChars(0,3)=&quot;A / a&quot;
+	arrChars(1,3)=&quot;a\&quot;
+	arrChars(2,3)=&quot;à&quot;
+	arrChars(0,4)=&quot;A / a&quot;
+	arrChars(1,4)=&quot;A&apos;&quot;
+	arrChars(2,4)=&quot;Á&quot;
+	arrChars(0,5)=&quot;A / a&quot;
+	arrChars(1,5)=&quot;a&apos;&quot;
+	arrChars(2,5)=&quot;á&quot;
+	arrChars(0,6)=&quot;A / a&quot;
+	arrChars(1,6)=&quot;A^&quot;
+	arrChars(2,6)=&quot;Â&quot;
+	arrChars(0,7)=&quot;A / a&quot;
+	arrChars(1,7)=&quot;a^&quot;
+	arrChars(2,7)=&quot;â&quot;
+	arrChars(0,8)=&quot;A / a&quot;
+	arrChars(1,8)=&quot;A:&quot;
+	arrChars(2,8)=&quot;Ä&quot;
+	arrChars(0,9)=&quot;A / a&quot;
+	arrChars(1,9)=&quot;a:&quot;
+	arrChars(2,9)=&quot;ä&quot;
+	arrChars(0,10)=&quot;A / a&quot;
+	arrChars(1,10)=&quot;A~&quot;
+	arrChars(2,10)=&quot;Ã&quot;
+	arrChars(0,11)=&quot;A / a&quot;
+	arrChars(1,11)=&quot;a~&quot;
+	arrChars(2,11)=&quot;ã&quot;
+	arrChars(0,12)=&quot;A / a&quot;
+	arrChars(1,12)=&quot;A@&quot;
+	arrChars(2,12)=&quot;Å&quot;
+	arrChars(0,13)=&quot;A / a&quot;
+	arrChars(1,13)=&quot;a@&quot;
+	arrChars(2,13)=&quot;å&quot;
+	arrChars(0,14)=&quot;A / a&quot;
+	arrChars(1,14)=&quot;AE&quot;
+	arrChars(2,14)=&quot;Æ&quot;
+	arrChars(0,15)=&quot;A / a&quot;
+	arrChars(1,15)=&quot;ae&quot;
+	arrChars(2,15)=&quot;æ&quot;
+	arrChars(0,16)=&quot;A / a&quot;
+	arrChars(1,16)=&quot;A,&quot;
+	arrChars(2,16)=&quot;Ą&quot;
+	arrChars(0,17)=&quot;A / a&quot;
+	arrChars(1,17)=&quot;a,&quot;
+	arrChars(2,17)=&quot;ą&quot;
+	arrChars(0,18)=&quot;A / a&quot;
+	arrChars(1,18)=&quot;A-&quot;
+	arrChars(2,18)=&quot;Ā&quot;
+	arrChars(0,19)=&quot;A / a&quot;
+	arrChars(1,19)=&quot;a-&quot;
+	arrChars(2,19)=&quot;ā&quot;
+	arrChars(0,20)=&quot;A / a&quot;
+	arrChars(1,20)=&quot;A(&quot;
+	arrChars(2,20)=&quot;Ă&quot;
+	arrChars(0,21)=&quot;A / a&quot;
+	arrChars(1,21)=&quot;a(&quot;
+	arrChars(2,21)=&quot;ă&quot;
+	arrChars(0,22)=&quot;A / a&quot;
+	arrChars(1,22)=&quot;A)&quot;
+	arrChars(2,22)=&quot;Ǎ&quot;
+	arrChars(0,23)=&quot;A / a&quot;
+	arrChars(1,23)=&quot;a)&quot;
+	arrChars(2,23)=&quot;ǎ&quot;
+	arrChars(0,24)=&quot;A / a&quot;
+	arrChars(1,24)=&quot;A.&quot;
+	arrChars(2,24)=&quot;Ạ&quot;
+	arrChars(0,25)=&quot;A / a&quot;
+	arrChars(1,25)=&quot;a.&quot;
+	arrChars(2,25)=&quot;ạ&quot;
+	arrChars(0,26)=&quot;A / a&quot;
+	arrChars(1,26)=&quot;A?&quot;
+	arrChars(2,26)=&quot;Ậ&quot;
+	arrChars(0,27)=&quot;A / a&quot;
+	arrChars(1,27)=&quot;a?&quot;
+	arrChars(2,27)=&quot;ậ&quot;
+	arrChars(0,28)=&quot;A / a&quot;
+	arrChars(1,28)=&quot;A;&quot;
+	arrChars(2,28)=&quot;Ặ&quot;
+	arrChars(0,29)=&quot;A / a&quot;
+	arrChars(1,29)=&quot;a;&quot;
+	arrChars(2,29)=&quot;ặ&quot;
+	arrChars(0,30)=&quot;B / b&quot;
+	arrChars(1,30)=&quot;B.&quot;
+	arrChars(2,30)=&quot;Ḅ&quot;
+	arrChars(0,31)=&quot;B / b&quot;
+	arrChars(1,31)=&quot;b.&quot;
+	arrChars(2,31)=&quot;ḅ&quot;
+	arrChars(0,32)=&quot;C / c&quot;
+	arrChars(1,32)=&quot;C,&quot;
+	arrChars(2,32)=&quot;Ç&quot;
+	arrChars(0,33)=&quot;C / c&quot;
+	arrChars(1,33)=&quot;c,&quot;
+	arrChars(2,33)=&quot;ç&quot;
+	arrChars(0,34)=&quot;C / c&quot;
+	arrChars(1,34)=&quot;C&apos;&quot;
+	arrChars(2,34)=&quot;Ć&quot;
+	arrChars(0,35)=&quot;C / c&quot;
+	arrChars(1,35)=&quot;c&apos;&quot;
+	arrChars(2,35)=&quot;ć&quot;
+	arrChars(0,36)=&quot;C / c&quot;
+	arrChars(1,36)=&quot;C)&quot;
+	arrChars(2,36)=&quot;Č&quot;
+	arrChars(0,37)=&quot;C / c&quot;
+	arrChars(1,37)=&quot;c)&quot;
+	arrChars(2,37)=&quot;č&quot;
+	arrChars(0,38)=&quot;C / c&quot;
+	arrChars(1,38)=&quot;C^&quot;
+	arrChars(2,38)=&quot;Ĉ&quot;
+	arrChars(0,39)=&quot;C / c&quot;
+	arrChars(1,39)=&quot;c^&quot;
+	arrChars(2,39)=&quot;ĉ&quot;
+	arrChars(0,40)=&quot;C / c&quot;
+	arrChars(1,40)=&quot;C.&quot;
+	arrChars(2,40)=&quot;Ċ&quot;
+	arrChars(0,41)=&quot;C / c&quot;
+	arrChars(1,41)=&quot;c.&quot;
+	arrChars(2,41)=&quot;ċ&quot;
+	arrChars(0,42)=&quot;D / d&quot;
+	arrChars(1,42)=&quot;D=&quot;
+	arrChars(2,42)=&quot;Đ&quot;
+	arrChars(0,43)=&quot;D / d&quot;
+	arrChars(1,43)=&quot;d=&quot;
+	arrChars(2,43)=&quot;ð&quot;
+	arrChars(0,44)=&quot;D / d&quot;
+	arrChars(1,44)=&quot;D-&quot;
+	arrChars(2,44)=&quot;Ď&quot;
+	arrChars(0,45)=&quot;D / d&quot;
+	arrChars(1,45)=&quot;d-&quot;
+	arrChars(2,45)=&quot;ď&quot;
+	arrChars(0,46)=&quot;D / d&quot;
+	arrChars(1,46)=&quot;D.&quot;
+	arrChars(2,46)=&quot;Ḍ&quot;
+	arrChars(0,47)=&quot;D / d&quot;
+	arrChars(1,47)=&quot;d.&quot;
+	arrChars(2,47)=&quot;ḍ&quot;
+	arrChars(0,48)=&quot;E / e&quot;
+	arrChars(1,48)=&quot;E`&quot;
+	arrChars(2,48)=&quot;È&quot;
+	arrChars(0,49)=&quot;E / e&quot;
+	arrChars(1,49)=&quot;e`&quot;
+	arrChars(2,49)=&quot;è&quot;
+	arrChars(0,50)=&quot;E / e&quot;
+	arrChars(1,50)=&quot;E\&quot;
+	arrChars(2,50)=&quot;È&quot;
+	arrChars(0,51)=&quot;E / e&quot;
+	arrChars(1,51)=&quot;e\&quot;
+	arrChars(2,51)=&quot;è&quot;
+	arrChars(0,52)=&quot;E / e&quot;
+	arrChars(1,52)=&quot;E&apos;&quot;
+	arrChars(2,52)=&quot;É&quot;
+	arrChars(0,53)=&quot;E / e&quot;
+	arrChars(1,53)=&quot;e&apos;&quot;
+	arrChars(2,53)=&quot;é&quot;
+	arrChars(0,54)=&quot;E / e&quot;
+	arrChars(1,54)=&quot;E^&quot;
+	arrChars(2,54)=&quot;Ê&quot;
+	arrChars(0,55)=&quot;E / e&quot;
+	arrChars(1,55)=&quot;e^&quot;
+	arrChars(2,55)=&quot;ê&quot;
+	arrChars(0,56)=&quot;E / e&quot;
+	arrChars(1,56)=&quot;E:&quot;
+	arrChars(2,56)=&quot;Ë&quot;
+	arrChars(0,57)=&quot;E / e&quot;
+	arrChars(1,57)=&quot;e:&quot;
+	arrChars(2,57)=&quot;ë&quot;
+	arrChars(0,58)=&quot;E / e&quot;
+	arrChars(1,58)=&quot;E~&quot;
+	arrChars(2,58)=&quot;Ẽ&quot;
+	arrChars(0,59)=&quot;E / e&quot;
+	arrChars(1,59)=&quot;e~&quot;
+	arrChars(2,59)=&quot;ẽ&quot;
+	arrChars(0,60)=&quot;E / e&quot;
+	arrChars(1,60)=&quot;E,&quot;
+	arrChars(2,60)=&quot;Ę&quot;
+	arrChars(0,61)=&quot;E / e&quot;
+	arrChars(1,61)=&quot;e,&quot;
+	arrChars(2,61)=&quot;ę&quot;
+	arrChars(0,62)=&quot;E / e&quot;
+	arrChars(1,62)=&quot;E)&quot;
+	arrChars(2,62)=&quot;Ě&quot;
+	arrChars(0,63)=&quot;E / e&quot;
+	arrChars(1,63)=&quot;e)&quot;
+	arrChars(2,63)=&quot;ě&quot;
+	arrChars(0,64)=&quot;E / e&quot;
+	arrChars(1,64)=&quot;E-&quot;
+	arrChars(2,64)=&quot;Ē&quot;
+	arrChars(0,65)=&quot;E / e&quot;
+	arrChars(1,65)=&quot;e-&quot;
+	arrChars(2,65)=&quot;ē&quot;
+	arrChars(0,66)=&quot;E / e&quot;
+	arrChars(1,66)=&quot;E(&quot;
+	arrChars(2,66)=&quot;Ĕ&quot;
+	arrChars(0,67)=&quot;E / e&quot;
+	arrChars(1,67)=&quot;e(&quot;
+	arrChars(2,67)=&quot;ĕ&quot;
+	arrChars(0,68)=&quot;E / e&quot;
+	arrChars(1,68)=&quot;E@&quot;
+	arrChars(2,68)=&quot;Ė&quot;
+	arrChars(0,69)=&quot;E / e&quot;
+	arrChars(1,69)=&quot;e@&quot;
+	arrChars(2,69)=&quot;ė&quot;
+	arrChars(0,70)=&quot;E / e&quot;
+	arrChars(1,70)=&quot;E.&quot;
+	arrChars(2,70)=&quot;Ẹ&quot;
+	arrChars(0,71)=&quot;E / e&quot;
+	arrChars(1,71)=&quot;e.&quot;
+	arrChars(2,71)=&quot;ẹ&quot;
+	arrChars(0,72)=&quot;E / e&quot;
+	arrChars(1,72)=&quot;E?&quot;
+	arrChars(2,72)=&quot;Ệ&quot;
+	arrChars(0,73)=&quot;E / e&quot;
+	arrChars(1,73)=&quot;e?&quot;
+	arrChars(2,73)=&quot;ệ&quot;
+	arrChars(0,74)=&quot;G / g&quot;
+	arrChars(1,74)=&quot;G^&quot;
+	arrChars(2,74)=&quot;Ĝ&quot;
+	arrChars(0,75)=&quot;G / g&quot;
+	arrChars(1,75)=&quot;g^&quot;
+	arrChars(2,75)=&quot;ĝ&quot;
+	arrChars(0,76)=&quot;G / g&quot;
+	arrChars(1,76)=&quot;G(&quot;
+	arrChars(2,76)=&quot;Ğ&quot;
+	arrChars(0,77)=&quot;G / g&quot;
+	arrChars(1,77)=&quot;g(&quot;
+	arrChars(2,77)=&quot;ğ&quot;
+	arrChars(0,78)=&quot;G / g&quot;
+	arrChars(1,78)=&quot;G@&quot;
+	arrChars(2,78)=&quot;Ġ&quot;
+	arrChars(0,79)=&quot;G / g&quot;
+	arrChars(1,79)=&quot;g@&quot;
+	arrChars(2,79)=&quot;ġ&quot;
+	arrChars(0,80)=&quot;G / g&quot;
+	arrChars(1,80)=&quot;G,&quot;
+	arrChars(2,80)=&quot;Ģ&quot;
+	arrChars(0,81)=&quot;G / g&quot;
+	arrChars(1,81)=&quot;g,&quot;
+	arrChars(2,81)=&quot;ģ&quot;
+	arrChars(0,82)=&quot;H / h&quot;
+	arrChars(1,82)=&quot;H^&quot;
+	arrChars(2,82)=&quot;Ĥ&quot;
+	arrChars(0,83)=&quot;H / h&quot;
+	arrChars(1,83)=&quot;h^&quot;
+	arrChars(2,83)=&quot;ĥ&quot;
+	arrChars(0,84)=&quot;H / h&quot;
+	arrChars(1,84)=&quot;H-&quot;
+	arrChars(2,84)=&quot;Ħ&quot;
+	arrChars(0,85)=&quot;H / h&quot;
+	arrChars(1,85)=&quot;h-&quot;
+	arrChars(2,85)=&quot;ħ&quot;
+	arrChars(0,86)=&quot;H / h&quot;
+	arrChars(1,86)=&quot;H.&quot;
+	arrChars(2,86)=&quot;Ḥ&quot;
+	arrChars(0,87)=&quot;H / h&quot;
+	arrChars(1,87)=&quot;h.&quot;
+	arrChars(2,87)=&quot;ḥ&quot;
+	arrChars(0,88)=&quot;I / i&quot;
+	arrChars(1,88)=&quot;I`&quot;
+	arrChars(2,88)=&quot;Ì&quot;
+	arrChars(0,89)=&quot;I / i&quot;
+	arrChars(1,89)=&quot;i`&quot;
+	arrChars(2,89)=&quot;ì&quot;
+	arrChars(0,90)=&quot;I / i&quot;
+	arrChars(1,90)=&quot;I\&quot;
+	arrChars(2,90)=&quot;Ì&quot;
+	arrChars(0,91)=&quot;I / i&quot;
+	arrChars(1,91)=&quot;i\&quot;
+	arrChars(2,91)=&quot;ì&quot;
+	arrChars(0,92)=&quot;I / i&quot;
+	arrChars(1,92)=&quot;I&apos;&quot;
+	arrChars(2,92)=&quot;Í&quot;
+	arrChars(0,93)=&quot;I / i&quot;
+	arrChars(1,93)=&quot;i&apos;&quot;
+	arrChars(2,93)=&quot;í&quot;
+	arrChars(0,94)=&quot;I / i&quot;
+	arrChars(1,94)=&quot;I^&quot;
+	arrChars(2,94)=&quot;Î&quot;
+	arrChars(0,95)=&quot;I / i&quot;
+	arrChars(1,95)=&quot;i^&quot;
+	arrChars(2,95)=&quot;î&quot;
+	arrChars(0,96)=&quot;I / i&quot;
+	arrChars(1,96)=&quot;I:&quot;
+	arrChars(2,96)=&quot;Ï&quot;
+	arrChars(0,97)=&quot;I / i&quot;
+	arrChars(1,97)=&quot;i:&quot;
+	arrChars(2,97)=&quot;ï&quot;
+	arrChars(0,98)=&quot;I / i&quot;
+	arrChars(1,98)=&quot;I~&quot;
+	arrChars(2,98)=&quot;Ĩ&quot;
+	arrChars(0,99)=&quot;I / i&quot;
+	arrChars(1,99)=&quot;i~&quot;
+	arrChars(2,99)=&quot;ĩ&quot;
+	arrChars(0,100)=&quot;I / i&quot;
+	arrChars(1,100)=&quot;I)&quot;
+	arrChars(2,100)=&quot;Ǐ&quot;
+	arrChars(0,101)=&quot;I / i&quot;
+	arrChars(1,101)=&quot;i)&quot;
+	arrChars(2,101)=&quot;ǐ&quot;
+	arrChars(0,102)=&quot;I / i&quot;
+	arrChars(1,102)=&quot;I-&quot;
+	arrChars(2,102)=&quot;Ī&quot;
+	arrChars(0,103)=&quot;I / i&quot;
+	arrChars(1,103)=&quot;i-&quot;
+	arrChars(2,103)=&quot;ī&quot;
+	arrChars(0,104)=&quot;I / i&quot;
+	arrChars(1,104)=&quot;I(&quot;
+	arrChars(2,104)=&quot;Ĭ&quot;
+	arrChars(0,105)=&quot;I / i&quot;
+	arrChars(1,105)=&quot;i(&quot;
+	arrChars(2,105)=&quot;ĭ&quot;
+	arrChars(0,106)=&quot;I / i&quot;
+	arrChars(1,106)=&quot;I,&quot;
+	arrChars(2,106)=&quot;Į&quot;
+	arrChars(0,107)=&quot;I / i&quot;
+	arrChars(1,107)=&quot;i,&quot;
+	arrChars(2,107)=&quot;į&quot;
+	arrChars(0,108)=&quot;I / i&quot;
+	arrChars(1,108)=&quot;I@&quot;
+	arrChars(2,108)=&quot;İ&quot;
+	arrChars(0,109)=&quot;I / i&quot;
+	arrChars(1,109)=&quot;i!&quot;
+	arrChars(2,109)=&quot;ı&quot;
+	arrChars(0,110)=&quot;I / i&quot;
+	arrChars(1,110)=&quot;IJ&quot;
+	arrChars(2,110)=&quot;Ĳ&quot;
+	arrChars(0,111)=&quot;I / i&quot;
+	arrChars(1,111)=&quot;ij&quot;
+	arrChars(2,111)=&quot;ĳ&quot;
+	arrChars(0,112)=&quot;I / i&quot;
+	arrChars(1,112)=&quot;I.&quot;
+	arrChars(2,112)=&quot;Ị&quot;
+	arrChars(0,113)=&quot;I / i&quot;
+	arrChars(1,113)=&quot;i.&quot;
+	arrChars(2,113)=&quot;ị&quot;
+	arrChars(0,114)=&quot;J / j&quot;
+	arrChars(1,114)=&quot;J^&quot;
+	arrChars(2,114)=&quot;Ĵ&quot;
+	arrChars(0,115)=&quot;J / j&quot;
+	arrChars(1,115)=&quot;j^&quot;
+	arrChars(2,115)=&quot;ĵ&quot;
+	arrChars(0,116)=&quot;K / k&quot;
+	arrChars(1,116)=&quot;K,&quot;
+	arrChars(2,116)=&quot;Ķ&quot;
+	arrChars(0,117)=&quot;K / k&quot;
+	arrChars(1,117)=&quot;k,&quot;
+	arrChars(2,117)=&quot;ķ&quot;
+	arrChars(0,118)=&quot;K / k&quot;
+	arrChars(1,118)=&quot;K.&quot;
+	arrChars(2,118)=&quot;Ḳ&quot;
+	arrChars(0,119)=&quot;K / k&quot;
+	arrChars(1,119)=&quot;k.&quot;
+	arrChars(2,119)=&quot;Ḳ&quot;
+	arrChars(0,120)=&quot;L / l&quot;
+	arrChars(1,120)=&quot;L&apos;&quot;
+	arrChars(2,120)=&quot;Ĺ&quot;
+	arrChars(0,121)=&quot;L / l&quot;
+	arrChars(1,121)=&quot;l&apos;&quot;
+	arrChars(2,121)=&quot;ĺ&quot;
+	arrChars(0,122)=&quot;L / l&quot;
+	arrChars(1,122)=&quot;L-&quot;
+	arrChars(2,122)=&quot;Ľ&quot;
+	arrChars(0,123)=&quot;L / l&quot;
+	arrChars(1,123)=&quot;l-&quot;
+	arrChars(2,123)=&quot;ľ&quot;
+	arrChars(0,124)=&quot;L / l&quot;
+	arrChars(1,124)=&quot;L,&quot;
+	arrChars(2,124)=&quot;Ļ&quot;
+	arrChars(0,125)=&quot;L / l&quot;
+	arrChars(1,125)=&quot;l,&quot;
+	arrChars(2,125)=&quot;ļ&quot;
+	arrChars(0,126)=&quot;L / l&quot;
+	arrChars(1,126)=&quot;L@&quot;
+	arrChars(2,126)=&quot;Ŀ&quot;
+	arrChars(0,127)=&quot;L / l&quot;
+	arrChars(1,127)=&quot;l@&quot;
+	arrChars(2,127)=&quot;ŀ&quot;
+	arrChars(0,128)=&quot;L / l&quot;
+	arrChars(1,128)=&quot;L/&quot;
+	arrChars(2,128)=&quot;Ł&quot;
+	arrChars(0,129)=&quot;L / l&quot;
+	arrChars(1,129)=&quot;l/&quot;
+	arrChars(2,129)=&quot;ł&quot;
+	arrChars(0,130)=&quot;L / l&quot;
+	arrChars(1,130)=&quot;L.&quot;
+	arrChars(2,130)=&quot;Ḷ&quot;
+	arrChars(0,131)=&quot;L / l&quot;
+	arrChars(1,131)=&quot;l.&quot;
+	arrChars(2,131)=&quot;ḷ&quot;
+	arrChars(0,132)=&quot;M / m&quot;
+	arrChars(1,132)=&quot;M.&quot;
+	arrChars(2,132)=&quot;Ṃ&quot;
+	arrChars(0,133)=&quot;M / m&quot;
+	arrChars(1,133)=&quot;m.&quot;
+	arrChars(2,133)=&quot;ṃ&quot;
+	arrChars(0,134)=&quot;N / n&quot;
+	arrChars(1,134)=&quot;N~&quot;
+	arrChars(2,134)=&quot;Ñ&quot;
+	arrChars(0,135)=&quot;N / n&quot;
+	arrChars(1,135)=&quot;n~&quot;
+	arrChars(2,135)=&quot;ñ&quot;
+	arrChars(0,136)=&quot;N / n&quot;
+	arrChars(1,136)=&quot;N&apos;&quot;
+	arrChars(2,136)=&quot;Ń&quot;
+	arrChars(0,137)=&quot;N / n&quot;
+	arrChars(1,137)=&quot;n&apos;&quot;
+	arrChars(2,137)=&quot;ń&quot;
+	arrChars(0,138)=&quot;N / n&quot;
+	arrChars(1,138)=&quot;N\&quot;
+	arrChars(2,138)=&quot;&amp;H01f8&quot;
+	arrChars(0,139)=&quot;N / n&quot;
+	arrChars(1,139)=&quot;n\&quot;
+	arrChars(2,139)=&quot;&amp;H01f9&quot;
+	arrChars(0,140)=&quot;N / n&quot;
+	arrChars(1,140)=&quot;N,&quot;
+	arrChars(2,140)=&quot;ņ&quot;
+	arrChars(0,141)=&quot;N / n&quot;
+	arrChars(1,141)=&quot;n,&quot;
+	arrChars(2,141)=&quot;ņ&quot;
+	arrChars(0,142)=&quot;N / n&quot;
+	arrChars(1,142)=&quot;N)&quot;
+	arrChars(2,142)=&quot;Ň&quot;
+	arrChars(0,143)=&quot;N / n&quot;
+	arrChars(1,143)=&quot;n)&quot;
+	arrChars(2,143)=&quot;ň&quot;
+	arrChars(0,144)=&quot;N / n&quot;
+	arrChars(1,144)=&quot;N_&quot;
+	arrChars(2,144)=&quot;Ṉ&quot;
+	arrChars(0,145)=&quot;N / n&quot;
+	arrChars(1,145)=&quot;n_&quot;
+	arrChars(2,145)=&quot;ṉ&quot;
+	arrChars(0,146)=&quot;N / n&quot;
+	arrChars(1,146)=&quot;N.&quot;
+	arrChars(2,146)=&quot;Ṇ&quot;
+	arrChars(0,147)=&quot;N / n&quot;
+	arrChars(1,147)=&quot;n.&quot;
+	arrChars(2,147)=&quot;ṇ&quot;
+	arrChars(0,148)=&quot;N / n&quot;
+	arrChars(1,148)=&quot;N*&quot;
+	arrChars(2,148)=&quot;Ṅ&quot;
+	arrChars(0,149)=&quot;N / n&quot;
+	arrChars(1,149)=&quot;n*&quot;
+	arrChars(2,149)=&quot;ṅ&quot;
+	arrChars(0,150)=&quot;N / n&quot;
+	arrChars(1,150)=&quot;N&gt;&quot;
+	arrChars(2,150)=&quot;Ṋ&quot;
+	arrChars(0,151)=&quot;N / n&quot;
+	arrChars(1,151)=&quot;n&gt;&quot;
+	arrChars(2,151)=&quot;ṋ&quot;
+	arrChars(0,152)=&quot;O / o&quot;
+	arrChars(1,152)=&quot;O`&quot;
+	arrChars(2,152)=&quot;Ò&quot;
+	arrChars(0,153)=&quot;O / o&quot;
+	arrChars(1,153)=&quot;o`&quot;
+	arrChars(2,153)=&quot;ò&quot;
+	arrChars(0,154)=&quot;O / o&quot;
+	arrChars(1,154)=&quot;O\&quot;
+	arrChars(2,154)=&quot;Ò&quot;
+	arrChars(0,155)=&quot;O / o&quot;
+	arrChars(1,155)=&quot;o\&quot;
+	arrChars(2,155)=&quot;ò&quot;
+	arrChars(0,156)=&quot;O / o&quot;
+	arrChars(1,156)=&quot;O&apos;&quot;
+	arrChars(2,156)=&quot;Ó&quot;
+	arrChars(0,157)=&quot;O / o&quot;
+	arrChars(1,157)=&quot;o&apos;&quot;
+	arrChars(2,157)=&quot;ó&quot;
+	arrChars(0,158)=&quot;O / o&quot;
+	arrChars(1,158)=&quot;O^&quot;
+	arrChars(2,158)=&quot;Ô&quot;
+	arrChars(0,159)=&quot;O / o&quot;
+	arrChars(1,159)=&quot;o^&quot;
+	arrChars(2,159)=&quot;ô&quot;
+	arrChars(0,160)=&quot;O / o&quot;
+	arrChars(1,160)=&quot;O)&quot;
+	arrChars(2,160)=&quot;Ǒ&quot;
+	arrChars(0,161)=&quot;O / o&quot;
+	arrChars(1,161)=&quot;o)&quot;
+	arrChars(2,161)=&quot;ǒ&quot;
+	arrChars(0,162)=&quot;O / o&quot;
+	arrChars(1,162)=&quot;O:&quot;
+	arrChars(2,162)=&quot;Ö&quot;
+	arrChars(0,163)=&quot;O / o&quot;
+	arrChars(1,163)=&quot;o:&quot;
+	arrChars(2,163)=&quot;ö&quot;
+	arrChars(0,164)=&quot;O / o&quot;
+	arrChars(1,164)=&quot;O~&quot;
+	arrChars(2,164)=&quot;Õ&quot;
+	arrChars(0,165)=&quot;O / o&quot;
+	arrChars(1,165)=&quot;o~&quot;
+	arrChars(2,165)=&quot;õ&quot;
+	arrChars(0,166)=&quot;O / o&quot;
+	arrChars(1,166)=&quot;OE&quot;
+	arrChars(2,166)=&quot;Œ&quot;
+	arrChars(0,167)=&quot;O / o&quot;
+	arrChars(1,167)=&quot;oe&quot;
+	arrChars(2,167)=&quot;œ&quot;
+	arrChars(0,168)=&quot;O / o&quot;
+	arrChars(1,168)=&quot;O/&quot;
+	arrChars(2,168)=&quot;Ø&quot;
+	arrChars(0,169)=&quot;O / o&quot;
+	arrChars(1,169)=&quot;o/&quot;
+	arrChars(2,169)=&quot;ø&quot;
+	arrChars(0,170)=&quot;O / o&quot;
+	arrChars(1,170)=&quot;O&quot;&quot;&quot;
+	arrChars(2,170)=&quot;Ő&quot;
+	arrChars(0,171)=&quot;O / o&quot;
+	arrChars(1,171)=&quot;o&quot;&quot;&quot;
+	arrChars(2,171)=&quot;ő&quot;
+	arrChars(0,172)=&quot;O / o&quot;
+	arrChars(1,172)=&quot;O-&quot;
+	arrChars(2,172)=&quot;Ō&quot;
+	arrChars(0,173)=&quot;O / o&quot;
+	arrChars(1,173)=&quot;o-&quot;
+	arrChars(2,173)=&quot;ō&quot;
+	arrChars(0,174)=&quot;O / o&quot;
+	arrChars(1,174)=&quot;O(&quot;
+	arrChars(2,174)=&quot;Ŏ&quot;
+	arrChars(0,175)=&quot;O / o&quot;
+	arrChars(1,175)=&quot;o(&quot;
+	arrChars(2,175)=&quot;ŏ&quot;
+	arrChars(0,176)=&quot;O / o&quot;
+	arrChars(1,176)=&quot;O.&quot;
+	arrChars(2,176)=&quot;Ọ&quot;
+	arrChars(0,177)=&quot;O / o&quot;
+	arrChars(1,177)=&quot;o.&quot;
+	arrChars(2,177)=&quot;ọ&quot;
+	arrChars(0,178)=&quot;O / o&quot;
+	arrChars(1,178)=&quot;O?&quot;
+	arrChars(2,178)=&quot;Ộ&quot;
+	arrChars(0,179)=&quot;O / o&quot;
+	arrChars(1,179)=&quot;o?&quot;
+	arrChars(2,179)=&quot;ộ&quot;
+	arrChars(0,180)=&quot;O / o&quot;
+	arrChars(1,180)=&quot;O;&quot;
+	arrChars(2,180)=&quot;Ợ&quot;
+	arrChars(0,181)=&quot;O / o&quot;
+	arrChars(1,181)=&quot;o;&quot;
+	arrChars(2,181)=&quot;ợ&quot;
+	arrChars(0,182)=&quot;P / p&quot;
+	arrChars(1,182)=&quot;P/&quot;
+	arrChars(2,182)=&quot;Þ&quot;
+	arrChars(0,183)=&quot;P / p&quot;
+	arrChars(1,183)=&quot;p/&quot;
+	arrChars(2,183)=&quot;þ&quot;
+	arrChars(0,184)=&quot;R / r&quot;
+	arrChars(1,184)=&quot;R&apos;&quot;
+	arrChars(2,184)=&quot;Ŕ&quot;
+	arrChars(0,185)=&quot;R / r&quot;
+	arrChars(1,185)=&quot;r&apos;&quot;
+	arrChars(2,185)=&quot;ŕ&quot;
+	arrChars(0,186)=&quot;R / r&quot;
+	arrChars(1,186)=&quot;R,&quot;
+	arrChars(2,186)=&quot;Ŗ&quot;
+	arrChars(0,187)=&quot;R / r&quot;
+	arrChars(1,187)=&quot;r,&quot;
+	arrChars(2,187)=&quot;ŗ&quot;
+	arrChars(0,188)=&quot;R / r&quot;
+	arrChars(1,188)=&quot;R)&quot;
+	arrChars(2,188)=&quot;Ř&quot;
+	arrChars(0,189)=&quot;R / r&quot;
+	arrChars(1,189)=&quot;r)&quot;
+	arrChars(2,189)=&quot;ř&quot;
+	arrChars(0,190)=&quot;R / r&quot;
+	arrChars(1,190)=&quot;R.&quot;
+	arrChars(2,190)=&quot;Ṛ&quot;
+	arrChars(0,191)=&quot;R / r&quot;
+	arrChars(1,191)=&quot;r.&quot;
+	arrChars(2,191)=&quot;ṛ&quot;
+	arrChars(0,192)=&quot;S / s&quot;
+	arrChars(1,192)=&quot;ss&quot;
+	arrChars(2,192)=&quot;ß&quot;
+	arrChars(0,193)=&quot;S / s&quot;
+	arrChars(1,193)=&quot;SS&quot;
+	arrChars(2,193)=&quot;ß&quot;
+	arrChars(0,194)=&quot;S / s&quot;
+	arrChars(1,194)=&quot;S&apos;&quot;
+	arrChars(2,194)=&quot;Ś&quot;
+	arrChars(0,195)=&quot;S / s&quot;
+	arrChars(1,195)=&quot;s&apos;&quot;
+	arrChars(2,195)=&quot;ś&quot;
+	arrChars(0,196)=&quot;S / s&quot;
+	arrChars(1,196)=&quot;S^&quot;
+	arrChars(2,196)=&quot;Ŝ&quot;
+	arrChars(0,197)=&quot;S / s&quot;
+	arrChars(1,197)=&quot;s^&quot;
+	arrChars(2,197)=&quot;ŝ&quot;
+	arrChars(0,198)=&quot;S / s&quot;
+	arrChars(1,198)=&quot;S,&quot;
+	arrChars(2,198)=&quot;Ş&quot;
+	arrChars(0,199)=&quot;S / s&quot;
+	arrChars(1,199)=&quot;s,&quot;
+	arrChars(2,199)=&quot;ş&quot;
+	arrChars(0,200)=&quot;S / s&quot;
+	arrChars(1,200)=&quot;S)&quot;
+	arrChars(2,200)=&quot;Š&quot;
+	arrChars(0,201)=&quot;S / s&quot;
+	arrChars(1,201)=&quot;s)&quot;
+	arrChars(2,201)=&quot;š&quot;
+	arrChars(0,202)=&quot;S / s&quot;
+	arrChars(1,202)=&quot;S.&quot;
+	arrChars(2,202)=&quot;Ṣ&quot;
+	arrChars(0,203)=&quot;S / s&quot;
+	arrChars(1,203)=&quot;s.&quot;
+	arrChars(2,203)=&quot;ṣ&quot;
+	arrChars(0,204)=&quot;T / t&quot;
+	arrChars(1,204)=&quot;T,&quot;
+	arrChars(2,204)=&quot;Ţ&quot;
+	arrChars(0,205)=&quot;T / t&quot;
+	arrChars(1,205)=&quot;t,&quot;
+	arrChars(2,205)=&quot;ţ&quot;
+	arrChars(0,206)=&quot;T / t&quot;
+	arrChars(1,206)=&quot;T)&quot;
+	arrChars(2,206)=&quot;Ť&quot;
+	arrChars(0,207)=&quot;T / t&quot;
+	arrChars(1,207)=&quot;t)&quot;
+	arrChars(2,207)=&quot;ť&quot;
+	arrChars(0,208)=&quot;T / t&quot;
+	arrChars(1,208)=&quot;T-&quot;
+	arrChars(2,208)=&quot;Ŧ&quot;
+	arrChars(0,209)=&quot;T / t&quot;
+	arrChars(1,209)=&quot;t-&quot;
+	arrChars(2,209)=&quot;ŧ&quot;
+	arrChars(0,210)=&quot;T / t&quot;
+	arrChars(1,210)=&quot;T.&quot;
+	arrChars(2,210)=&quot;Ṭ&quot;
+	arrChars(0,211)=&quot;T / t&quot;
+	arrChars(1,211)=&quot;t.&quot;
+	arrChars(2,211)=&quot;ṭ&quot;
+	arrChars(0,212)=&quot;U / u&quot;
+	arrChars(1,212)=&quot;U`&quot;
+	arrChars(2,212)=&quot;Ù&quot;
+	arrChars(0,213)=&quot;U / u&quot;
+	arrChars(1,213)=&quot;u`&quot;
+	arrChars(2,213)=&quot;ù&quot;
+	arrChars(0,214)=&quot;U / u&quot;
+	arrChars(1,214)=&quot;U\&quot;
+	arrChars(2,214)=&quot;Ù&quot;
+	arrChars(0,215)=&quot;U / u&quot;
+	arrChars(1,215)=&quot;u\&quot;
+	arrChars(2,215)=&quot;ù&quot;
+	arrChars(0,216)=&quot;U / u&quot;
+	arrChars(1,216)=&quot;U&apos;&quot;
+	arrChars(2,216)=&quot;Ú&quot;
+	arrChars(0,217)=&quot;U / u&quot;
+	arrChars(1,217)=&quot;u&apos;&quot;
+	arrChars(2,217)=&quot;ú&quot;
+	arrChars(0,218)=&quot;U / u&quot;
+	arrChars(1,218)=&quot;U^&quot;
+	arrChars(2,218)=&quot;Û&quot;
+	arrChars(0,219)=&quot;U / u&quot;
+	arrChars(1,219)=&quot;u^&quot;
+	arrChars(2,219)=&quot;û&quot;
+	arrChars(0,220)=&quot;U / u&quot;
+	arrChars(1,220)=&quot;U)&quot;
+	arrChars(2,220)=&quot;Ǔ&quot;
+	arrChars(0,221)=&quot;U / u&quot;
+	arrChars(1,221)=&quot;u)&quot;
+	arrChars(2,221)=&quot;ǔ&quot;
+	arrChars(0,222)=&quot;U / u&quot;
+	arrChars(1,222)=&quot;U:&quot;
+	arrChars(2,222)=&quot;Ü&quot;
+	arrChars(0,223)=&quot;U / u&quot;
+	arrChars(1,223)=&quot;u:&quot;
+	arrChars(2,223)=&quot;ü&quot;
+	arrChars(0,224)=&quot;U / u&quot;
+	arrChars(1,224)=&quot;U~&quot;
+	arrChars(2,224)=&quot;Ũ&quot;
+	arrChars(0,225)=&quot;U / u&quot;
+	arrChars(1,225)=&quot;u~&quot;
+	arrChars(2,225)=&quot;ũ&quot;
+	arrChars(0,226)=&quot;U / u&quot;
+	arrChars(1,226)=&quot;U-&quot;
+	arrChars(2,226)=&quot;Ū&quot;
+	arrChars(0,227)=&quot;U / u&quot;
+	arrChars(1,227)=&quot;u-&quot;
+	arrChars(2,227)=&quot;ū&quot;
+	arrChars(0,228)=&quot;U / u&quot;
+	arrChars(1,228)=&quot;U(&quot;
+	arrChars(2,228)=&quot;Ŭ&quot;
+	arrChars(0,229)=&quot;U / u&quot;
+	arrChars(1,229)=&quot;u(&quot;
+	arrChars(2,229)=&quot;ŭ&quot;
+	arrChars(0,230)=&quot;U / u&quot;
+	arrChars(1,230)=&quot;U@&quot;
+	arrChars(2,230)=&quot;Ů&quot;
+	arrChars(0,231)=&quot;U / u&quot;
+	arrChars(1,231)=&quot;u@&quot;
+	arrChars(2,231)=&quot;ů&quot;
+	arrChars(0,232)=&quot;U / u&quot;
+	arrChars(1,232)=&quot;U&quot;&quot;&quot;
+	arrChars(2,232)=&quot;Ű&quot;
+	arrChars(0,233)=&quot;U / u&quot;
+	arrChars(1,233)=&quot;u&quot;&quot;&quot;
+	arrChars(2,233)=&quot;ű&quot;
+	arrChars(0,234)=&quot;U / u&quot;
+	arrChars(1,234)=&quot;U,&quot;
+	arrChars(2,234)=&quot;Ų&quot;
+	arrChars(0,235)=&quot;U / u&quot;
+	arrChars(1,235)=&quot;u,&quot;
+	arrChars(2,235)=&quot;ų&quot;
+	arrChars(0,236)=&quot;U / u&quot;
+	arrChars(1,236)=&quot;U.&quot;
+	arrChars(2,236)=&quot;Ụ&quot;
+	arrChars(0,237)=&quot;U / u&quot;
+	arrChars(1,237)=&quot;u.&quot;
+	arrChars(2,237)=&quot;ụ&quot;
+	arrChars(0,238)=&quot;U / u&quot;
+	arrChars(1,238)=&quot;U;&quot;
+	arrChars(2,238)=&quot;Ự&quot;
+	arrChars(0,239)=&quot;U / u&quot;
+	arrChars(1,239)=&quot;u;&quot;
+	arrChars(2,239)=&quot;ự&quot;
+	arrChars(0,240)=&quot;V / v&quot;
+	arrChars(1,240)=&quot;V.&quot;
+	arrChars(2,240)=&quot;Ṿ&quot;
+	arrChars(0,241)=&quot;V / v&quot;
+	arrChars(1,241)=&quot;v.&quot;
+	arrChars(2,241)=&quot;ṿ&quot;
+	arrChars(0,242)=&quot;W / w&quot;
+	arrChars(1,242)=&quot;W`&quot;
+	arrChars(2,242)=&quot;Ẁ&quot;
+	arrChars(0,243)=&quot;W / w&quot;
+	arrChars(1,243)=&quot;w`&quot;
+	arrChars(2,243)=&quot;ẁ&quot;
+	arrChars(0,244)=&quot;W / w&quot;
+	arrChars(1,244)=&quot;W\&quot;
+	arrChars(2,244)=&quot;Ẁ&quot;
+	arrChars(0,245)=&quot;W / w&quot;
+	arrChars(1,245)=&quot;w\&quot;
+	arrChars(2,245)=&quot;ẁ&quot;
+	arrChars(0,246)=&quot;W / w&quot;
+	arrChars(1,246)=&quot;W&apos;&quot;
+	arrChars(2,246)=&quot;Ẃ&quot;
+	arrChars(0,247)=&quot;W / w&quot;
+	arrChars(1,247)=&quot;w&apos;&quot;
+	arrChars(2,247)=&quot;ẃ&quot;
+	arrChars(0,248)=&quot;W / w&quot;
+	arrChars(1,248)=&quot;W:&quot;
+	arrChars(2,248)=&quot;Ẅ&quot;
+	arrChars(0,249)=&quot;W / w&quot;
+	arrChars(1,249)=&quot;w:&quot;
+	arrChars(2,249)=&quot;ẅ&quot;
+	arrChars(0,250)=&quot;W / w&quot;
+	arrChars(1,250)=&quot;W^&quot;
+	arrChars(2,250)=&quot;Ŵ&quot;
+	arrChars(0,251)=&quot;W / w&quot;
+	arrChars(1,251)=&quot;w^&quot;
+	arrChars(2,251)=&quot;ŵ&quot;
+	arrChars(0,252)=&quot;W / w&quot;
+	arrChars(1,252)=&quot;W.&quot;
+	arrChars(2,252)=&quot;Ẉ&quot;
+	arrChars(0,253)=&quot;W / w&quot;
+	arrChars(1,253)=&quot;w.&quot;
+	arrChars(2,253)=&quot;ẉ&quot;
+	arrChars(0,254)=&quot;Y / y&quot;
+	arrChars(1,254)=&quot;Y&apos;&quot;
+	arrChars(2,254)=&quot;Ý&quot;
+	arrChars(0,255)=&quot;Y / y&quot;
+	arrChars(1,255)=&quot;y&apos;&quot;
+	arrChars(2,255)=&quot;ý&quot;
+	arrChars(0,256)=&quot;Y / y&quot;
+	arrChars(1,256)=&quot;Y^&quot;
+	arrChars(2,256)=&quot;Ŷ&quot;
+	arrChars(0,257)=&quot;Y / y&quot;
+	arrChars(1,257)=&quot;y^&quot;
+	arrChars(2,257)=&quot;ŷ&quot;
+	arrChars(0,258)=&quot;Y / y&quot;
+	arrChars(1,258)=&quot;Y:&quot;
+	arrChars(2,258)=&quot;Ÿ&quot;
+	arrChars(0,259)=&quot;Y / y&quot;
+	arrChars(1,259)=&quot;y:&quot;
+	arrChars(2,259)=&quot;ÿ&quot;
+	arrChars(0,260)=&quot;Y / y&quot;
+	arrChars(1,260)=&quot;Y.&quot;
+	arrChars(2,260)=&quot;Ỵ&quot;
+	arrChars(0,261)=&quot;Y / y&quot;
+	arrChars(1,261)=&quot;y.&quot;
+	arrChars(2,261)=&quot;ỵ&quot;
+	arrChars(0,262)=&quot;Z / z&quot;
+	arrChars(1,262)=&quot;Z&apos;&quot;
+	arrChars(2,262)=&quot;Ź&quot;
+	arrChars(0,263)=&quot;Z / z&quot;
+	arrChars(1,263)=&quot;z&apos;&quot;
+	arrChars(2,263)=&quot;ź&quot;
+	arrChars(0,264)=&quot;Z / z&quot;
+	arrChars(1,264)=&quot;Z@&quot;
+	arrChars(2,264)=&quot;Ż&quot;
+	arrChars(0,265)=&quot;Z / z&quot;
+	arrChars(1,265)=&quot;z@&quot;
+	arrChars(2,265)=&quot;ż&quot;
+	arrChars(0,266)=&quot;Z / z&quot;
+	arrChars(1,266)=&quot;Z)&quot;
+	arrChars(2,266)=&quot;Ž&quot;
+	arrChars(0,267)=&quot;Z / z&quot;
+	arrChars(1,267)=&quot;z)&quot;
+	arrChars(2,267)=&quot;ž&quot;
+	arrChars(0,268)=&quot;Z / z&quot;
+	arrChars(1,268)=&quot;Z.&quot;
+	arrChars(2,268)=&quot;Ẓ&quot;
+	arrChars(0,269)=&quot;Z / z&quot;
+	arrChars(1,269)=&quot;z.&quot;
+	arrChars(2,269)=&quot;ẓ&quot;
+	arrChars(0,270)=&quot;¿ – « ...&quot;
+	arrChars(1,270)=&quot;&lt;&lt;&quot;
+	arrChars(2,270)=&quot;«&quot;
+	arrChars(0,271)=&quot;¿ – « ...&quot;
+	arrChars(1,271)=&quot;&gt;&gt;&quot;
+	arrChars(2,271)=&quot;»&quot;
+	arrChars(0,272)=&quot;¿ – « ...&quot;
+	arrChars(1,272)=&quot;!!&quot;
+	arrChars(2,272)=&quot;¡&quot;
+	arrChars(0,273)=&quot;¿ – « ...&quot;
+	arrChars(1,273)=&quot;?!&quot;
+	arrChars(2,273)=&quot;¿&quot;
+	arrChars(0,274)=&quot;¿ – « ...&quot;
+	arrChars(1,274)=&quot;-.&quot;
+	arrChars(2,274)=&quot;–&quot;
+	arrChars(0,275)=&quot;¿ – « ...&quot;
+	arrChars(1,275)=&quot;--&quot;
+	arrChars(2,275)=&quot;—&quot;
+	arrChars(0,276)=&quot;¿ – « ...&quot;
+	arrChars(1,276)=&quot;..&quot;
+	arrChars(2,276)=&quot;…&quot;
+	arrChars(0,277)=&quot;¿ – « ...&quot;
+	arrChars(1,277)=&quot;\+&quot;
+	arrChars(2,277)=&quot;†&quot;
+	arrChars(0,278)=&quot;¿ – « ...&quot;
+	arrChars(1,278)=&quot;++&quot;
+	arrChars(2,278)=&quot;‡&quot;
+	arrChars(0,279)=&quot;¿ – « ...&quot;
+	arrChars(1,279)=&quot;&lt;&apos;&quot;
+	arrChars(2,279)=&quot;‘&quot;
+	arrChars(0,280)=&quot;¿ – « ...&quot;
+	arrChars(1,280)=&quot;&gt;&apos;&quot;
+	arrChars(2,280)=&quot;‛&quot;
+	arrChars(0,281)=&quot;¿ – « ...&quot;
+	arrChars(1,281)=&quot;,#&quot;
+	arrChars(2,281)=&quot;“&quot;
+	arrChars(0,282)=&quot;¿ – « ...&quot;
+	arrChars(1,282)=&quot;#,&quot;
+	arrChars(2,282)=&quot;”&quot;
+	arrChars(0,283)=&quot;¿ – « ...&quot;
+	arrChars(1,283)=&quot;,,&quot;
+	arrChars(2,283)=&quot;„&quot;
+	arrChars(0,284)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,284)=&quot;C=&quot;
+	arrChars(2,284)=&quot;€&quot;
+	arrChars(0,285)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,285)=&quot;c=&quot;
+	arrChars(2,285)=&quot;€&quot;
+	arrChars(0,286)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,286)=&quot;C/&quot;
+	arrChars(2,286)=&quot;¢&quot;
+	arrChars(0,287)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,287)=&quot;c/&quot;
+	arrChars(2,287)=&quot;¢&quot;
+	arrChars(0,288)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,288)=&quot;C|&quot;
+	arrChars(2,288)=&quot;¢&quot;
+	arrChars(0,289)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,289)=&quot;c|&quot;
+	arrChars(2,289)=&quot;¢&quot;
+	arrChars(0,290)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,290)=&quot;E=&quot;
+	arrChars(2,290)=&quot;€&quot;
+	arrChars(0,291)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,291)=&quot;e=&quot;
+	arrChars(2,291)=&quot;€&quot;
+	arrChars(0,292)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,292)=&quot;L=&quot;
+	arrChars(2,292)=&quot;£&quot;
+	arrChars(0,293)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,293)=&quot;l=&quot;
+	arrChars(2,293)=&quot;£&quot;
+	arrChars(0,294)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,294)=&quot;S|&quot;
+	arrChars(2,294)=&quot;$&quot;
+	arrChars(0,295)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,295)=&quot;s|&quot;
+	arrChars(2,295)=&quot;$&quot;
+	arrChars(0,296)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,296)=&quot;Y=&quot;
+	arrChars(2,296)=&quot;¥&quot;
+	arrChars(0,297)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,297)=&quot;y=&quot;
+	arrChars(2,297)=&quot;¥&quot;
+	arrChars(0,298)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,298)=&quot;W=&quot;
+	arrChars(2,298)=&quot;₩&quot;
+	arrChars(0,299)=&quot;€ ¥ £ ...&quot;
+	arrChars(1,299)=&quot;w=&quot;
+	arrChars(2,299)=&quot;₩&quot;
+	arrChars(0,300)=&quot;© ™ § ...&quot;
+	arrChars(1,300)=&quot;C@&quot;
+	arrChars(2,300)=&quot;©&quot;
+	arrChars(0,301)=&quot;© ™ § ...&quot;
+	arrChars(1,301)=&quot;c@&quot;
+	arrChars(2,301)=&quot;©&quot;
+	arrChars(0,302)=&quot;© ™ § ...&quot;
+	arrChars(1,302)=&quot;R@&quot;
+	arrChars(2,302)=&quot;®&quot;
+	arrChars(0,303)=&quot;© ™ § ...&quot;
+	arrChars(1,303)=&quot;r@&quot;
+	arrChars(2,303)=&quot;®&quot;
+	arrChars(0,304)=&quot;© ™ § ...&quot;
+	arrChars(1,304)=&quot;O@&quot;
+	arrChars(2,304)=&quot;°&quot;
+	arrChars(0,305)=&quot;© ™ § ...&quot;
+	arrChars(1,305)=&quot;o@&quot;
+	arrChars(2,305)=&quot;°&quot;
+	arrChars(0,306)=&quot;© ™ § ...&quot;
+	arrChars(1,306)=&quot;S-&quot;
+	arrChars(2,306)=&quot;§&quot;
+	arrChars(0,307)=&quot;© ™ § ...&quot;
+	arrChars(1,307)=&quot;s-&quot;
+	arrChars(2,307)=&quot;§&quot;
+	arrChars(0,308)=&quot;© ™ § ...&quot;
+	arrChars(1,308)=&quot;p-&quot;
+	arrChars(2,308)=&quot;¶&quot;
+	arrChars(0,309)=&quot;© ™ § ...&quot;
+	arrChars(1,309)=&quot;CO&quot;
+	arrChars(2,309)=&quot;℅&quot;
+	arrChars(0,310)=&quot;© ™ § ...&quot;
+	arrChars(1,310)=&quot;Co&quot;
+	arrChars(2,310)=&quot;℅&quot;
+	arrChars(0,311)=&quot;© ™ § ...&quot;
+	arrChars(1,311)=&quot;co&quot;
+	arrChars(2,311)=&quot;℅&quot;
+	arrChars(0,312)=&quot;© ™ § ...&quot;
+	arrChars(1,312)=&quot;NO&quot;
+	arrChars(2,312)=&quot;№&quot;
+	arrChars(0,313)=&quot;© ™ § ...&quot;
+	arrChars(1,313)=&quot;No&quot;
+	arrChars(2,313)=&quot;№&quot;
+	arrChars(0,314)=&quot;© ™ § ...&quot;
+	arrChars(1,314)=&quot;no&quot;
+	arrChars(2,314)=&quot;№&quot;
+	arrChars(0,315)=&quot;© ™ § ...&quot;
+	arrChars(1,315)=&quot;TM&quot;
+	arrChars(2,315)=&quot;™&quot;
+	arrChars(0,316)=&quot;© ™ § ...&quot;
+	arrChars(1,316)=&quot;Tm&quot;
+	arrChars(2,316)=&quot;™&quot;
+	arrChars(0,317)=&quot;© ™ § ...&quot;
+	arrChars(1,317)=&quot;tm&quot;
+	arrChars(2,317)=&quot;™&quot;
+	arrChars(0,318)=&quot;© ™ § ...&quot;
+	arrChars(1,318)=&quot;CK&quot;
+	arrChars(2,318)=&quot;✓&quot;
+	arrChars(0,319)=&quot;© ™ § ...&quot;
+	arrChars(1,319)=&quot;Ck&quot;
+	arrChars(2,319)=&quot;✓&quot;
+	arrChars(0,320)=&quot;© ™ § ...&quot;
+	arrChars(1,320)=&quot;ck&quot;
+	arrChars(2,320)=&quot;✓&quot;
+	arrChars(0,321)=&quot;© ™ § ...&quot;
+	arrChars(1,321)=&quot;CB&quot;
+	arrChars(2,321)=&quot;☑&quot;
+	arrChars(0,322)=&quot;© ™ § ...&quot;
+	arrChars(1,322)=&quot;Cb&quot;
+	arrChars(2,322)=&quot;☑&quot;
+	arrChars(0,323)=&quot;© ™ § ...&quot;
+	arrChars(1,323)=&quot;cb&quot;
+	arrChars(2,323)=&quot;☑&quot;
+	arrChars(0,324)=&quot;© ™ § ...&quot;
+	arrChars(1,324)=&quot;XB&quot;
+	arrChars(2,324)=&quot;☒&quot;
+	arrChars(0,325)=&quot;© ™ § ...&quot;
+	arrChars(1,325)=&quot;Xb&quot;
+	arrChars(2,325)=&quot;☒&quot;
+	arrChars(0,326)=&quot;© ™ § ...&quot;
+	arrChars(1,326)=&quot;xb&quot;
+	arrChars(2,326)=&quot;☒&quot;
+	arrChars(0,327)=&quot;↑ ↓ ← →&quot;
+	arrChars(1,327)=&quot;-^&quot;
+	arrChars(2,327)=&quot;↑&quot;
+	arrChars(0,328)=&quot;↑ ↓ ← →&quot;
+	arrChars(1,328)=&quot;^-&quot;
+	arrChars(2,328)=&quot;↓&quot;
+	arrChars(0,329)=&quot;↑ ↓ ← →&quot;
+	arrChars(1,329)=&quot;&lt;-&quot;
+	arrChars(2,329)=&quot;←&quot;
+	arrChars(0,330)=&quot;↑ ↓ ← →&quot;
+	arrChars(1,330)=&quot;-&gt;&quot;
+	arrChars(2,330)=&quot;→&quot;
+	arrChars(0,331)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,331)=&quot;12&quot;
+	arrChars(2,331)=&quot;½&quot;
+	arrChars(0,332)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,332)=&quot;13&quot;
+	arrChars(2,332)=&quot;⅓&quot;
+	arrChars(0,333)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,333)=&quot;23&quot;
+	arrChars(2,333)=&quot;⅔&quot;
+	arrChars(0,334)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,334)=&quot;14&quot;
+	arrChars(2,334)=&quot;¼&quot;
+	arrChars(0,335)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,335)=&quot;34&quot;
+	arrChars(2,335)=&quot;¾&quot;
+	arrChars(0,336)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,336)=&quot;15&quot;
+	arrChars(2,336)=&quot;⅕&quot;
+	arrChars(0,337)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,337)=&quot;25&quot;
+	arrChars(2,337)=&quot;⅖&quot;
+	arrChars(0,338)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,338)=&quot;35&quot;
+	arrChars(2,338)=&quot;⅗&quot;
+	arrChars(0,339)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,339)=&quot;45&quot;
+	arrChars(2,339)=&quot;⅘&quot;
+	arrChars(0,340)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,340)=&quot;16&quot;
+	arrChars(2,340)=&quot;⅙&quot;
+	arrChars(0,341)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,341)=&quot;56&quot;
+	arrChars(2,341)=&quot;⅚&quot;
+	arrChars(0,342)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,342)=&quot;18&quot;
+	arrChars(2,342)=&quot;⅛&quot;
+	arrChars(0,343)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,343)=&quot;38&quot;
+	arrChars(2,343)=&quot;⅜&quot;
+	arrChars(0,344)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,344)=&quot;58&quot;
+	arrChars(2,344)=&quot;⅝&quot;
+	arrChars(0,345)=&quot;½ ⅓ ⅛ ...&quot;
+	arrChars(1,345)=&quot;78&quot;
+	arrChars(2,345)=&quot;⅞&quot;
+	arrChars(0,346)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,346)=&quot;==&quot;
+	arrChars(2,346)=&quot;≈&quot;
+	arrChars(0,347)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,347)=&quot;=/&quot;
+	arrChars(2,347)=&quot;≠&quot;
+	arrChars(0,348)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,348)=&quot;=!&quot;
+	arrChars(2,348)=&quot;≡&quot;
+	arrChars(0,349)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,349)=&quot;&lt;_&quot;
+	arrChars(2,349)=&quot;≤&quot;
+	arrChars(0,350)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,350)=&quot;&gt;_&quot;
+	arrChars(2,350)=&quot;≥&quot;
+	arrChars(0,351)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,351)=&quot;+-&quot;
+	arrChars(2,351)=&quot;±&quot;
+	arrChars(0,352)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,352)=&quot;x!&quot;
+	arrChars(2,352)=&quot;×&quot;
+	arrChars(0,353)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,353)=&quot;X!&quot;
+	arrChars(2,353)=&quot;×&quot;
+	arrChars(0,354)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,354)=&quot;-:&quot;
+	arrChars(2,354)=&quot;÷&quot;
+	arrChars(0,355)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,355)=&quot;DD&quot;
+	arrChars(2,355)=&quot;∆&quot;
+	arrChars(0,356)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,356)=&quot;Dd&quot;
+	arrChars(2,356)=&quot;∆&quot;
+	arrChars(0,357)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,357)=&quot;dd&quot;
+	arrChars(2,357)=&quot;∆&quot;
+	arrChars(0,358)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,358)=&quot;EE&quot;
+	arrChars(2,358)=&quot;∑&quot;
+	arrChars(0,359)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,359)=&quot;Ee&quot;
+	arrChars(2,359)=&quot;∑&quot;
+	arrChars(0,360)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,360)=&quot;ee&quot;
+	arrChars(2,360)=&quot;∑&quot;
+	arrChars(0,361)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,361)=&quot;e!&quot;
+	arrChars(2,361)=&quot;∂&quot;
+	arrChars(0,362)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,362)=&quot;FF&quot;
+	arrChars(2,362)=&quot;∫&quot;
+	arrChars(0,363)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,363)=&quot;Ff&quot;
+	arrChars(2,363)=&quot;∫&quot;
+	arrChars(0,364)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,364)=&quot;ff&quot;
+	arrChars(2,364)=&quot;∫&quot;
+	arrChars(0,365)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,365)=&quot;LL&quot;
+	arrChars(2,365)=&quot;Λ&quot;
+	arrChars(0,366)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,366)=&quot;ll&quot;
+	arrChars(2,366)=&quot;λ&quot;
+	arrChars(0,367)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,367)=&quot;mu&quot;
+	arrChars(2,367)=&quot;µ&quot;
+	arrChars(0,368)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,368)=&quot;OO&quot;
+	arrChars(2,368)=&quot;∞&quot;
+	arrChars(0,369)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,369)=&quot;Oo&quot;
+	arrChars(2,369)=&quot;∞&quot;
+	arrChars(0,370)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,370)=&quot;oo&quot;
+	arrChars(2,370)=&quot;∞&quot;
+	arrChars(0,371)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,371)=&quot;SR&quot;
+	arrChars(2,371)=&quot;√&quot;
+	arrChars(0,372)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,372)=&quot;Sr&quot;
+	arrChars(2,372)=&quot;√&quot;
+	arrChars(0,373)=&quot;∑ ÷ ± ...&quot;
+	arrChars(1,373)=&quot;sr&quot;
+	arrChars(2,373)=&quot;√&quot;
+	arrChars(0,374)=&quot;α β γ ...&quot;
+	arrChars(1,374)=&quot;\A&quot;
+	arrChars(2,374)=&quot;Α&quot;
+	arrChars(0,375)=&quot;α β γ ...&quot;
+	arrChars(1,375)=&quot;\a&quot;
+	arrChars(2,375)=&quot;α&quot;
+	arrChars(0,376)=&quot;α β γ ...&quot;
+	arrChars(1,376)=&quot;\B&quot;
+	arrChars(2,376)=&quot;Β&quot;
+	arrChars(0,377)=&quot;α β γ ...&quot;
+	arrChars(1,377)=&quot;\b&quot;
+	arrChars(2,377)=&quot;β&quot;
+	arrChars(0,378)=&quot;α β γ ...&quot;
+	arrChars(1,378)=&quot;\G&quot;
+	arrChars(2,378)=&quot;Γ&quot;
+	arrChars(0,379)=&quot;α β γ ...&quot;
+	arrChars(1,379)=&quot;\g&quot;
+	arrChars(2,379)=&quot;γ&quot;
+	arrChars(0,380)=&quot;α β γ ...&quot;
+	arrChars(1,380)=&quot;\D&quot;
+	arrChars(2,380)=&quot;Δ&quot;
+	arrChars(0,381)=&quot;α β γ ...&quot;
+	arrChars(1,381)=&quot;\d&quot;
+	arrChars(2,381)=&quot;δ&quot;
+	arrChars(0,382)=&quot;α β γ ...&quot;
+	arrChars(1,382)=&quot;\E&quot;
+	arrChars(2,382)=&quot;E&quot;
+	arrChars(0,383)=&quot;α β γ ...&quot;
+	arrChars(1,383)=&quot;\e&quot;
+	arrChars(2,383)=&quot;ε&quot;
+	arrChars(0,384)=&quot;α β γ ...&quot;
+	arrChars(1,384)=&quot;\w&quot;
+	arrChars(2,384)=&quot;&amp;H03f5&quot;
+	arrChars(0,385)=&quot;α β γ ...&quot;
+	arrChars(1,385)=&quot;\Z&quot;
+	arrChars(2,385)=&quot;Ζ&quot;
+	arrChars(0,386)=&quot;α β γ ...&quot;
+	arrChars(1,386)=&quot;\z&quot;
+	arrChars(2,386)=&quot;ζ&quot;
+	arrChars(0,387)=&quot;α β γ ...&quot;
+	arrChars(1,387)=&quot;\H&quot;
+	arrChars(2,387)=&quot;Η&quot;
+	arrChars(0,388)=&quot;α β γ ...&quot;
+	arrChars(1,388)=&quot;\h&quot;
+	arrChars(2,388)=&quot;η&quot;
+	arrChars(0,389)=&quot;α β γ ...&quot;
+	arrChars(1,389)=&quot;\Q&quot;
+	arrChars(2,389)=&quot;Θ&quot;
+	arrChars(0,390)=&quot;α β γ ...&quot;
+	arrChars(1,390)=&quot;\q&quot;
+	arrChars(2,390)=&quot;θ&quot;
+	arrChars(0,391)=&quot;α β γ ...&quot;
+	arrChars(1,391)=&quot;\I&quot;
+	arrChars(2,391)=&quot;Ι&quot;
+	arrChars(0,392)=&quot;α β γ ...&quot;
+	arrChars(1,392)=&quot;\i&quot;
+	arrChars(2,392)=&quot;ι&quot;
+	arrChars(0,393)=&quot;α β γ ...&quot;
+	arrChars(1,393)=&quot;\K&quot;
+	arrChars(2,393)=&quot;Κ&quot;
+	arrChars(0,394)=&quot;α β γ ...&quot;
+	arrChars(1,394)=&quot;\k&quot;
+	arrChars(2,394)=&quot;κ&quot;
+	arrChars(0,395)=&quot;α β γ ...&quot;
+	arrChars(1,395)=&quot;\L&quot;
+	arrChars(2,395)=&quot;Λ&quot;
+	arrChars(0,396)=&quot;α β γ ...&quot;
+	arrChars(1,396)=&quot;\l&quot;
+	arrChars(2,396)=&quot;λ&quot;
+	arrChars(0,397)=&quot;α β γ ...&quot;
+	arrChars(1,397)=&quot;\M&quot;
+	arrChars(2,397)=&quot;Μ&quot;
+	arrChars(0,398)=&quot;α β γ ...&quot;
+	arrChars(1,398)=&quot;\m&quot;
+	arrChars(2,398)=&quot;μ&quot;
+	arrChars(0,399)=&quot;α β γ ...&quot;
+	arrChars(1,399)=&quot;\N&quot;
+	arrChars(2,399)=&quot;Ν&quot;
+	arrChars(0,400)=&quot;α β γ ...&quot;
+	arrChars(1,400)=&quot;\n&quot;
+	arrChars(2,400)=&quot;ν&quot;
+	arrChars(0,401)=&quot;α β γ ...&quot;
+	arrChars(1,401)=&quot;\X&quot;
+	arrChars(2,401)=&quot;Ξ&quot;
+	arrChars(0,402)=&quot;α β γ ...&quot;
+	arrChars(1,402)=&quot;\x&quot;
+	arrChars(2,402)=&quot;ξ&quot;
+	arrChars(0,403)=&quot;α β γ ...&quot;
+	arrChars(1,403)=&quot;\_&quot;
+	arrChars(2,403)=&quot;Ο&quot;
+	arrChars(0,404)=&quot;α β γ ...&quot;
+	arrChars(1,404)=&quot;\-&quot;
+	arrChars(2,404)=&quot;ο&quot;
+	arrChars(0,405)=&quot;α β γ ...&quot;
+	arrChars(1,405)=&quot;\P&quot;
+	arrChars(2,405)=&quot;Π&quot;
+	arrChars(0,406)=&quot;α β γ ...&quot;
+	arrChars(1,406)=&quot;\p&quot;
+	arrChars(2,406)=&quot;π&quot;
+	arrChars(0,407)=&quot;α β γ ...&quot;
+	arrChars(1,407)=&quot;\R&quot;
+	arrChars(2,407)=&quot;Ρ&quot;
+	arrChars(0,408)=&quot;α β γ ...&quot;
+	arrChars(1,408)=&quot;\r&quot;
+	arrChars(2,408)=&quot;ρ&quot;
+	arrChars(0,409)=&quot;α β γ ...&quot;
+	arrChars(1,409)=&quot;\S&quot;
+	arrChars(2,409)=&quot;Σ&quot;
+	arrChars(0,410)=&quot;α β γ ...&quot;
+	arrChars(1,410)=&quot;\s&quot;
+	arrChars(2,410)=&quot;σ&quot;
+	arrChars(0,411)=&quot;α β γ ...&quot;
+	arrChars(1,411)=&quot;\&gt;&quot;
+	arrChars(2,411)=&quot;ς&quot;
+	arrChars(0,412)=&quot;α β γ ...&quot;
+	arrChars(1,412)=&quot;\T&quot;
+	arrChars(2,412)=&quot;Τ&quot;
+	arrChars(0,413)=&quot;α β γ ...&quot;
+	arrChars(1,413)=&quot;\t&quot;
+	arrChars(2,413)=&quot;τ&quot;
+	arrChars(0,414)=&quot;α β γ ...&quot;
+	arrChars(1,414)=&quot;\U&quot;
+	arrChars(2,414)=&quot;Υ&quot;
+	arrChars(0,415)=&quot;α β γ ...&quot;
+	arrChars(1,415)=&quot;\u&quot;
+	arrChars(2,415)=&quot;υ&quot;
+	arrChars(0,416)=&quot;α β γ ...&quot;
+	arrChars(1,416)=&quot;\F&quot;
+	arrChars(2,416)=&quot;Φ&quot;
+	arrChars(0,417)=&quot;α β γ ...&quot;
+	arrChars(1,417)=&quot;\f&quot;
+	arrChars(2,417)=&quot;φ&quot;
+	arrChars(0,418)=&quot;α β γ ...&quot;
+	arrChars(1,418)=&quot;\C&quot;
+	arrChars(2,418)=&quot;Χ&quot;
+	arrChars(0,419)=&quot;α β γ ...&quot;
+	arrChars(1,419)=&quot;\c&quot;
+	arrChars(2,419)=&quot;χ&quot;
+	arrChars(0,420)=&quot;α β γ ...&quot;
+	arrChars(1,420)=&quot;\Y&quot;
+	arrChars(2,420)=&quot;Ψ&quot;
+	arrChars(0,421)=&quot;α β γ ...&quot;
+	arrChars(1,421)=&quot;\y&quot;
+	arrChars(2,421)=&quot;ψ&quot;
+	arrChars(0,422)=&quot;α β γ ...&quot;
+	arrChars(1,422)=&quot;\O&quot;
+	arrChars(2,422)=&quot;Ω&quot;
+	arrChars(0,423)=&quot;α β γ ...&quot;
+	arrChars(1,423)=&quot;\o&quot;
+	arrChars(2,423)=&quot;ω&quot;
+
+
+
+
+	
+	
+
+	
+	fncCharacterArray = arrChars()
+	
+end Function
+
+
+Sub DisplayDlgInfo()
+
+	&apos; displays the reference/GUI dialog
+
+	dim ctlCategs	as object
+	dim ctlChars	as object
+	dim ctlFlagText	as object
+	dim ctlReverse	as object
+	dim arrCategs(0)
+	dim arrFilter()
+	dim i			as long
+	dim x			as long
+	dim y			as long
+	dim blnFound	as boolean
+	dim strTest		as string
+	dim intState	as integer
+	
+	on error goto Errorhandler
+	
+	&apos; create Component and Controller objects that can be used by dlgAttach
+	objAppComponent = ThisComponent
+	objAppController = objAppComponent.CurrentController
+	
+	&apos; populate array from Function
+	&apos; array used in more than one procedure so it&apos;s built and returned by a Function
+
+	&apos; if character array isn&apos;t populated, populate it
+	if ubound(arrCSCChars,1) &lt; 0 then
+		arrCSCChars() = fncCharacterArray
+	end if
+	
+ 	DialogLibraries.LoadLibrary(&quot;ComposeSpecialChars&quot;)
+	dlg = CreateUnoDialog(DialogLibraries.ComposeSpecialChars.dlgInfo)
+
+	ctlFlagText = dlg.getControl(&quot;txtCalcDelim&quot;)
+	ctlFlagText.text = fncGetCalcDelimConst()
+	
+	ctlReverse = dlg.getControl(&quot;chkReverse&quot;)
+	intState = fncGetReverseVal()
+	ctlReverse.state = intState
+	ctlReverse.visible = false
+	
+	dim lbl7 as object
+	
+	lbl7 = dlg.getControl(&quot;Label7&quot;)
+	lbl7.model.label = fncInstructionsLabel()
+	
+	CenterDialog(dlg)
+	
+	y = -1
+	
+	&apos; populate the dialog&apos;s categories list
+	for i = 0 to ubound(arrCSCChars,2)
+		blnFound = False
+		for x = 0 to ubound(arrCategs)
+			strTest = arrCSCChars(0,i)
+			if arrCategs(x) = strtest then
+				blnFound = True
+				exit for
+			end if
+		next x
+		if blnFound = False then
+			y = y + 1
+			redim preserve arrCategs(y)
+			arrCategs(ubound(arrCategs)) = arrCSCChars(0,i)
+		end if
+	next i
+	
+	if arrCategs(ubound(arrCategs)) = &quot;&quot; then
+		redim preserve arrCategs(ubound(arrCategs)-1)
+	end if
+	
+	for i = 0 to ubound(arrCategs)
+		arrCategs(i) = &quot; &quot; &amp; arrCategs(i)
+	next i
+	
+	ctlCategs = dlg.getControl(&quot;lstCategs&quot;)
+	ctlCategs.addItems(arrCategs,0)
+	
+	&apos; populate the dialog&apos;s characters
+	&apos; use the FilterChars procedure instead of inline code because
+	&apos; FilterChars is also used when clicking on the dialog&apos;s 
+	&apos; categories list
+	FilterChars(dlg, arrCSCChars())
+	
+	dlg.Execute()
+	
+	objCtl = dlg.getControl(&quot;chkReverse&quot;)
+	
+	intState = objCtl.state
+	
+	if intState &gt; 1 then
+		intState = 1
+	end if
+	
+	objCtl.state = fncSetReverseVal(intState)
+	
+	REVERSE_VAL = objCtl.state
+	
+	&apos; clear these variables
+	objAppController = nothing
+	objAppComponent = nothing
+	
+	dlg.dispose()
+	
+	Exit Sub
+	
+Errorhandler:
+
+	select case err
+		case 423
+			&apos;do nothing
+		case else
+			msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;DisplayDlgInfo&quot;
+	end select
+	
+End Sub
+
+
+Sub ClickCategsList(objEventObject as object)
+
+	FilterChars(dlg, arrCSCChars())
+
+End Sub
+
+
+Sub FilterChars(dlg as object, arrchars())
+
+	dim strFilter	as string
+	dim ctlCategs	as object
+	dim ctlChars	as object
+	
+	on error goto Errorhandler
+	
+	ctlCategs = dlg.getControl(&quot;lstCategs&quot;)
+	ctlChars = dlg.getControl(&quot;lstChars&quot;)
+	
+	strFilter = ctlCategs.getSelectedItem()
+
+	ctlChars.removeItems(0,ctlChars.ItemCount)
+	arrFilter() = fncFilterCharsArray(arrchars(), strFilter)
+	ctlChars.addItems(arrFilter,0)
+		
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;FilterChars&quot;
+				
+End Sub
+
+
+Function fncFilterCharsArray(arr(), strFilter as string) as Array
+
+	dim i			as long
+	dim y			as long
+	dim lngUbound	as long
+	dim strChar		as string
+	dim strTest		as string	
+	dim arrResult(0)
+
+	on error goto Errorhandler
+
+	lngUbound = ubound(arr,2)
+	
+	y = -1
+
+	for i = 0 to lngUbound
+		strTest = arr(0,i)
+		Select Case trim(strFilter)
+			Case &quot;&quot;, strTest
+				y = y + 1
+				redim preserve arrResult(y)
+				strTest = arr(2,i)
+				if left(strTest,2) = &quot;&amp;H&quot; then
+					strChar = chr(clng(strTest))
+				else
+					strChar = strTest
+				end if
+				arrResult(y) = &quot; &quot; &amp; strChar &amp; &quot;  =  &quot; &amp; arr(1,i)
+		End Select
+	next i
+
+	if arrResult(ubound(arrResult)) = &quot;&quot; then
+		redim preserve arrResult(ubound(arrResult)-1)
+	end if
+	
+	fncFilterCharsArray = arrResult()
+	
+	exit Function
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;fncFilterCharsArray&quot;
+		
+end Function
+
+
+Sub InsertCharacter()
+
+	dim strChar			as string
+	dim strFilger		as string
+	dim strComp			as string
+	dim ctlChars		as object
+	dim objDoc			as object
+	
+	on error goto Errorhandler
+	
+	ctlChars = dlg.getControl(&quot;lstChars&quot;)
+	
+	strFilter = ctlChars.getSelectedItem()
+	
+	strChar = trim(left(strFilter, 2))
+
+	objComponent = ThisComponent
+	objController = objComponent.CurrentController
+	
+	&apos; determine which component is calling the addin
+	strComp = fncWhichComponent(objComponent)
+	
+	Select Case strComp
+		Case &quot;Text&quot;
+			InsertSCWriter(objController, strChar)
+		Case &quot;Spreadsheet&quot;
+			InsertSCCalc(objController, strChar)
+	End Select
+	
+	dlg.endExecute()
+
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;InsertCharacter&quot;
+		
+End Sub
+
+
+Sub InsertSCWriter(objController as object, strChar as string)
+
+	dim objDispatcher	as object
+	dim args1(0) 		as new com.sun.star.beans.PropertyValue
+
+	objDispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	
+	args1(0).Name = &quot;Text&quot;
+	args1(0).Value = strChar
+	
+	objDispatcher.executeDispatch(objController.Frame, &quot;.uno:InsertText&quot;, &quot;&quot;, 0, args1())
+
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;InsertSCWriter&quot;
+		
+End Sub
+
+
+Sub InsertSCCalc(objController as object, strChar as string)
+
+	&apos; for Calc spreadsheets
+
+	on error goto ErrorHandler
+
+	dim objRange		as object
+	dim objActiveCell	as object
+	dim objActiveSheet	as object
+	dim objDispatcher	as object
+	dim strType			as string
+	dim str1			as string
+	dim str2			as string
+	dim str3			as string
+	dim strCell			as string
+	dim strString		as string
+	dim lngPos			as long
+	dim blnResult		as boolean
+
+	CALC_DELIM = fncGetCalcDelimConst()
+
+	objActiveSheet = objController.getActiveSheet()
+	objRange = ThisComponent.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
+	objController.Select(objRange) 
+	objActiveCell = ThisComponent.CurrentSelection
+	
+	&apos; commit changes to the cell using &quot;select database range&quot;
+
+	objDispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	
+	dim args1(0) as new com.sun.star.beans.PropertyValue
+	args1(0).Name = &quot;DbName&quot;
+	args1(0).Value = &quot;&quot;
+	
+	objDispatcher.executeDispatch(objController.Frame, &quot;.uno:SelectDB&quot;, &quot;&quot;, 0, args1())
+		    	
+	&apos; determine type of cell - getFormula for Formula cells, getString for Text/Empty
+	&apos; Empty type = cells that have not been exited, so data entry type not determined yet
+   	strType = fncGetCellType(objActiveCell)
+   	
+   	Select Case strType
+   	
+   		Case &quot;VALUE&quot;
+   		
+   		CASE &quot;FORMULA&quot;
+   		
+   			strString = objActiveCell.getFormula()
+   		
+		Case &quot;TEXT&quot;, &quot;EMPTY&quot;
+		
+			strString = objActiveCell.getString()
+
+   	End Select
+
+	&apos; search the string for the delimiter character (flagged by the CALC_DELIM constant)
+
+	lngPos = instr(strString, CALC_DELIM)
+
+	if lngPos &gt; 0 then
+		strString = Replace(strString, CALC_DELIM, strChar)
+	else
+		str2 = right(strString, 1)
+		if str2 = &quot;&quot;&quot;&quot; then
+			str1 = left(strString, len(strString)-1)
+			strString = str1 &amp; strChar &amp; str2
+		else
+			strString = strString &amp; strChar
+		end if
+	end if
+	
+   	Select Case strType
+   	
+   		Case &quot;VALUE&quot;
+   		
+   		CASE &quot;FORMULA&quot;
+   		
+   			objActiveCell.setFormula(strString)
+   			
+		Case &quot;TEXT&quot;, &quot;EMPTY&quot;
+		
+			objActiveCell.setString(strString)
+
+   	End Select
+
+FinishUp:
+
+   	&apos; switch cell back to input mode
+	blnResult = fncSwitchToInputMode(objController.Frame)
+   	
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;ComposeSCCalc&quot;
+		
+End Sub
+
+
+
+sub RefreshFormula(str as string)
+
+	rem ----------------------------------------------------------------------
+	rem define variables
+	dim document   as object
+	dim dispatcher as object
+	rem ----------------------------------------------------------------------
+	rem get access to the document
+	document   = ThisComponent.CurrentController.Frame
+	dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	
+	rem ----------------------------------------------------------------------
+	dim args1(0) as new com.sun.star.beans.PropertyValue
+	dim str as string
+	args1(0).Name = &quot;StringName&quot;
+	args1(0).Value = str
+	
+	dispatcher.executeDispatch(document, &quot;.uno:EnterString&quot;, &quot;&quot;, 0, args1())
+
+
+end sub
+
+
+Sub ComposeSCImpress()
+
+	&apos; bug in Impress? text range updates only occassionally...
+
+	dim strComp			as string
+	dim objComponent	as object
+	dim objController	as object
+	dim objFrame		as object
+	dim objPage			as object
+	dim objShapes		as object
+	dim objThisShape	as object
+	dim objDispatcher	as object
+	dim objViewCursor	as object
+	dim objText			as object
+	dim objTextCursor	as object
+	dim objTextRange	as object
+	dim args1(0) 		as new com.sun.star.beans.PropertyValue
+	dim bln	as boolean
+	
+	&apos; arrCSCChars() = fncCharacterArray
+	
+	objComponent = ThisComponent
+	objController = objComponent.CurrentController
+	objFrame = objController.Frame
+	
+	objPage = objController.CurrentPage
+	objShapes = objComponent.getCurrentSelection()
+
+	objThisShape = objShapes.getByIndex(0)
+
+	objText = objThisShape.getText()
+	objTextCursor = objText.createTextCursor(objText)
+	
+	&apos; select and copy two preceding characters
+	objTextCursor.goLeft(2, True)
+	strString = objTextCursor.getString()
+	
+	objTextRange = objTextCursor(0,2)
+	
+	&apos; skip if there aren&apos;t 2 character to process
+	if len(strString) = 2 then
+	
+		dim i 				as integer
+		dim x				as integer
+		dim blnFound 		as boolean
+		dim strComposedChar	as string
+		dim strTest			as string
+		
+		blnFound = False
+		
+		&apos; loop through array of characters looking for match
+		for i = 0 To uBound(arrCSCChars,2) &apos; upper limit of array = ubound of 2nd dimension
+			strTest = trim(arrCSCChars(1,i))
+			if arrCSCChars(1,i) = strString Then
+				&apos; match found - exit loop
+				blnFound = true
+				strComposedChar = arrCSCChars(2,i)
+				Exit for
+			end if
+		next i
+	
+		if blnFound = True then
+			&apos; replace composing characters with special characters
+			objTextRange.setString(strComposedChar)
+		else
+			&apos; no match found, notify user and deselect the characters
+			msgbox &quot;&quot;&quot;&quot; &amp; strstring &amp; &quot;&quot;&quot; is not defined as an accented character.&quot;, 0, &quot;Undefined character&quot;
+			objTextCursor.goRight(2,False)
+		end if
+
+	end if
+	
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;ComposeSCWriter&quot;
+		
+End Sub
+
+
+Function fncAdjustString(strString as string)
+
+	dim lngR		as long
+	dim strR		as string
+	dim strL		as string
+	dim strResult	as string
+	
+	strL = left(strString,1)
+	strR = right(strString,1)
+	lngR = asc(strR)
+	
+	select case lngR
+		case 8217
+			strR = &quot;&apos;&quot;
+		Case 8221
+			strR = &quot;&quot;&quot;&quot;
+	end select
+	
+	strResult = strL &amp; strR
+	
+	fncAdjustString = strResult
+	
+	Exit Function
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;fncAdjustString&quot;
+	
+	fncAdjustString = strResult
+		
+End Function
+
+
+
+Function fncAlphaNumList() as Array
+
+	dim arr(35)
+	
+	arr(0) = &quot; 0&quot;
+	arr(1) = &quot; 1&quot;
+	arr(2) = &quot; 2&quot;
+	arr(3) = &quot; 3&quot;
+	arr(4) = &quot; 4&quot;
+	arr(5) = &quot; 5&quot;
+	arr(6) = &quot; 6&quot;
+	arr(7) = &quot; 7&quot;
+	arr(8) = &quot; 8&quot;
+	arr(9) = &quot; 9&quot;
+	arr(10) = &quot; a&quot;
+	arr(11) = &quot; b&quot;
+	arr(12) = &quot; c&quot;
+	arr(13) = &quot; d&quot;
+	arr(14) = &quot; e&quot;
+	arr(15) = &quot; f&quot;
+	arr(16) = &quot; g&quot;
+	arr(17) = &quot; h&quot;
+	arr(18) = &quot; i&quot;
+	arr(19) = &quot; j&quot;
+	arr(20) = &quot; k&quot;
+	arr(21) = &quot; l&quot;
+	arr(22) = &quot; m&quot;
+	arr(23) = &quot; n&quot;
+	arr(24) = &quot; o&quot;
+	arr(25) = &quot; p&quot;
+	arr(26) = &quot; q&quot;
+	arr(27) = &quot; r&quot;
+	arr(28) = &quot; s&quot;
+	arr(29) = &quot; t&quot;
+	arr(30) = &quot; u&quot;
+	arr(31) = &quot; v&quot;
+	arr(32) = &quot; w&quot;
+	arr(33) = &quot; x&quot;
+	arr(34) = &quot; y&quot;
+	arr(35) = &quot; z&quot;
+	
+	fncAlphaNumList = arr()	
+	
+End Function
+
+Function fncOtherKeysList() as Array
+
+	dim arr(23)
+	
+	arr(0) = &quot; +&quot;
+	arr(1) = &quot; -&quot;
+	arr(2) = &quot; *&quot;
+	arr(3) = &quot; /&quot;
+	arr(4) = &quot; =&quot;
+	arr(5) = &quot; &lt;&quot;
+	arr(6) = &quot; &gt;&quot;
+	arr(7) = &quot; ,&quot;
+	arr(8) = &quot; .&quot;
+	arr(9) = &quot; BACKSPACE&quot;
+	arr(10) = &quot; DELETE&quot;
+	arr(11) = &quot; DOWN&quot;
+	arr(12) = &quot; END&quot;
+	arr(13) = &quot; ESC&quot;
+	arr(14) = &quot; HOME&quot;
+	arr(15) = &quot; INS&quot;
+	arr(16) = &quot; LEFT&quot;
+	arr(17) = &quot; PAGEDOWN&quot;
+	arr(18) = &quot; PAGEUP&quot;
+	arr(19) = &quot; ENTER&quot;
+	arr(20) = &quot; RIGHT&quot;
+	arr(21) = &quot; SPACE&quot;
+	arr(22) = &quot; TAB&quot;
+	arr(23) = &quot; UP&quot;
+	
+	fncOtherKeysList = arr()	
+	
+End Function
+
+
+Function fncFnKeysList() as Array
+
+	dim arr(11)
+	
+	&apos;arr(0) = &quot; F1&quot;
+	arr(0) = &quot; F2&quot;
+	arr(1) = &quot; F3&quot;
+	arr(2) = &quot; F4&quot;
+	arr(3) = &quot; F5&quot;
+	&apos;arr(5) = &quot; F6&quot;
+	arr(4) = &quot; F7&quot;
+	arr(5) = &quot; F8&quot;
+	arr(6) = &quot; F9&quot;
+	&apos;arr(9) = &quot; F10&quot;
+	arr(7) = &quot; F11&quot;
+	arr(8) = &quot; F12&quot;
+	
+	fncFnKeysList = arr()	
+	
+End Function
+
+
+Function fncKeyConstant(str as String) as Integer
+
+	dim intReturn as integer
+	
+	select case ucase(str)
+		case &quot;0&quot;
+			intReturn = 256
+		case &quot;1&quot;
+			intReturn = 257
+		case &quot;2&quot;
+			intReturn = 258
+		case &quot;3&quot;
+			intReturn = 259
+		case &quot;4&quot;
+			intReturn = 260
+		case &quot;5&quot;
+			intReturn = 261
+		case &quot;6&quot;
+			intReturn = 262
+		case &quot;7&quot;
+			intReturn = 263
+		case &quot;8&quot;
+			intReturn = 264
+		case &quot;9&quot;
+			intReturn = 265
+		case &quot;A&quot;
+			intReturn = 512
+		case &quot;B&quot;
+			intReturn = 513
+		case &quot;C&quot;
+			intReturn = 514
+		case &quot;D&quot;
+			intReturn = 515
+		case &quot;E&quot;
+			intReturn = 516
+		case &quot;F&quot;
+			intReturn = 517
+		case &quot;G&quot;
+			intReturn = 518
+		case &quot;H&quot;
+			intReturn = 519
+		case &quot;I&quot;
+			intReturn = 520
+		case &quot;J&quot;
+			intReturn = 521
+		case &quot;K&quot;
+			intReturn = 522
+		case &quot;L&quot;
+			intReturn = 523
+		case &quot;M&quot;
+			intReturn = 524
+		case &quot;N&quot;
+			intReturn = 525
+		case &quot;O&quot;
+			intReturn = 526
+		case &quot;P&quot;
+			intReturn = 527
+		case &quot;Q&quot;
+			intReturn = 528
+		case &quot;R&quot;
+			intReturn = 529
+		case &quot;S&quot;
+			intReturn = 530
+		case &quot;T&quot;
+			intReturn = 531
+		case &quot;U&quot;
+			intReturn = 532
+		case &quot;V&quot;
+			intReturn = 533
+		case &quot;W&quot;
+			intReturn = 534
+		case &quot;X&quot;
+			intReturn = 535
+		case &quot;Y&quot;
+			intReturn = 536
+		case &quot;Z&quot;
+			intReturn = 537
+		case &quot;F1&quot;
+			intReturn = 768
+		case &quot;F2&quot;
+			intReturn = 769
+		case &quot;F3&quot;
+			intReturn = 770
+		case &quot;F4&quot;
+			intReturn = 771
+		case &quot;F5&quot;
+			intReturn = 772
+		case &quot;F6&quot;
+			intReturn = 773
+		case &quot;F7&quot;
+			intReturn = 774
+		case &quot;F8&quot;
+			intReturn = 775
+		case &quot;F9&quot;
+			intReturn = 776
+		case &quot;F10&quot;
+			intReturn = 777
+		case &quot;F11&quot;
+			intReturn = 778
+		case &quot;F12&quot;
+			intReturn = 779
+		case &quot;+&quot; &apos;ADD
+			intReturn = 1287
+		case &quot;BACKSPACE&quot;
+			intReturn = 1283
+		case &quot;COMMA&quot;
+			intReturn = 1292
+		case &quot;CONTEXTMENU&quot;
+			intReturn = 1305
+		case &quot;COPY&quot;
+			intReturn = 1298
+		case &quot;CUT&quot;
+			intReturn = 1297
+		case &quot;.&quot; &apos;DECIMAL
+			intReturn = 1309
+		case &quot;DELETE&quot;
+			intReturn = 1286
+		case &quot;DIVIDE&quot;
+			intReturn = 1290
+		case &quot;DOWN&quot;
+			intReturn = 1024
+		case &quot;END&quot;
+			intReturn = 1029
+		case &quot;=&quot; &apos;EQUAL
+			intReturn = 1295
+		case &quot;ESCAPE&quot;
+			intReturn = 1281
+		case &quot;FIND&quot;
+			intReturn = 1302
+		case &quot;FRONT&quot;
+			intReturn = 1304
+		case &quot;&gt;&quot; &apos;GREATER
+			intReturn = 1294
+		case &quot;HANGUL_HANJA&quot;
+			intReturn = 1308
+		case &quot;HELP&quot;
+			intReturn = 1306
+		case &quot;HOME&quot;
+			intReturn = 1028
+		case &quot;INSERT&quot;
+			intReturn = 1285
+		case &quot;LEFT&quot;
+			intReturn = 1026
+		case &quot;&lt;&quot; &apos;LESS
+			intReturn = 1293
+		case &quot;MENU&quot;
+			intReturn = 1307
+		case &quot;*&quot; &apos;MULTIPLY
+			intReturn = 1289
+		case &quot;OPEN&quot;
+			intReturn = 1296
+		case &quot;PAGEDOWN&quot;
+			intReturn = 1031
+		case &quot;PAGEUP&quot;
+			intReturn = 1030
+		case &quot;PASTE&quot;
+			intReturn = 1299
+		case &quot;.&quot; &apos;POINT
+			intReturn = 1291
+		case &quot;PROPERTIES&quot;
+			intReturn = 1303
+		case &quot;QUOTELEFT&quot;
+			intReturn = 1311
+		case &quot;REPEAT&quot;
+			intReturn = 1301
+		case &quot;ENTER&quot; &apos;RETURN
+			intReturn = 1280
+		case &quot;RIGHT&quot;
+			intReturn = 1027
+		case &quot;SPACE&quot;
+			intReturn = 1284
+		case &quot;SUBTRACT&quot;
+			intReturn = 1288
+		case &quot;TAB&quot;
+			intReturn = 1282
+		case &quot;TILDE&quot;
+			intReturn = 1310
+		case &quot;UNDO&quot;
+			intReturn = 1300
+		case &quot;UP&quot;
+			intReturn = 1025
+		case else
+			intReturn = 0
+	end select	
+	
+	fncKeyConstant = intReturn
+
+end Function
+
+
+Function fncGetKeyEvent() as object
+
+	dim objModuleCfgMgrSupplier	as object
+	dim objWriterModuleCfgMgr 	as object
+	dim objCalcModuleCfgMgr 	as object
+	dim objWriterShortCutMgr 	as object
+	dim objCalcShortCutMgr		as object
+	dim strCommand 				as string
+	dim strWriterCommand 		as string
+	dim strCalCommand			as string
+	dim strMsg 					as string
+	dim strResultString			as string
+	dim strMacroName			as string
+	dim strCharKeyX				as string
+	dim strOtherKeyX			as string
+	dim strFnKeyX				as string
+	dim intMsgResult 			as integer
+	dim intPosPre				as integer
+	dim intPosPost				as integer
+	dim intModKeysX				as integer
+	dim intCharKeyX				as integer
+	dim intOtherKeysX			as integer
+	dim intFnKeyX				as integer
+	dim aKeyEvent			    as New com.sun.star.awt.KeyEvent
+	
+	on error goto Errorhandler
+	
+	strCharKeyX = &quot;&quot;
+	strOtherKeyX = &quot;&quot;
+	strFnKeyX = &quot;&quot;
+	intModKeysX = 0
+	intOtherKeysX = 0
+	intFnKeyX = 0
+	intCharKeyX = 0
+	
+	if optChar.State = True then
+		if lstCharKeys.getSelectedItemPos() &gt; -1 then
+			strCharKeyX = trim(lstCharKeys.getSelectedItem)
+		end if
+	end if
+	
+	if optOther.State = True then	
+		if lstOtherKeys.getSelectedItemPos() &gt; -1 then
+			strOtherKeyX = trim(lstOtherKeys.getSelectedItem)
+		end if
+	end if
+	
+	if optFn.State = True then	
+		if lstFnKeys.getSelectedItemPos() &gt; -1 then
+			strFnKeyX = trim(lstFnKeys.getSelectedItem)
+		end if
+	end if
+		
+	intModKeysX = 0
+	
+	if chkAlt.State = 1 then
+		intModKeysX = 4
+	end if
+	
+	if chkAltGr.State = 1 then
+		intModKeysX = intModKeysX + 6
+	end if
+	
+	if chkCtl.State = 1 then
+		intModKeysX = intModKeysX + 2
+	end if
+	
+	if chkShift.State = 1 then
+		intModKeysX = intModKeysX + 1
+	end if
+	
+	if strCharKeyX &lt;&gt; &quot;&quot; then
+		intCharKeyX = fncKeyConstant(strCharKeyX)
+	else
+		intCharKeyX = 0
+	end if
+	
+	if strOtherKeyX &lt;&gt; &quot;&quot; then
+		intOtherKeysX = fncKeyConstant(strOtherKeyX)
+	else
+		intOtherKeysX = 0
+	end if
+	
+	if strFnKeyX &lt;&gt; &quot;&quot; then
+		intFnKeys = fncKeyConstant(strFnKeyX)
+	else
+		intFnKeys = 0
+	end if
+	
+	intOtherKeysX = intCharKeyX + intOtherKeysX + intFnKeys
+	
+	With aKeyEvent
+		.Modifiers = intModKeysX
+		.KeyCode = intOtherKeysX
+	End With
+	
+Finishup:
+	
+	fncGetKeyEvent = aKeyEvent
+	
+	Exit Function
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;ClearShortcut&quot;
+	
+	aKeyEvent = nothing
+	
+	goto Finishup
+		
+End Function
+
+
+
+sub SetCalcDelimConst()
+
+	dim strDelim 	as string
+	dim objCtl		as object
+	
+	objCtl = dlg.getControl(&quot;txtCalcDelim&quot;)
+	
+	strDelim = objCtl.text
+
+	objCtl.text = fncSetCalcDelimConst(strDelim)
+	
+	CALC_DELIM = objCtl.text
+	
+	msgbox &quot;The Calc flag character has been changed to &quot; &amp; strDelim, 64, &quot;Flag changed&quot;
+	
+end sub
+
+
+Sub SetReverseVal()
+
+	dim intState 	as integer
+	dim objCtl		as object
+	
+	objCtl = dlg.getControl(&quot;chkReverse&quot;)
+	
+	intState = objCtl.state
+	
+	if intState &gt; 1 then
+		intState = 1
+	end if
+	&apos;if intState = 0 then
+	&apos;	intState = 1
+	&apos;else
+	&apos;	intState = 0
+	&apos;end if
+	
+	objCtl.state = fncSetReverseVal(intState)
+	
+	REVERSE_VAL = objCtl.state
+	
+End Sub
+
+
+</script:module>

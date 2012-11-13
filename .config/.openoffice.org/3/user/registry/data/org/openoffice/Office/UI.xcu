@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="UI" oor:package="org.openoffice.Office">
+ <node oor:name="ColorScheme">
+  <node oor:name="ColorSchemes">
+   <node oor:name="OpenOffice.org">
+    <node oor:name="DocBoundaries">
+     <prop oor:name="IsVisible" oor:type="xs:boolean">
+      <value>false</value>
+     </prop>
+    </node>
+    <node oor:name="WriterFieldShadings">
+     <prop oor:name="IsVisible" oor:type="xs:boolean">
+      <value>false</value>
+     </prop>
+    </node>
+   </node>
+  </node>
+ </node>
+</oor:component-data>

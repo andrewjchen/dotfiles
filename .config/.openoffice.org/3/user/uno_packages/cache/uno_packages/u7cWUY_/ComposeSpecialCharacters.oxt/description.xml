@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Extension files were created by Extension Compiler - version  -->
+<description xmlns="http://openoffice.org/extensions/description/2006"
+ xmlns:dep="http://openoffice.org/extensions/description/2006"
+ xmlns:xlink="http://www.w3.org/1999/xlink" >
+   <identifier value="com.ProductivityApps.ComposeSpecialChacters" />
+   <version value="2.0.4" />
+   <dependencies>
+      <OpenOffice.org-minimal-version value="2.3" dep:name="OpenOffice.org 2.4 minimal" />
+   </dependencies>
+   <registration>
+      <simple-license accept-by="user" default-license-id="en" suppress-on-update="true" >
+         <license-text xlink:href="Legal/license-en.txt" lang="en" license-id="en" />
+      </simple-license>
+   </registration>
+   <update-information>
+      <src xlink:href="http://www.productivityapps.com/oo/updates/updatefeed.xml" />
+   </update-information>
+   <display-name>
+      <name lang="en">Compose Special Characters</name>
+   </display-name>
+   <publisher>
+      <name lang="en" xlink:href="http://www.productivityapps.com">ProductivityApps</name>
+   </publisher>
+   <release-notes>
+      <src lang="en" xlink:href="http://www.productivityapps.com/cscreleasenotes.html"/>
+   </release-notes>
+</description>

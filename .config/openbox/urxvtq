@@ -1,0 +1,17 @@
+#!/bin/bash
+
+wid=$(xdotool search --name urxvtq)
+if [ -z "$wid" ]; then
+  /path/to/urxvtc -name urxvtq -geometry 80x28
+ # wid=$(xdotool search --name urxvtq)
+  wid=$(xdotool search --name urxvtq | grep -m 1 "" )
+  xdotool windowfocus $wid
+  xdotool key Control_L+l
+else
+  if [ -z "$(xdotool search --onlyvisible --name urxvtq 2>/dev/null)" ]; then
+    xdotool windowmap $wid
+    xdotool windowfocus $wid
+  else
+    xdotool windowunmap $wid
+  fi
+fi

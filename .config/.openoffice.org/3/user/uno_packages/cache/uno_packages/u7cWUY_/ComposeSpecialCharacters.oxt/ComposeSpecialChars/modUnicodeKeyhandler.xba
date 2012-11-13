@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modUnicodeKeyhandler" script:language="StarBasic">Option Explicit
+
+Global objInsertUnicodeKeyHandler
+Global objInsertUnicodeKeyHandlerController
+Global strUnicode as string
+
+Sub AddInsertUnicodeKeyHandler
+
+    objInsertUnicodeKeyHandlerController = thisComponent.getCurrentController
+	objInsertUnicodeKeyHandler = createUnoListener(&quot;InsertUnicodeKeyHandler_&quot;,&quot;com.sun.star.awt.XKeyHandler&quot;)
+	objInsertUnicodeKeyHandlerController.addKeyHandler(objInsertUnicodeKeyHandler)
+	&apos;thisComponent.currentController.addKeyHandler(objInsertUnicodeKeyHandler)
+
+End Sub
+
+Sub RemoveInsertUnicodeKeyHandler
+
+	objInsertUnicodeKeyHandlerController.removeKeyHandler(objInsertUnicodeKeyHandler)
+	objInsertUnicodeKeyHandlerController = nothing
+
+End Sub
+
+Sub InsertUnicodeCharacter()
+
+	AddInsertUnicodeKeyHandler()
+	
+End Sub
+
+Function InsertUnicodeKeyHandler_keyPressed(oKeyEvent as new com.sun.star.awt.KeyHandler) As Boolean
+
+	dim strUnicodeHex as string
+	dim strUnicodeChar as string
+	dim strKey as string
+	
+	InsertUnicodeKeyHandler_keyPressed = true
+	
+	strKey = fncGetKeyPressed(oKeyEvent.keyCode)
+
+	if len(strUnicode) &lt; 3 then
+		strUnicode = strUnicode &amp; strKey
+	else
+		strUnicode = strUnicode &amp; strKey
+		strUnicodeHex = &quot;&amp;H&quot; &amp; strUnicode
+		
+		if clng(strUnicodeHex) = 0 then
+			msgbox strUnicode &amp; &quot; is not a valid code for a unicode character.&quot;,16,&quot;Invalid code&quot;
+			goto ResetAndEnd
+		end if
+		
+		strUnicodeChar = chr(clng(strUnicodeHex))
+
+		InsertUnicodeCharacterText(strUnicodeChar)
+		goto ResetAndEnd
+	end if
+	
+	exit function
+	
+ResetAndEnd:
+	strUnicode = &quot;&quot;
+	RemoveInsertUnicodeKeyHandler()	
+
+End Function
+
+Function InsertUnicodeKeyHandler_keyReleased(oKeyEvent as new com.sun.star.awt.KeyHandler) As Boolean
+	InsertUnicodeKeyHandler_keyReleased = False
+End Function
+
+Sub InsertUnicodeKeyHandler_disposing
+	&apos;do nothing
+End Sub
+
+
+sub InsertUnicodeCharacterText(strChar as string)
+	rem ----------------------------------------------------------------------
+	rem define variables
+	dim document   as object
+	dim dispatcher as object
+	rem ----------------------------------------------------------------------
+	rem get access to the document
+	document   = ThisComponent.CurrentController.Frame
+	dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	
+	rem ----------------------------------------------------------------------
+	dim args1(0) as new com.sun.star.beans.PropertyValue
+	args1(0).Name = &quot;Text&quot;
+	args1(0).Value = strChar
+	
+	dispatcher.executeDispatch(document, &quot;.uno:InsertText&quot;, &quot;&quot;, 0, args1())
+	
+
+end sub
+
+
+sub xx
+rem ----------------------------------------------------------------------
+rem define variables
+dim document   as object
+dim dispatcher as object
+rem ----------------------------------------------------------------------
+rem get access to the document
+document   = ThisComponent.CurrentController.Frame
+dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+
+rem ----------------------------------------------------------------------
+dim args1(0) as new com.sun.star.beans.PropertyValue
+
+args1(0).Name = &quot;Symbols&quot;
+args1(0).Value = &quot;µ&quot;
+
+dispatcher.executeDispatch(document, &quot;.uno:InsertSymbol&quot;, &quot;&quot;, 0, args1())
+
+
+end sub
+</script:module>

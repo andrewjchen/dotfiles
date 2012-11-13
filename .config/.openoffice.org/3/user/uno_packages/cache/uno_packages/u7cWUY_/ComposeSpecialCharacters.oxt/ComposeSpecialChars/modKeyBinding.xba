@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modKeyBinding" script:language="StarBasic">REM  *****  BASIC  *****
+
+&apos; adapted from Paolo Mantovani&apos;s code posted at:
+&apos; http://codesnippets.services.openoffice.org/Office/Office.ManagingKeyboardShortcuts.snip
+
+Sub BindAltShiftZ
+
+	&apos; this macro binds ComposeSpecialChars to Alt+Shift+Z
+	
+	dim objModuleCfgMgrSupplier	as object
+	dim objWriterModuleCfgMgr 	as object
+	dim objCalcModuleCfgMgr 	as object
+	Dim objWriterShortCutMgr 	as object
+	dim objCalcShortCutMgr		as object
+	Dim strCommand 				as string
+	dim strLocCommand 			as string
+	Dim strMsg 					as string
+	dim strResultString			as string
+	dim intMsgResult 			as integer
+	dim blnWriter				as boolean
+	dim blnCalc					as boolean
+	
+	on error goto Errorhandler
+	
+	strResultString = &quot;&quot;
+	strLocCommand = &quot;&quot;
+	
+	blnWriter = False
+	blnCalc = False
+	
+	strCommand = &quot;vnd.sun.star.script:ComposeSpecialChars.modCode.ComposeSpecialChar?language=Basic&amp;location=application&quot;
+ 
+	objModuleCfgMgrSupplier = createUnoService(&quot;com.sun.star.ui.ModuleUIConfigurationManagerSupplier&quot;)
+
+	&apos; Retrieve the module configuration manager with module identifier
+	objWriterModuleCfgMgr = objModuleCfgMgrSupplier.getUIConfigurationManager(&quot;com.sun.star.text.TextDocument&quot;)
+	objWriterShortCutMgr = objWriterModuleCfgMgr.getShortCutManager
+
+	objCalcModuleCfgMgr = objModuleCfgMgrSupplier.getUIConfigurationManager(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;)
+	objCalcShortCutMgr = objCalcModuleCfgMgr.getShortCutManager
+	
+	Dim aKeyEvent As New com.sun.star.awt.KeyEvent
+	With aKeyEvent
+		.Modifiers = com.sun.star.awt.KeyModifier.MOD2 + com.sun.star.awt.KeyModifier.SHIFT
+		.KeyCode = com.sun.star.awt.Key.Z
+	End With
+	
+	On Error Resume next
+	strLocCommand = objWriterShortCutMgr.getCommandByKeyEvent(aKeyEvent)
+	On Error GoTo 0 &apos;restore the error handler
+
+	Select Case strLocCommand
+	
+		Case = &quot;&quot; &apos;no previous bindings
+			objWriterShortCutMgr.setKeyEvent( aKeyEvent, strCommand )
+			objWriterShortCutMgr.store
+			blnWriter = True
+			
+		Case = strCommand &apos;ok the key event is already used by our command
+			&apos;nothing to do
+			blnWriter = True
+			
+		Case else &apos;the key event is already used by another command
+		
+			strMsg = &quot;In Writer the key combination Alt+Shift+Z is already being used for:&quot; &amp; Chr(10)
+			strMsg = strMsg &amp; strLocCommand &amp; &quot;&quot;&quot;.&quot; &amp; Chr(10) &amp; Chr(10)
+			strMsg = strMsg &amp; &quot;Do you want to change this combination?&quot;
+					   
+			intMsgResult = MsgBox( strMsg, 1)
+			if intMsgResult = 1 Then
+				objWriterShortCutMgr.removeKeyEvent( aKeyEvent)
+				objWriterShortCutMgr.setKeyEvent( aKeyEvent, strCommand )
+				objWriterShortCutMgr.store
+				blnWriter = True
+			end if
+			
+	End Select
+	
+	if blnWriter = True then
+		strResultString = &quot;Writer&quot;
+	end if
+	
+	strLocCommand = &quot;&quot;
+	
+	On Error Resume next
+	
+	strLocCommand = objCalcShortCutMgr.getCommandByKeyEvent(aKeyEvent)
+
+	On Error GoTo 0 &apos;restore the error handler
+
+	Select Case strLocCommand
+	
+		Case = &quot;&quot; &apos;no previous bindings
+			objCalcShortCutMgr.setKeyEvent( aKeyEvent, strCommand )
+			objCalcShortCutMgr.store
+			blnCalc = True
+			
+		Case = strCommand &apos;ok the key event is already used by our command
+			&apos;nothing to do
+			blnCalc = True
+			
+		Case else &apos;the key event is already used by another command
+		
+			strMsg = &quot;In Calc the key combination Alt+Shift+Z is already being used for:&quot; &amp; Chr(10)
+			strMsg = strMsg &amp; strLocCommand &amp; &quot;&quot;&quot;.&quot; &amp; Chr(10) &amp; Chr(10)
+			strMsg = strMsg &amp; &quot;Do you want to change this combination?&quot;
+					   
+			intMsgResult = MsgBox( strMsg, 1)
+			if intMsgResult = 1 Then
+				objCalcShortCutMgr.removeKeyEvent( aKeyEvent)
+				objCalcShortCutMgr.setKeyEvent( aKeyEvent, strCommand )
+				objCalcShortCutMgr.store
+				blnCalc = True
+			end if
+			
+	End Select
+	
+	if blnCalc = True Then
+		if strResultString &lt;&gt; &quot;&quot; then
+			strResultString = &quot;Calc&quot; &amp; Chr(10) &amp; strResultString
+		else
+			strResultString = &quot;Calc&quot; 
+		end if
+	end if
+	
+	if strResultString &lt;&gt; &quot;&quot; then
+		MsgBox &quot;The ComposeSpecialChar macro has been assigned to your shorcut key combination in:&quot; &amp; Chr(10) &amp; Chr(10) &amp; strResultString, 0, &quot;Macro assigned to shortcut&quot;
+	else
+		MsgBox &quot;ComposeSpecialChar has not been assigned to a keystroke shortcut.&quot;, 0, &quot;Shortcut assignment cancelled by user&quot;
+	end if
+	
+	dlg.endExecute()
+		
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;BindAltShiftZ&quot;
+		
+End Sub
+
+
+
+Function fncBindMacroToShortcut(intModKeys as integer, intOtherKeys as integer, strAttachType as string) as boolean
+
+	dim objModuleCfgMgrSupplier	as object
+	dim objWriterModuleCfgMgr 	as object
+	dim objCalcModuleCfgMgr 	as object
+	dim objWriterShortCutMgr 	as object
+	dim objCalcShortCutMgr		as object
+	dim strCommand 				as string
+	dim strLocCommand 			as string
+	dim strMsg 					as string
+	dim strResultString			as string
+	dim strMacroName			as string
+	dim intMsgResult 			as integer
+	dim intPosPre				as integer
+	dim intPosPost				as integer
+	dim blnWriter				as boolean
+	dim blnCalc					as boolean
+	dim blnReturn				as boolean
+	
+	on error goto Errorhandler
+	
+	strResultString = &quot;&quot;
+	strLocCommand = &quot;&quot;
+	
+	blnWriter = False
+	blnCalc = False
+	blnReturn = False
+	
+	select case strAttachType
+		case &quot;CSC&quot;
+			strCommand = &quot;vnd.sun.star.script:ComposeSpecialChars.modCode.ComposeSpecialChar?language=Basic&amp;location=application&quot;
+		case &quot;Unicode&quot;
+			strCommand = &quot;vnd.sun.star.script:ComposeSpecialChars.modComposeUnicode.ComposeUnicodeChar?language=Basic&amp;location=application&quot;
+		case else
+	end select
+ 
+	objModuleCfgMgrSupplier = createUnoService(&quot;com.sun.star.ui.ModuleUIConfigurationManagerSupplier&quot;)
+
+	Dim aKeyEvent As New com.sun.star.awt.KeyEvent
+	With aKeyEvent
+		.Modifiers = intModKeys
+		.KeyCode = intOtherKeys
+	End With
+
+&apos; assign in Writer
+
+	if chkWriter.State = 1 then
+			
+		&apos; Retrieve the module configuration manager with module identifier
+		objWriterModuleCfgMgr = objModuleCfgMgrSupplier.getUIConfigurationManager(&quot;com.sun.star.text.TextDocument&quot;)
+		objWriterShortCutMgr = objWriterModuleCfgMgr.getShortCutManager
+	
+		On Error Resume next
+		strLocCommand = objWriterShortCutMgr.getCommandByKeyEvent(aKeyEvent)
+		On Error GoTo 0 &apos;restore the error handler
+	
+		Select Case strLocCommand
+		
+			Case = &quot;&quot; &apos;no previous bindings
+				objWriterShortCutMgr.setKeyEvent( aKeyEvent, strCommand )
+				objWriterShortCutMgr.store
+				blnWriter = True
+				
+			Case = strCommand &apos;ok the key event is already used by our command
+				&apos;nothing to do
+				blnWriter = True
+				
+			Case else &apos;the key event is already used by another command
+			
+				strMsg = &quot;In Writer the keyboard shortcut you chose is already being used for:&quot; &amp; Chr(10) &amp; Chr(10)
+				strMsg = strMsg &amp; strLocCommand &amp; &quot;&quot;&quot;.&quot; &amp; Chr(10) &amp; Chr(10)
+				strMsg = strMsg &amp; &quot;Do you want to change this combination?&quot;
+						   
+				intMsgResult = MsgBox( strMsg, 36, &quot;Reassign shortcut in Writer?&quot;)
+				if intMsgResult = 6 Then
+					objWriterShortCutMgr.removeKeyEvent( aKeyEvent)
+					objWriterShortCutMgr.setKeyEvent( aKeyEvent, strCommand )
+					objWriterShortCutMgr.store
+					blnWriter = True
+				end if
+				
+		End Select
+		
+		strLocCommand = &quot;&quot;
+
+	end if
+	
+&apos; assign in Calc
+
+	if chkCalc.State = 1 then
+			
+		&apos; Retrieve the module configuration manager with module identifier
+		objCalcModuleCfgMgr = objModuleCfgMgrSupplier.getUIConfigurationManager(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;)
+		objCalcShortCutMgr = objCalcModuleCfgMgr.getShortCutManager
+	
+		On Error Resume next
+		
+		strLocCommand = objCalcShortCutMgr.getCommandByKeyEvent(aKeyEvent)
+		
+		On Error GoTo 0 &apos;restore the error handler
+	
+		Select Case strLocCommand
+		
+			Case = &quot;&quot; &apos;no previous bindings
+				objCalcShortCutMgr.setKeyEvent( aKeyEvent, strCommand )
+				objCalcShortCutMgr.store
+				blnCalc = True
+				
+			Case = strCommand &apos;ok the key event is already used by our command
+				&apos;nothing to do
+				blnCalc = True
+				
+			Case else &apos;the key event is already used by another command
+			
+				strMsg = &quot;In Calc the keyboard shortcut you chose is already being used for:&quot; &amp; Chr(10) &amp; Chr(10)
+				strMsg = strMsg &amp; strLocCommand &amp; &quot;&quot;&quot;.&quot; &amp; Chr(10) &amp; Chr(10)
+				strMsg = strMsg &amp; &quot;Do you want to change this combination?&quot;
+						   
+				intMsgResult = MsgBox( strMsg, 36, &quot;Reassign shortcut in Calc?&quot;)
+				if intMsgResult = 6 Then
+					objCalcShortCutMgr.removeKeyEvent( aKeyEvent)
+					objCalcShortCutMgr.setKeyEvent( aKeyEvent, strCommand )
+					objCalcShortCutMgr.store
+					blnCalc = True
+				end if
+				
+		End Select
+		
+	end if
+	
+	if blnWriter = True then
+		strResultString = &quot;Writer&quot;
+	end if
+	
+	if blnCalc = True Then
+		if strResultString &lt;&gt; &quot;&quot; then
+			strResultString = &quot;Calc&quot; &amp; Chr(10) &amp; strResultString
+		else
+			strResultString = &quot;Calc&quot; 
+		end if
+	end if
+	
+	if strResultString &lt;&gt; &quot;&quot; then
+		MsgBox &quot;The ComposeSpecialChar macro has been assigned to the keyboard shortcut you chose in the following applications:&quot; &amp; Chr(10) &amp; Chr(10) &amp; strResultString, 64, &quot;Macro assigned to shortcut&quot;
+		blnReturn = True
+	else
+		MsgBox &quot;ComposeSpecialChar has not been assigned to a keystroke shortcut.&quot;, 48, &quot;Shortcut assignment cancelled by user&quot;
+		blnReturn = False
+	end if
+	
+FinishUp:
+
+	fncBindMacroToShortcut = blnReturn
+
+	Exit Function
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;fncBindMacroToShortcut&quot;
+	
+	blnReturn = False
+	
+	goto FinishUp
+		
+End Function
+
+
+
+Sub ClearShortcut()
+
+	dim objModuleCfgMgrSupplier	as object
+	dim objWriterModuleCfgMgr 	as object
+	dim objCalcModuleCfgMgr 	as object
+	dim objWriterShortCutMgr 	as object
+	dim objCalcShortCutMgr		as object
+	dim strCommand 				as string
+	dim strLocCommand 			as string
+	dim strMsg 					as string
+	dim strResultString			as string
+	dim strMacroName			as string
+	dim intMsgResult 			as integer
+	dim intPosPre				as integer
+	dim intPosPost				as integer
+	dim intRemovalCount			as integer
+	dim blnWriter				as boolean
+	dim blnCalc					as boolean
+	dim strCharKeyX				as string
+	dim strOtherKeyX			as string
+	dim strFnKeyX				as string
+	dim intModKeysX				as integer
+	dim intCharKeyX				as integer
+	dim intOtherKeysX			as integer
+	dim intFnKeyX				as integer
+	dim aKeyEvent			    as New com.sun.star.awt.KeyEvent
+	
+	on error goto Errorhandler
+	
+	strCharKeyX = &quot;&quot;
+	strOtherKeyX = &quot;&quot;
+	strFnKeyX = &quot;&quot;
+	intModKeysX = 0
+	intOtherKeysX = 0
+	intFnKeyX = 0
+	intCharKeyX = 0
+	
+	strResultString = &quot;&quot;
+	strLocCommand = &quot;&quot;
+	
+	blnWriter = False
+	blnCalc = False
+	
+	intRemovalCount = 0
+	
+	strCommand = &quot;&quot;
+	
+	if lstCharKeys.getSelectedItemPos() &gt; -1 then
+		strCharKeyX = trim(lstCharKeys.getSelectedItem)
+	end if
+	
+	if lstOtherKeys.getSelectedItemPos() &gt; -1 then
+		strOtherKeyX = trim(lstOtherKeys.getSelectedItem)
+	end if
+	
+	if lstFnKeys.getSelectedItemPos() &gt; -1 then
+		strFnKeyX = trim(lstFnKeys.getSelectedItem)
+	end if
+	
+	intModKeysX = 0
+	
+	if chkAlt.State = 1 then
+		intModKeysX = 4
+	end if
+	
+	if chkAltGr.State = 1 then
+		intModKeysX = intModKeysX + 6
+	end if
+	
+	if chkCtl.State = 1 then
+		intModKeysX = intModKeysX + 2
+	end if
+	
+	if chkShift.State = 1 then
+		intModKeysX = intModKeysX + 1
+	end if
+	
+	if strCharKeyX &lt;&gt; &quot;&quot; then
+		intCharKeyX = fncKeyConstant(strCharKeyX)
+	else
+		intCharKeyX = 0
+	end if
+	
+	if strOtherKeyX &lt;&gt; &quot;&quot; then
+		intOtherKeysX = fncKeyConstant(strOtherKeyX)
+	else
+		intOtherKeysX = 0
+	end if
+	
+	if strFnKeyX &lt;&gt; &quot;&quot; then
+		intFnKeysX = fncKeyConstant(strFnKeyX)
+	else
+		intFnKeysX = 0
+	end if
+	
+	intOtherKeysX = intCharKeyX + intOtherKeysX + intFnKeysX
+	
+	objModuleCfgMgrSupplier = createUnoService(&quot;com.sun.star.ui.ModuleUIConfigurationManagerSupplier&quot;)
+
+	With aKeyEvent
+		.Modifiers = intModKeysX
+		.KeyCode = intOtherKeysX
+	End With
+	
+&apos; remove from Writer
+
+	if chkWriter.State = 1 then
+		
+		&apos; Retrieve the module configuration manager with module identifier
+		objWriterModuleCfgMgr = objModuleCfgMgrSupplier.getUIConfigurationManager(&quot;com.sun.star.text.TextDocument&quot;)
+		objWriterShortCutMgr = objWriterModuleCfgMgr.getShortCutManager
+	
+		On Error Resume next
+		strLocCommand = objWriterShortCutMgr.getCommandByKeyEvent(aKeyEvent)
+		On Error GoTo 0 &apos;restore the error handler
+	
+		Select Case strLocCommand
+		
+			Case = &quot;&quot; &apos;no previous bindings
+				MsgBox &quot;The keyboard shortcut you chose is not being used in Writer.&quot;, 48, &quot;Shortcut not removed&quot;
+				blnWriter = False
+				
+			Case else &apos;the key event is already used by a command
+			
+				strMsg = &quot;In Writer the keyboard shortcut you chose is being used for:&quot; &amp; Chr(10) &amp; Chr(10)
+				strMsg = strMsg &amp; strLocCommand &amp; &quot;&quot;&quot;.&quot; &amp; Chr(10) &amp; Chr(10)
+				strMsg = strMsg &amp; &quot;Do you want to remove this shortcut?&quot; &amp; Chr(10) &amp;Chr(10)
+						   
+				intMsgResult = MsgBox( strMsg, 36, &quot;Remove shortcut from Writer?&quot;)
+				if intMsgResult = 6 Then
+					objWriterShortCutMgr.removeKeyEvent( aKeyEvent)
+					objWriterShortCutMgr.store
+					intRemovalCount = intRemovalCount+1
+					blnWriter = True
+				end if
+				
+		End Select
+		
+		strLocCommand = &quot;&quot;
+
+	end if
+		
+&apos; remove from Calc
+
+	if chkCalc.State = 1 then
+		
+		&apos; Retrieve the module configuration manager with module identifier
+		objCalcModuleCfgMgr = objModuleCfgMgrSupplier.getUIConfigurationManager(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;)
+		objCalcShortCutMgr = objCalcModuleCfgMgr.getShortCutManager
+	
+		On Error Resume next
+		
+		strLocCommand = objCalcShortCutMgr.getCommandByKeyEvent(aKeyEvent)
+	
+		On Error GoTo 0 &apos;restore the error handler
+	
+		Select Case strLocCommand
+		
+			Case = &quot;&quot; &apos;no previous bindings
+				MsgBox &quot;The keyboard shortcut you chose is not being used in Calc.&quot;, 48, &quot;Shortcut not removed&quot;
+				blnCalc = False
+				
+			Case else &apos;the key event is already used by a command
+			
+				strMsg = &quot;In Calc the keyboard shortcut you chose is being used for:&quot; &amp; Chr(10) &amp; Chr(10)
+				strMsg = strMsg &amp; strLocCommand &amp; &quot;&quot;&quot;.&quot; &amp; Chr(10) &amp; Chr(10)
+				strMsg = strMsg &amp; &quot;Do you want to remove this shortcut?&quot; &amp; Chr(10) &amp; Chr(10)
+						   
+				intMsgResult = MsgBox( strMsg, 36, &quot;Remove shortcut from Calc?&quot;)
+				if intMsgResult = 6 Then
+					objCalcShortCutMgr.removeKeyEvent( aKeyEvent)
+					objCalcShortCutMgr.store
+					intRemovalCount = intRemovalCount+1
+					blnCalc = True
+				end if
+				
+		End Select
+		
+	end if
+	
+	if blnWriter = True then
+		strResultString = &quot;Writer&quot;
+	end if
+
+	if blnCalc = True Then
+		if strResultString &lt;&gt; &quot;&quot; then
+			strResultString = &quot;Calc&quot; &amp; Chr(10) &amp; strResultString
+		else
+			strResultString = &quot;Calc&quot; 
+		end if
+	end if
+	
+	if strResultString &lt;&gt; &quot;&quot; then
+		MsgBox &quot;The shortcut has been removed from the application(s) you chose:&quot; &amp; Chr(10) &amp; Chr(10) &amp; strResultString, 64, &quot;Macro assigned to shortcut&quot;
+	end if
+	
+FinishUp:
+
+	DisplayCommandMappedToKey()
+
+	Exit Sub
+	
+Errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;ClearShortcut&quot;
+	
+	goto FinishUp
+		
+End Sub
+
+
+Sub DisplayCommandMappedToKey()
+
+	Dim aKeyEvent 				as new com.sun.star.awt.KeyEvent
+	dim aCalcKeyEvent			as new com.sun.star.awt.KeyEvent
+	dim aWriterKeyEvent			as new com.sun.star.awt.KeyEvent
+	dim objModuleCfgMgrSupplier	as object
+	dim objWriterModuleCfgMgr 	as object
+	dim objCalcModuleCfgMgr 	as object
+	dim objWriterShortCutMgr 	as object
+	dim objCalcShortCutMgr		as object
+	dim lblWriter				as object
+	dim lblCalc					as object
+	dim strWriterCommand		as string
+	dim strCalcCommand			as string
+	dim intPos					as integer
+	
+	on error goto errorhandler
+	
+	chkWriter.Model.Label = &quot;Writer:  &quot;
+	chkCalc.Model.Label = &quot;Calc:  &quot;
+
+	aKeyEvent = fncGetKeyEvent()
+
+	objModuleCfgMgrSupplier = createUnoService(&quot;com.sun.star.ui.ModuleUIConfigurationManagerSupplier&quot;)
+
+	&apos; Retrieve the module configuration manager with module identifier
+	objWriterModuleCfgMgr = objModuleCfgMgrSupplier.getUIConfigurationManager(&quot;com.sun.star.text.TextDocument&quot;)
+	objWriterShortCutMgr = objWriterModuleCfgMgr.getShortCutManager
+
+	objCalcModuleCfgMgr = objModuleCfgMgrSupplier.getUIConfigurationManager(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;)
+	objCalcShortCutMgr = objCalcModuleCfgMgr.getShortCutManager
+	
+	On Error Resume next
+	
+	strCalcCommand = objCalcShortCutMgr.getCommandByKeyEvent(aKeyEvent)
+	strWriterCommand = objWriterShortCutMgr.getCommandByKeyEvent(aKeyEvent)
+	
+	On Error GoTo 0 &apos;restore the error handler
+	
+	if left(strWriterCommand,5) = &quot;.uno:&quot; then
+		strWriterCommand = mid(strWriterCommand, 6, len(strWriterCommand)-4)
+	end if
+
+	if left(strCalcCommand,5) = &quot;.uno:&quot; then
+		strCalcCommand = mid(strCalcCommand, 6, len(strCalcCommand)-4)
+	end if
+	
+	&apos; if string contains a ? then it may be a macro
+	&apos; strip out everything but the macro name
+	
+	intPos = instr(strWriterCommand,&quot;?&quot;)
+	if intPos &gt; 0 then
+		strWriterCommand = left(strWriterCommand,intPos-1)
+		strWriterCommand = fncGetMacroName(strWriterCommand)
+	end if
+
+	intPos = instr(strCalcCommand,&quot;?&quot;)
+	if intPos &gt; 0 then
+		strCalcCommand = left(strCalcCommand,intPos-1)
+		strCalcCommand = fncGetMacroName(strCalcCommand)
+	end if
+
+	chkWriter.Model.Label = &quot;Writer:  &quot; &amp; strWriterCommand 
+	chkCalc.Model.Label = &quot;Calc:  &quot; &amp; strCalcCommand
+	
+	Exit Sub
+	
+errorhandler:
+
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;DisplayCommandMappedToKey&quot;
+	
+End Sub
+
+
+</script:module>

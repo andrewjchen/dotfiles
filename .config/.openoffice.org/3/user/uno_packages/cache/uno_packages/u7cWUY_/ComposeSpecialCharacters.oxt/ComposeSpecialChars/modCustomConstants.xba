@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modCustomConstants" script:language="StarBasic">REM  *****  BASIC  *****
+
+&apos; This module: Copyright 2008 Charles Henrich
+&apos; All other modules: not copyrighted.
+ 
+&apos; This library is free software; you can redistribute it and/or
+&apos; modify it under the terms of the GNU Lesser General Public
+&apos; License as published by the Free Software Foundation; either
+&apos; version 2.1 of the License, or (at your option) any later version.
+ 
+&apos; This library is distributed in the hope that it will be useful,
+&apos; but WITHOUT ANY WARRANTY; without even the implied warranty of
+&apos; MERCHANTABILITY or FITNESS for A PARTICULAR PURPOSE.  See the GNU
+&apos; Lesser General Public License for more details.
+ 
+&apos; You should have received a copy of the GNU Lesser General Public
+&apos; License along with this library; if not, write to
+
+&apos; Free Software Foundation, Inc.
+&apos; 51 Franklin Street
+&apos; Fifth Floor
+&apos; Boston, MA  02110-1301  
+&apos; USA
+
+Function fncCreateConstsLib() as boolean
+
+	dim objGSBL		as object
+	dim blnResult	as boolean
+	
+	on error goto errorhandler
+
+	objGSBL = GlobalScope.BasicLibraries
+	
+	if objGSBL.hasByName(CSC_CUSTOM_CONSTS_LIB) = False then
+		objGSBL.createLibrary(CSC_CUSTOM_CONSTS_LIB)
+	end if
+	
+	blnResult = objGSBL.hasByName(CSC_CUSTOM_CONSTS_LIB) 
+
+FinishUp:
+	
+	fncCreateConstsLib = blnResult
+	
+	Exit Function
+	
+errorhandler:
+	
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;fncCreateConstsLib&quot;
+	
+	blnResult = False
+	
+	goto FinishUp
+		
+End Function
+
+
+
+Function fncCreateConstsMod(strModName as string, strCode as string) as boolean
+
+	dim objGSBL		as object
+	dim objLib		as object
+	dim blnResult	as boolean
+	
+	on error goto errorhandler
+
+	blnResult = False
+	objGSBL = GlobalScope.BasicLibraries
+	objLib = objGSBL.getByName(CSC_CUSTOM_CONSTS_LIB)
+	
+	if left(strModName,3) &lt;&gt; &quot;mod&quot; then
+		strModName = &quot;mod&quot; &amp; strModName
+	end if
+	
+	if objLib.hasByName(CSC_CUSTOM_CONSTS_MOD) = false then
+		objLib.insertByName(strModName, strCode)		
+	end if
+	
+	blnResult = objLib.hasByName(strModName)
+	
+FinishUp:
+	
+	fncCreateConstsMod = blnResult
+	
+	Exit Function
+	
+errorhandler:
+	
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$, 16, &quot;fncCreateConstsMod&quot;
+	
+	blnResult = False
+	
+	goto FinishUp
+		
+End Function
+
+
+Function fncGetReverseVal() as integer
+	
+	dim strDelim	as string
+	dim strCode		as string
+	dim strMsg		as string
+	dim strMsgTitle	as string
+	dim strModName	as string
+	dim strFncName	as string
+	dim strURL		as string
+	dim lngMsgBox	as long
+	dim objGSBL		as object
+	dim objLib		as object
+	dim objMod		as object
+	dim intReverse	as integer
+	
+	on error goto errorhandler
+
+	strMsg = &quot;There was a problem creating the storage library for Compose Special Character settings.&quot;
+	lngMsgBox = 48
+	strTitle = &quot;Try vice versa set to true&quot;
+	objGSBL = GlobalScope.BasicLibraries
+	strModName = &quot;modReverseVal&quot;
+	strFncName = &quot;fncReverseVal&quot;
+	strDefaultCode = &quot;Function &quot; &amp; strFncName &amp; &quot;() as integer&quot; &amp; Chr(13) &amp; &quot;fncReverseVal = 1&quot; &amp; Chr(13) &amp; &quot;End Function&quot; 
+	&apos;intReverse = 1
+	
+	if objGSBL.hasByName(CSC_CUSTOM_CONSTS_LIB) = False then
+		if fncCreateConstsLib = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			intReverse = 1
+			goto FinishUp
+		end if			
+	end if
+	
+	objLib = objGSBL.getByName(CSC_CUSTOM_CONSTS_LIB)
+	
+	if objLib.hasByName(strModName) = false then
+		if fncCreateConstsMod(strModName, strDefaultCode) = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			intReverse = 1
+			goto FinishUp
+		end if			
+	end if
+	
+	if objGSBL.isLibraryLoaded(CSC_CUSTOM_CONSTS_LIB) = false then
+		objGSBL.loadLibrary(CSC_CUSTOM_CONSTS_LIB)
+	end if
+	
+	intReverse = ComposeSpecialCharsX.fncReverseVal
+
+FinishUp:
+	
+	fncGetReverseVal = intReverse
+	
+	Exit Function
+
+errorhandler:
+	
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$ &amp; Chr(13) &amp; Chr(13) &amp; strMsg, 16, &quot;fncGetReverseVal&quot;
+	
+	intReverse = 1
+	
+	goto FinishUp
+			
+End Function
+
+
+Function fncSetReverseVal(intReverse as integer) as integer
+
+	dim strVal  	as string
+	dim strCode		as string
+	dim strMsg		as string
+	dim strMsgTitle	as string
+	dim strModName	as string
+	dim strFncName	as string
+	dim strURL		as string
+	dim lngMsgBox	as long
+	dim objGSBL		as object
+	dim objLib		as object
+	dim objMod		as object
+	
+	on error goto errorhandler
+	
+	strMsg = &quot;There was a problem creating the storage library for Compose Special Character settings.&quot;
+	lngMsgBox = 48
+	strTitle = &quot;Try vice versa set to true&quot;
+	objGSBL = GlobalScope.BasicLibraries
+	strModName = &quot;modReverseVal&quot;
+	strFncName = &quot;fncReverseVal&quot;
+	strDefaultCode = &quot;Function &quot; &amp; strFncName &amp; &quot;() as integer&quot; &amp; Chr(13) &amp; &quot;fncReverseVal = &quot; &amp; intReverse &amp; Chr(13) &amp; &quot;End Function&quot; 
+	
+	if objGSBL.hasByName(CSC_CUSTOM_CONSTS_LIB) = False then
+		if fncCreateConstsLib = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			intReverse = 1
+			goto FinishUp
+		end if			
+	end if
+	
+	objLib = objGSBL.getByName(CSC_CUSTOM_CONSTS_LIB)
+	
+	if objLib.hasByName(strModName) = false then
+		if fncCreateConstsMod(strModName, strDefaultCode) = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			intReverse = 1
+			goto FinishUp
+		end if
+	else
+		objLib.replaceByName(strModName, strDefaultCode)			
+	end if
+	
+	if objGSBL.isLibraryLoaded(CSC_CUSTOM_CONSTS_LIB) = false then
+		objGSBL.loadLibrary(CSC_CUSTOM_CONSTS_LIB)
+	end if
+	
+	intReverse = ComposeSpecialCharsX.fncReverseVal
+	
+FinishUp:
+	
+	fncSetReverseVal = intReverse
+	
+	Exit Function
+
+errorhandler:
+	
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$ &amp; Chr(13) &amp; Chr(13) &amp; strMsg, 16, &quot;fncSetReverseVal&quot;
+	
+	msgbox strMsg, lngMsgBox, strMsgTitle
+	intReverse = 1
+	goto FinishUp
+
+End Function
+
+
+Function fncGetCalcDelimConst() as string
+
+	dim strDelim	as string
+	dim strCode		as string
+	dim strMsg		as string
+	dim strMsgTitle	as string
+	dim strModName	as string
+	dim strFncName	as string
+	dim strURL		as string
+	dim lngMsgBox	as long
+	dim objGSBL		as object
+	dim objLib		as object
+	dim objMod		as object
+	
+	on error goto errorhandler
+
+	strMsg = &quot;The Calc flag character has been set to the default &apos;¬&apos; because there was a problem creating the storage library for Compose Special Character settings.&quot;
+	lngMsgBox = 48
+	strTitle = &quot;Calc flag set to default&quot;
+	objGSBL = GlobalScope.BasicLibraries
+	strModName = &quot;modCalcDelim&quot;
+	strFncName = &quot;fncCalcDelim&quot;
+	strDefaultCode = &quot;Function &quot; &amp; strFncName &amp; &quot;() as string&quot; &amp; Chr(13) &amp; &quot;fncCalcDelim = &quot;&quot;¬&quot;&quot;&quot; &amp; Chr(13) &amp; &quot;End Function&quot; 
+	
+	if objGSBL.hasByName(CSC_CUSTOM_CONSTS_LIB) = False then
+		if fncCreateConstsLib = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			strDelim = &quot;¬&quot;
+			goto FinishUp
+		end if			
+	end if
+	
+	objLib = objGSBL.getByName(CSC_CUSTOM_CONSTS_LIB)
+	
+	if objLib.hasByName(strModName) = false then
+		if fncCreateConstsMod(strModName, strDefaultCode) = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			strDelim = &quot;¬&quot;
+			goto FinishUp
+		end if			
+	end if
+	
+	if objGSBL.isLibraryLoaded(CSC_CUSTOM_CONSTS_LIB) = false then
+		objGSBL.loadLibrary(CSC_CUSTOM_CONSTS_LIB)
+	end if
+	
+	strDelim = ComposeSpecialCharsX.fncCalcDelim
+
+FinishUp:
+	
+	fncGetCalcDelimConst = strDelim
+	
+	Exit Function
+
+errorhandler:
+	
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$ &amp; Chr(13) &amp; Chr(13) &amp; strMsg, 16, &quot;fncGetCalcDelimConst&quot;
+	
+	strDelim = &quot;¬&quot;
+	
+	goto FinishUp
+		
+End Function
+
+
+Function fncSetCalcDelimConst(strCalcDelim as string) as string
+
+	dim strDelim	as string
+	dim strCode		as string
+	dim strMsg		as string
+	dim strMsgTitle	as string
+	dim strModName	as string
+	dim strFncName	as string
+	dim strURL		as string
+	dim lngMsgBox	as long
+	dim objGSBL		as object
+	dim objLib		as object
+	dim objMod		as object
+	
+	on error goto errorhandler
+
+	strMsg = &quot;The Calc flag character has been set to the default &apos;¬&apos; because there was a problem creating the storage library for Compose Special Character settings.&quot;
+	lngMsgBox = 48
+	strTitle = &quot;Calc flag set to default&quot;
+	objGSBL = GlobalScope.BasicLibraries
+	strModName = &quot;modCalcDelim&quot;
+	strFncName = &quot;fncCalcDelim&quot;
+	strDefaultCode = &quot;Function &quot; &amp; strFncName &amp; &quot;() as string&quot; &amp; Chr(13) &amp; &quot;fncCalcDelim = &quot;&quot;&quot; &amp; strCalcDelim &amp; &quot;&quot;&quot;&quot; &amp; Chr(13) &amp; &quot;End Function&quot; 
+	
+	if objGSBL.hasByName(CSC_CUSTOM_CONSTS_LIB) = False then
+		if fncCreateConstsLib = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			strDelim = &quot;¬&quot;
+			goto FinishUp
+		end if			
+	end if
+	
+	objLib = objGSBL.getByName(CSC_CUSTOM_CONSTS_LIB)
+	
+	if objLib.hasByName(strModName) = false then
+		if fncCreateConstsMod(strModName, strDefaultCode) = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			strDelim = &quot;¬&quot;
+			goto FinishUp
+		end if
+	else
+		objLib.replaceByName(strModName, strDefaultCode)			
+	end if
+	
+	if objGSBL.isLibraryLoaded(CSC_CUSTOM_CONSTS_LIB) = false then
+		objGSBL.loadLibrary(CSC_CUSTOM_CONSTS_LIB)
+	end if
+	
+	strDelim = ComposeSpecialCharsX.fncCalcDelim
+	
+FinishUp:
+	
+	fncSetCalcDelimConst = strDelim
+	
+	Exit Function
+
+errorhandler:
+	
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$ &amp; Chr(13) &amp; Chr(13) &amp; strMsg, 16, &quot;fncSetCalcDelimConst&quot;
+	
+	msgbox strMsg, lngMsgBox, strMsgTitle
+	strDelim = &quot;¬&quot;
+	goto FinishUp
+
+End Function
+
+
+
+Function fncGetDisplayV2Notice() as boolean
+
+	dim blnResult	as string
+	dim strCode		as string
+	dim strMsg		as string
+	dim strMsgTitle	as string
+	dim strModName	as string
+	dim strFncName	as string
+	dim strURL		as string
+	dim lngMsgBox	as long
+	dim objGSBL		as object
+	dim objLib		as object
+	dim objMod		as object
+	
+	on error goto errorhandler
+
+	objGSBL = GlobalScope.BasicLibraries
+	strModName = &quot;modDisplayV2Notice&quot;
+	strFncName = &quot;fncDisplayV2Notice&quot;
+	strDefaultCode = &quot;Function &quot; &amp; strFncName &amp; &quot;() as string&quot; &amp; Chr(13) &amp; strFncName &amp; &quot; = true&quot; &amp; Chr(13) &amp; &quot;End Function&quot; 
+	
+	if objGSBL.hasByName(CSC_CUSTOM_CONSTS_LIB) = False then
+		if fncCreateConstsLib = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			blnResult = true
+			goto FinishUp
+		end if			
+	end if
+	
+	objLib = objGSBL.getByName(CSC_CUSTOM_CONSTS_LIB)
+	
+	if objLib.hasByName(strModName) = false then
+		if fncCreateConstsMod(strModName, strDefaultCode) = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			blnResult = true
+			goto FinishUp
+		end if			
+	end if
+	
+	if objGSBL.isLibraryLoaded(CSC_CUSTOM_CONSTS_LIB) = false then
+		objGSBL.loadLibrary(CSC_CUSTOM_CONSTS_LIB)
+	end if
+	
+	blnResult = ComposeSpecialCharsX.fncDisplayV2Notice
+
+FinishUp:
+	
+	fncGetDisplayV2Notice = blnResult
+	
+	Exit Function
+
+errorhandler:
+	
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$ &amp; Chr(13) &amp; Chr(13) &amp; strMsg, 16, &quot;fncGetDisplayV2Notice&quot;
+	
+	blnResult = true
+	
+	goto FinishUp
+		
+End Function
+
+
+Function fncSetDisplayV2Notice(bln as boolean) as boolean
+
+	dim blnResult	as string
+	dim strCode		as string
+	dim strMsg		as string
+	dim strMsgTitle	as string
+	dim strModName	as string
+	dim strFncName	as string
+	dim strURL		as string
+	dim lngMsgBox	as long
+	dim objGSBL		as object
+	dim objLib		as object
+	dim objMod		as object
+	
+	on error goto errorhandler
+	
+	blnResult = bln
+
+	objGSBL = GlobalScope.BasicLibraries
+	strModName = &quot;modDisplayV2Notice&quot;
+	strFncName = &quot;fncDisplayV2Notice&quot;
+	strDefaultCode = &quot;Function &quot; &amp; strFncName &amp; &quot;() as string&quot; &amp; Chr(13) &amp; strFncName &amp; &quot; = &quot; &amp; blnResult &amp; Chr(13) &amp; &quot;End Function&quot; 
+	
+	if objGSBL.hasByName(CSC_CUSTOM_CONSTS_LIB) = False then
+		if fncCreateConstsLib = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			blnResult = true
+			goto FinishUp
+		end if			
+	end if
+	
+	objLib = objGSBL.getByName(CSC_CUSTOM_CONSTS_LIB)
+	
+	if objLib.hasByName(strModName) = false then
+		if fncCreateConstsMod(strModName, strDefaultCode) = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			blnResult = true
+			goto FinishUp
+		end if
+	else
+		objLib.replaceByName(strModName, strDefaultCode)			
+	end if
+	
+	if objGSBL.isLibraryLoaded(CSC_CUSTOM_CONSTS_LIB) = false then
+		objGSBL.loadLibrary(CSC_CUSTOM_CONSTS_LIB)
+	end if
+	
+	blnResult = ComposeSpecialCharsX.fncDisplayV2Notice
+	
+FinishUp:
+	
+	fncSetDisplayV2Notice = blnResult
+	
+	Exit Function
+
+errorhandler:
+	
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$ &amp; Chr(13) &amp; Chr(13) &amp; strMsg, 16, &quot;fncSetDisplayV2Notice&quot;
+	
+	msgbox strMsg, lngMsgBox, strMsgTitle
+	blnResult = true
+	goto FinishUp
+
+End Function
+
+
+Function fncGetDisplayCUCAlert() as boolean
+
+	dim blnResult	as string
+	dim strCode		as string
+	dim strMsg		as string
+	dim strMsgTitle	as string
+	dim strModName	as string
+	dim strFncName	as string
+	dim strURL		as string
+	dim lngMsgBox	as long
+	dim objGSBL		as object
+	dim objLib		as object
+	dim objMod		as object
+	
+	on error goto errorhandler
+
+	objGSBL = GlobalScope.BasicLibraries
+	strModName = &quot;modDisplayCUCAlert&quot;
+	strFncName = &quot;fncDisplayCUCAlert&quot;
+	strDefaultCode = &quot;Function &quot; &amp; strFncName &amp; &quot;() as string&quot; &amp; Chr(13) &amp; strFncName &amp; &quot; = true&quot; &amp; Chr(13) &amp; &quot;End Function&quot; 
+	
+	if objGSBL.hasByName(CSC_CUSTOM_CONSTS_LIB) = False then
+		if fncCreateConstsLib = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			blnResult = true
+			goto FinishUp
+		end if			
+	end if
+	
+	objLib = objGSBL.getByName(CSC_CUSTOM_CONSTS_LIB)
+	
+	if objLib.hasByName(strModName) = false then
+		if fncCreateConstsMod(strModName, strDefaultCode) = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			blnResult = true
+			goto FinishUp
+		end if			
+	end if
+	
+	if objGSBL.isLibraryLoaded(CSC_CUSTOM_CONSTS_LIB) = false then
+		objGSBL.loadLibrary(CSC_CUSTOM_CONSTS_LIB)
+	end if
+	
+	blnResult = ComposeSpecialCharsX.fncDisplayCUCAlert
+
+FinishUp:
+	
+	fncGetDisplayCUCAlert = blnResult
+	
+	Exit Function
+
+errorhandler:
+	
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$ &amp; Chr(13) &amp; Chr(13) &amp; strMsg, 16, &quot;fncGetDisplayCUCAlert&quot;
+	
+	blnResult = true
+	
+	goto FinishUp
+		
+End Function
+
+
+Function fncSetDisplayCUCAlert(bln as boolean) as boolean
+
+	dim blnResult	as string
+	dim strCode		as string
+	dim strMsg		as string
+	dim strMsgTitle	as string
+	dim strModName	as string
+	dim strFncName	as string
+	dim strURL		as string
+	dim lngMsgBox	as long
+	dim objGSBL		as object
+	dim objLib		as object
+	dim objMod		as object
+	
+	on error goto errorhandler
+	
+	blnResult = bln
+
+	objGSBL = GlobalScope.BasicLibraries
+	strModName = &quot;modDisplayCUCAlert&quot;
+	strFncName = &quot;fncDisplayCUCAlert&quot;
+	strDefaultCode = &quot;Function &quot; &amp; strFncName &amp; &quot;() as string&quot; &amp; Chr(13) &amp; strFncName &amp; &quot; = &quot; &amp; blnResult &amp; Chr(13) &amp; &quot;End Function&quot; 
+	
+	if objGSBL.hasByName(CSC_CUSTOM_CONSTS_LIB) = False then
+		if fncCreateConstsLib = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			blnResult = true
+			goto FinishUp
+		end if			
+	end if
+	
+	objLib = objGSBL.getByName(CSC_CUSTOM_CONSTS_LIB)
+	
+	if objLib.hasByName(strModName) = false then
+		if fncCreateConstsMod(strModName, strDefaultCode) = False then
+			msgbox strMsg, lngMsgBox, strMsgTitle
+			blnResult = true
+			goto FinishUp
+		end if
+	else
+		objLib.replaceByName(strModName, strDefaultCode)			
+	end if
+	
+	if objGSBL.isLibraryLoaded(CSC_CUSTOM_CONSTS_LIB) = false then
+		objGSBL.loadLibrary(CSC_CUSTOM_CONSTS_LIB)
+	end if
+	
+	blnResult = ComposeSpecialCharsX.fncDisplayCUCAlert
+	
+FinishUp:
+	
+	fncSetDisplayCUCAlert = blnResult
+	
+	Exit Function
+
+errorhandler:
+	
+	msgbox &quot;Error # &quot; &amp; err &amp; &quot;: &quot; &amp; error$ &amp; Chr(13) &amp; Chr(13) &amp; strMsg, 16, &quot;fncSetDisplayCUCAlert&quot;
+	
+	msgbox strMsg, lngMsgBox, strMsgTitle
+	blnResult = true
+	goto FinishUp
+
+End Function
+
+
+
+Function fncOOoVersion() As String
+  &apos;Retreives the running OOO version
+  Dim objSettings, objConfigProvider
+  Dim arrParams2(0) As new com.sun.star.beans.PropertyValue
+  Dim strProvider$, strAccess$
+  dim strResult as string
+  strProvider = &quot;com.sun.star.configuration.ConfigurationProvider&quot;
+  strAccess   = &quot;com.sun.star.configuration.ConfigurationAccess&quot;
+  objConfigProvider = createUnoService(strProvider)
+  arrParams2(0).Name = &quot;nodepath&quot;
+  arrParams2(0).Value = &quot;/org.openoffice.Setup/Product&quot;
+  objSettings = objConfigProvider.createInstanceWithArguments(strAccess, arrParams2())
+  strResult=objSettings.getbyname(&quot;ooSetupVersion&quot;)
+  fncOOoVersion=sResult
+End Function
+
+</script:module>

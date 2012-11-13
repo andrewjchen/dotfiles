@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modAlerts" script:language="StarBasic">Sub DisplayCUCAlert()
+
+	dim objAlertDlg		as object
+	dim lblInfo			as object
+
+ 	DialogLibraries.LoadLibrary(&quot;ComposeSpecialChars&quot;)
+	objAlertDlg = CreateUnoDialog(DialogLibraries.ComposeSpecialChars.dlgCUCAlert)
+
+	CenterDialog(objAlertDlg)
+	
+	lblInfo = objAlertDlg.getControl(&quot;lblInfo&quot;)
+	
+	lblInfo.model.label = &quot;NEW FEATURE&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+						  &quot;Now you can compose unicode characters, as well as special characters!&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+						  &quot;Open the Compose Special Characters dialog for details - in the OpenOffice menu in Writer or Calc choose Insert, then Compose Character:&quot; &amp; Chr(13) &amp; Chr(13) &amp; _
+						  &quot;Insert &gt; Compose Character...&quot;
+	
+	objAlertDlg.Execute()
+	
+	objAlertDlg.dispose()
+
+End Sub
+</script:module>

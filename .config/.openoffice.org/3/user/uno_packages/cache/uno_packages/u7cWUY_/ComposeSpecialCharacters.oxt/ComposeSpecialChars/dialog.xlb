@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library:library PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "library.dtd">
+<library:library xmlns:library="http://openoffice.org/2000/library" library:name="ComposeSpecialChars" library:readonly="false" library:passwordprotected="false">
+ <library:element library:name="dlgInfo"/>
+ <library:element library:name="dlgAttach"/>
+ <library:element library:name="dlgAttachUnicode"/>
+ <library:element library:name="dlgCUCAlert"/>
+</library:library>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library:library PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "library.dtd">
+<library:library xmlns:library="http://openoffice.org/2000/library" library:name="ComposeSpecialChars" library:readonly="false" library:passwordprotected="false">
+ <library:element library:name="modCode"/>
+ <library:element library:name="modContact"/>
+ <library:element library:name="modCustomConstants"/>
+ <library:element library:name="modMisc"/>
+ <library:element library:name="modKeyBinding"/>
+ <library:element library:name="modComponentHandling"/>
+ <library:element library:name="modFuncs"/>
+ <library:element library:name="modUnicodeKeyhandler"/>
+ <library:element library:name="modComposeUnicode"/>
+ <library:element library:name="modAttachDialogCode"/>
+ <library:element library:name="modAlerts"/>
+</library:library>

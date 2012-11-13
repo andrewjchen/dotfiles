@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modComponentHandling" script:language="StarBasic">REM  *****  BASIC  *****
+
+&apos; from http://wiki.services.openoffice.org/wiki/Currently_active_document
+
+Public Function fncWhichComponent(oDoc) as string 
+
+	if HasUnoInterfaces(oDoc, &quot;com.sun.star.lang.XServiceInfo&quot;) then
+	
+	  if thisComponent.supportsService (&quot;com.sun.star.text.GenericTextDocument&quot;) then
+	     fncWhichComponent = &quot;Text&quot;
+	  ElseIf thisComponent.supportsService(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;) then
+	     fncWhichComponent = &quot;Spreadsheet&quot;
+	  ElseIf thisComponent.supportsService(&quot;com.sun.star.presentation.PresentationDocument&quot;) then
+	     fncWhichComponent = &quot;Presentation&quot;
+	  ElseIf thisComponent.supportsService(&quot;com.sun.star.drawing.GenericDrawingDocument&quot;) then
+	     fncWhichComponent = &quot;Drawing&quot;
+	  else
+	     fncWhichComponent = &quot;Oops current document something else&quot;
+	  end if
+	
+	else
+	
+	  fncWhichComponent = &quot;Not a document&quot;
+	
+	end if
+
+end Function 
+
+
+</script:module>
