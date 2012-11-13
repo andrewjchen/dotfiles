@@ -63,7 +63,7 @@
         (ccl ("/usr/bin/ccl" "-K" "'utf-8-unix") :coding-system utf-8-unix)))
 
 ;(add-to-list 'load-path "/usr/share/emacs/site-lisp/slime/")
-(add-to-list 'load-path "~/emacs_workspace/slime/")
+(add-to-list 'load-path "~/.emacs.d/slime/")
 (require 'slime)
 (setq slime-net-coding-system 'utf-8-unix)
 (slime-setup '(slime-fancy))
@@ -121,7 +121,33 @@
 
 ;(require 'haskell-mode)
 ;(require 'lua-mode)
-;(require 'sclang)
+;(require 'sclang
+(require 'flymake)
+(require 'csharp-mode)
+;; (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
+;; (setq auto-mode-alist
+;;       (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))o
+;; Basic code required for C# mode
+(require 'flymake)
+(autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
+(setq auto-mode-alist  (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
+
+;; Custom code to use a default compiler string for all C# files
+(defvar my-csharp-default-compiler nil)
+(setq my-csharp-default-compiler "mono @@FILE@@")
+
+(defun my-csharp-get-value-from-comments (marker-string line-limit)
+  my-csharp-default-compiler)
+
+(add-hook 'csharp-mode-hook (lambda ()
+                              (if my-csharp-default-compiler
+                                  (progn
+                                    (fset 'orig-csharp-get-value-from-comments
+                                          (symbol-function 'csharp-get-value-from-comments))
+                                    (fset 'csharp-get-value-from-comments
+                                          (symbol-function 'my-csharp-get-value-from-comments))))
+                              (flymake-mode)))
+
 
 (require 'markdown-mode)
 
@@ -295,6 +321,7 @@
 
 ;;; Hide menu bar
 (global-set-key (kbd "<f12>") 'menu-bar-mode)
+;(global-unset-key (kbd "ESC"))
 (menu-bar-mode 0)
 ; scrollbar on right()
 (set-scroll-bar-mode 'right)

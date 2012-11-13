@@ -1,0 +1,4 @@
+(ql:quickload :hunchentoot)
+(ql:quickload)
+(hunchentoot:start (make-instance 'hunchentoot:easy-acceptor :port 8080))
+(asdf:oos 'asdf:load-op :hunchentoot-test)

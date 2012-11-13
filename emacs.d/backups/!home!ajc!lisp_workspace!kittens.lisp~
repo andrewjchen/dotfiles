@@ -1,0 +1,74 @@
+(in-package :cl-user)
+
+
+(ql:quickload :cl-who)
+(ql:quickload :parenscript)
+()(ql:quickload :hunchentoot)
+(ql:quickload :elephant)
+
+(defpackage :rank-kittens
+  (:use :cl :cl-who :hunchentoot :parenscript :elephant))
+
+(in-package :rank-kittens)
+
+;; Starts our web
+;(setf *web-server* (start-server :port 8080))
+
+(defclass kitten()
+  ((name :reader name
+         :initarg :name)
+   (votes :accessor votes
+          :initform 0 )))
+
+(defmethod vote-for (user-selected-kitten)
+  (incf (votes user-selected-kitten)))
+
+;(setf bubbles (make-instance 'kitten :name "bubbles"))
+
+;(name bubbles)
+;(votes bubbles)
+;(vote-for bubbles)
+;(votes bubbles)
+
+
+(defvar *kittens* '())
+
+(defun kitten-from-name (name)
+  (find name *kittens*
+        :test #'string-equal
+        :key #'name))
+
+(defun kitten-stored? (name)
+  (kitten-from-name name))
+
+(defun kittens ()
+  (sort (copy-list *kittens*) #'> :key #'votes))
+
+(defun add-kitten (name)
+  (unless (kitten-stored? name)
+    (push (make-instance 'kitten :name name) *kittens*)))
+
+
+(kittens)
+#|
+(defmacro standard-page ((&key title) &body body)
+  `(with-html-output-to-string (*standard-output* nil :prologue t :indent t)
+     (:html :xmlns "http://www.w3.org/1999/xhtml"
+            :xml\:lang "en"
+            :lang "en"
+            (:head
+             (:meta :http-equiv "Content-Type"
+                    :content    "text/html;charset=utf-8")
+             (:title ,title)
+             (:link :type "text/css"
+                    :rel "stylesheet"
+                    :href "/retro.css"))
+            (:body
+             (:div :id "header"         ; Retro games header
+                   (:img :src "/logo.jpg"
+                         :alt "Commodore 64"
+                         :class "logo")
+                   (:span :class "strapline"
+                          "Vote on your favourite Retro Game"))
+             ,@body))))
+|#

@@ -1,0 +1,41 @@
+;;;; diatimic.lisp
+
+(in-package #:diatimic)
+
+(ps (defun add() (+ 1 2)))
+
+(ps (@ ($ document) ready))
+
+(ps ((@ ($ document) ready)
+     (lambda ()
+       ;function starts here
+       ;(+ 1 2)
+       (progn
+         (setf time 0)
+         (setf stop true)
+         ((@ window setInterval) periodicTask 10)
+         ((@ ($ "div.second") append)
+          "<center class=added ><h1>0</h1></center>")
+         (+ 1 2)
+         nil
+
+
+         )))
+    (defun periodicTask ()
+      ((@ console log) "Periodic Task called")
+      (if (not stopped)
+          (progn
+            (setf time (+ 1 time))
+            ((@ ($ ".added") remove ))
+            ((@ ($ "div.second") append)
+             (concatenate 'string
+                          "<center class=added><h1>"
+                          time
+                          "</h1></center>"))
+            nil
+          )
+      )
+    )
+)
+
+

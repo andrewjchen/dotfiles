@@ -1,0 +1,131 @@
+;;;; blai.lisp
+
+(in-package #:blai)
+
+;;; "blai" goes here. Hacks and glory await!
+
+
+;; should this just be a point struct?
+(defstruct pos2d
+  x
+  y)
+
+(defstruct vel2d
+  x
+  y)
+
+(defstruct accel2d
+  x
+  y)
+
+(defstruct force
+  magnitude
+  direction)
+
+;; A physical particle, with 2D pos2d/vel2d
+(defclass physics-object ()
+  ((pos2d :accessor physics-object-pos2d
+          :initform (make-pos2d :x 0 :y 0)
+          :initarg :pos2d)
+   (vel2d :accessor physics-object-vel2d
+          :initform (make-vel2d :x 0 :y 0)
+          :initarg :vel2d)
+   (accel2d :accessor physics-object-accel2d
+            :initform (make-accel2d :x 0 :y 0)
+            :initarg :accel2d)
+   (mass :accessor physics-object-mass
+         :initform 1
+         :initarg :mass)
+   (forces :initform (make-hash-table))))
+
+
+
+(defmethod tick ((object physics-object) (deltaT real))
+  "Updates a physics-object's pos2d given its vel2d
+and a given amount of time that has elapsed"
+  (let ((posx (pos2d-x (physics-object-pos2d object)))
+        (posy (pos2d-y (physics-object-pos2d object)))
+        (velx (vel2d-x (physics-object-vel2d object)))
+        (vely (vel2d-y (physics-object-vel2d object)))
+        (forces (slot-value object 'forces)))
+    (progn
+      ;; Pos2d increments:
+      ;; x = x * vel2dx * dt
+      (setf
+       (pos2d-x (physics-object-pos2d object))
+       (+
+        (* velx deltaT)
+        posx))
+      ;; y = y * vel2dy * dt
+      (setf
+       (pos2d-y (physics-object-pos2d object))
+       (+
+        (* vely deltaT)
+        posy))
+      ;; F=ma --> a = F/M
+      ;; v = v + a * dt
+      (loop for key being the hash-keys of forces
+         do
+           (progn
+
+                                        ;           (print (gethash key forces))
+             (print (gethash key forces))
+                                        ;           (setf (vel2d-x (physics-object-vel2d object))
+                                        ;                (+ velx ())
+                                        ;3           (setf ())
+             ))
+      )))
+
+(defmethod apply-force ((object  physics-object)
+                        (f force)
+                        (name symbol))
+  "Applies a force on the physics object"
+  (if
+                                        ; if the force doesn't exist already, add it
+   (equal (gethash name (slot-value object 'forces)) nil)
+                                        ;
+   (progn
+                                        ; adds force to table
+     (setf (gethash name (slot-value object 'forces)) f)
+                                        ; sets the acceleration
+     (let ((accelx (accel2d-x (physics-object-accel2d object)))
+           (accely (accel2d-y (physics-object-accel2d object)))
+           (fmag (force-magnitude f))
+           (fdir (force-direction f))
+           (mass (physics-object-mass object)))
+                                        ; x component of acceleration
+       (setf
+        (accel2d-x (physics-object-accel2d object))
+        (+ accelx
+                                        ; adds the acceleration caused by the force:
+                                        ; f = ma
+                                        ; a = f/m
+           (* (/ fmag mass) (cos fdir))))
+                                        ; y component of acceleration
+       (setf
+        (accel2d-y (physics-object-accel2d object))
+        (+ accely
+                                        ; adds the acceleration caused by the force:
+                                        ; f = ma
+                                        ; a = f/m
+           (* (/ fmag mass) (sin fdir))))
+
+       ))
+                                        ; otherwise do nothing
+   nil))
+
+(defvar *ball* (make-instance 'physics-object
+                              :pos2d
+                              (make-pos2d :x 0 :y 0)
+                              :vel2d
+                              (make-vel2d :x 0 :y 0)
+                              :mass 10))
+
+(setf (vel2d-x (physics-object-vel2d *ball*)) 5)
+(setf (vel2d-y (physics-object-vel2d *ball*)) 2)
+
+(describe *ball*)
+
+(tick *ball* 1)
+
+(apply-force *ball* (make-force :magnitude 9.8 :direction 0) 'gravity)

@@ -1,0 +1,46 @@
+function buttonActions(){
+  $("div.first").slideUp(300).slideDown(100);
+  //everyTime(1000, periodicTask, 10);
+  stop = !stop
+  //$(this).oneTime(1000, periodicTask);
+}
+
+function periodicTask() {
+  console.log("Period task called")
+  //$("div.second").fadeOut(100).fadeIn(100);
+  if(!stop){
+    time++
+    $(".added").remove()
+    $("div.second").append("<center class=added><h1>" + time + "</h1></center>")
+  }
+//  $("div.second").innerHTML =
+}
+
+$(document).ready(function() {
+    //and then change this code so that your callback gets run
+    //when the button gets clicked instead of mine.
+    // **by the way, this is jQuery!
+  time = 0
+  stop = true
+  $("button").click(buttonActions);
+  $('#prettybutton').click(buttonActions);
+  window.setInterval(periodicTask, 10);
+  $("div.second").append("<center class=added><h1>0</h1></center>")
+});
+/*
+$(document).ready(function(){
+
+  $("#ball_holder").everyTime(10, function(){
+    $("#ball_holder").animate({top:"184px"}, 400).animate({top:"0px"}, 370);
+  });
+
+  $("#start").click(function(){
+    $("#shoot").everyTime(10, function(){
+      $("#shoot").animate({left:"700px"}, 2500).animate({left:"10"}, 2500);
+    });
+  });
+  $("#stop").click(function(){
+    $("#shoot").stop(true).stopTime();
+  });
+
+});*/
