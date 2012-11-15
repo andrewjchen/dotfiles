@@ -23,9 +23,9 @@
 
 ;; ----- ido-work-directory-list -----
 (
- "/home/ajc/octave_workspace/"
  "/home/ajc/blai_workspace/blai/src/"
  "/home/ajc/blai_workspace/blai/"
+ "/home/ajc/octave_workspace/"
  "/home/ajc/lisp_workspace/"
  "/home/ajc/diatimic_workspace/diatimic/"
  "/home/ajc/.emacs.d/"
@@ -50,27 +50,29 @@
 
 ;; ----- ido-work-file-list -----
 (
+ "plot.lisp"
+ "blai.asd"
  "math.m"
+ "plot.m"
  "hello.m"
  "physics-object.lisp"
  "blai.lisp"
  "COPYING"
- "blai.asd"
  "blai.fasl"
  "package.lisp"
- "hello.lisp"
- "diatimic.lisp"
 )
 
 ;; ----- ido-dir-file-cache -----
 (
- ("/home/ajc/octave_workspace/" (20642 4703) "math.m" "../" "./" ".#math.m" "hello.m")
+ ("/home/ajc/blai_workspace/blai/src/" (20643 61981) "plot.lisp" "blai.fasl" "physics-object.lisp" "physics-object.fasl" "blai.lisp" "../" "./" "package.lisp")
 
- ("/home/ajc/" (20641 55848) "Dropbox/" ".stellarium/" ".pulse/" ".local/" ".pulse-cookie" ".gnome2/" ".java/" ".racket/" "angel-stage_workspace/" "grub" ".odbc.ini" "clojure_workspace/" ".cbp2make/" ".fontconfig/" "Media/" "pie_workspace/" "gtk-3.0/" ".log/" ".baudline/" "sudoers" ".hplip/" ".xscreensaver" ".nv/" "bak/" ".icedtea/" ".swfinfo" ".drirc" ".xmonad/" ".gvfs/" "callgrind.out.14737" "foo" ".ssh/" "roslib" "lisp_workspace/" "berkeley/" ".pki/" ".emacs.d.bak/" ".fehbg" ".aptitude/" "Mail/" "Steam/" ".octave_hist" ".shotwell/" "philosophy/" ".synaptic/" ".xinitrc" ".lein/" ".vimrc" "join-tutorial.pdf" ".mission-control/" "kyle_quicklisp.tar.xz" ".audacity-data/" ".emacs-places" "android_workspace/" ".gconf/" ".gnupg/" ".xpaint/" "astrophotomix_workspace/" ".Skype/" ".cups/" ".jackdrc" "git/" ".bashrc" ".gimp-2.6/" ".kde/" "Music/" ".node-gyp/" ".profile" "callgrind.out.23902" "Assignment 4.doc" ".config/" "mnt/" ".emacs.d/" "ucb-scheme-1.3.6-2-x86_64.pkg.tar.xz" ".ido.last" ".matplotlib/" ".wallpaper/" "steam_workspace/" ".bash_logout" ".dmenu_cache" ".synergy.conf" ".sudo_as_admin_successful" "emacs_workspace/" ".hardinfo/" ".lesshst" ".mozilla/" ".ros/" ".mysql_history" "Downloads/" ".dropbox/" "foo~" ".sage/" ".sylpheed-2.0/" ".dmrc" ".jline-reply.history" ".steampath" ".appdata/" ".gnome2_private/" "octave_workspace/" "nodejs_workspace/" ".gtk-bookmarks" "courtIchiro_workspace/" ".viminfo" ".bashrc.bak" ".ogre/" "schedule.pdf" ".eclipse/" "tmp/" "blai_workspace/" "gigantoraptor_workspace/" "quicklisp/" ".android/" ".emacs.d.pre-prelude.tar" ".swt/" ".xournal/" ".npm/" ".Xresources" "Videos/" ".ICEauthority" "bspoker_workspace/" ".arduino/" ".moc/" ".steam/" ".turtlebot_dashboard" "coverletter.pdf" "paypal-webassign" ".slime-history.eld" ".Xdefaults" "rankmy_workspace/" "iaroc/" "rublargh_workspace/" "output.pdf" "electronics_workspace/" "diatimic_workspace/" "schedule-visual.pdf" ".muttrc" "sketchbook/" ".mc/" ".gstreamer-0.10/" ".gtkrc-2.0" "PKGBUILD" "opencv_workspace/" "kyle_emacs.tar.xz" ".purple/" ".gegl-0.0/" ".xvidcaprc" "ros_workspace/" "wic_workspace/" ".mysql/" "scheme_workspace/" ".processing/" ".dbus/" "Projects/" ".bash_history" "octave-core" "trajectoryOptimization_workspace/" "vmware/" ".mutt/" ".bash_aliases" ".codeblocks/" "calsol_workspace/" "config.vcg" ".gitconfig" ".PlayOnLinux/" "examples.desktop" ".gitk" ".face" ".quicksynergy/" ".libreoffice/" "optar-1-4-x86_64.pkg.tar.xz" ".irssi/" ".vim/" "Bitcasa/" "node_modules/" ".macromedia/" ".vimperator/" ".vmware/" ".Xauthority" ".dia/" "maths_workspace/" "test-0000.avi" ".steampid" ".sbclrc" "Documents/" ".esd_auth" "Screenshots/" "papers/" ".mplayer/" ".ipython/" "Pictures/" ".bitcasa/" ".python27_compiled/" ".adobe/" "bin/" ".icons/" "Desktop/" "callgrind.out.12998" "bash/" ".xsession-errors" ".sane/" "domainname.pdf" ".thumbnails/" ".mono/" "netform_workspace/" ".cache/" ".pentadactyl/" "wingMorphing_workspace/" ".recently-used" ".subversion/" "xms" ".VirtualBox/" "cmu_workspace/" ".psensor/" ".m2/" ".xmobarrc" ".slime/" ".gksu.lock" ".texmf-var/" ".emacs.d.pre-prelude.tar.bak" ".dropbox.bak/" "callgrind.out.11510" ".ghc/" ".wine/" ".rviz/" "Dropbox.bak/" "../" "./")
+ ("/home/ajc/blai_workspace/blai/" (20643 61626) "README.md" "COPYING" "blai.fasl" "src/" "physics-object.fasl" "blai.asd" ".gitignore" "../" "./" ".git/")
 
- ("/home/ajc/blai_workspace/blai/src/" (20641 39844) "blai.fasl" "physics-object.lisp" "blai.lisp" "../" "./" "package.lisp")
+ ("/home/ajc/blai_workspace/" (20642 47196) "cl-plplot-0.6.0.tar.gz" "cl-plplot-0.6.0/" "blai/" "lift/" "squirl/" "cl-opengl/" "cl-plplot-manual.pdf" "../" "cl-graph/" "./")
 
- ("/home/ajc/blai_workspace/blai/" (20641 39683) "README.md" ".#physics-object.lisp" "COPYING" "blai.fasl" "src/" "blai.asd" ".gitignore" "../" "./" ".git/")
+ ("/home/ajc/" (20644 768) "Dropbox/" ".stellarium/" ".pulse/" ".local/" ".pulse-cookie" ".gnome2/" ".java/" ".racket/" "angel-stage_workspace/" "grub" ".odbc.ini" "clojure_workspace/" ".cbp2make/" ".fontconfig/" "Media/" "pie_workspace/" "gtk-3.0/" ".log/" ".baudline/" "sudoers" ".hplip/" ".xscreensaver" ".nv/" "bak/" ".icedtea/" ".swfinfo" ".drirc" ".xmonad/" ".gvfs/" "callgrind.out.14737" "foo" ".ssh/" "roslib" "lisp_workspace/" "berkeley/" ".pki/" ".emacs.d.bak/" ".fehbg" ".aptitude/" "Mail/" "Steam/" ".octave_hist" ".shotwell/" "philosophy/" ".synaptic/" ".xinitrc" ".lein/" ".vimrc" "join-tutorial.pdf" ".mission-control/" "kyle_quicklisp.tar.xz" ".audacity-data/" ".emacs-places" "android_workspace/" ".gconf/" ".gnupg/" ".xpaint/" "astrophotomix_workspace/" ".Skype/" ".cups/" ".jackdrc" "git/" ".bashrc" ".gimp-2.6/" ".kde/" "Music/" ".node-gyp/" ".profile" "callgrind.out.23902" "Assignment 4.doc" ".config/" "mnt/" ".emacs.d/" "ucb-scheme-1.3.6-2-x86_64.pkg.tar.xz" ".ido.last" ".matplotlib/" ".wallpaper/" "steam_workspace/" ".bash_logout" ".dmenu_cache" ".synergy.conf" ".sudo_as_admin_successful" "emacs_workspace/" ".hardinfo/" ".lesshst" ".mozilla/" ".ros/" ".mysql_history" "Downloads/" ".dropbox/" "foo~" ".sage/" ".sylpheed-2.0/" ".dmrc" ".jline-reply.history" ".steampath" ".appdata/" ".gnome2_private/" "octave_workspace/" "nodejs_workspace/" ".gtk-bookmarks" "courtIchiro_workspace/" ".viminfo" ".bashrc.bak" ".ogre/" "schedule.pdf" ".eclipse/" "tmp/" "blai_workspace/" "gigantoraptor_workspace/" "quicklisp/" ".android/" ".emacs.d.pre-prelude.tar" ".swt/" ".xournal/" ".npm/" ".Xresources" "Videos/" ".ICEauthority" "bspoker_workspace/" ".arduino/" ".moc/" ".steam/" ".turtlebot_dashboard" "coverletter.pdf" "paypal-webassign" ".slime-history.eld" ".Xdefaults" "rankmy_workspace/" "iaroc/" "rublargh_workspace/" "output.pdf" "electronics_workspace/" "diatimic_workspace/" "schedule-visual.pdf" ".muttrc" "sketchbook/" ".mc/" ".gstreamer-0.10/" ".gtkrc-2.0" "PKGBUILD" "opencv_workspace/" "kyle_emacs.tar.xz" ".purple/" ".gegl-0.0/" ".xvidcaprc" "ros_workspace/" "wic_workspace/" ".mysql/" "scheme_workspace/" ".processing/" ".dbus/" "Projects/" ".bash_history" "octave-core" "trajectoryOptimization_workspace/" "vmware/" ".mutt/" ".bash_aliases" ".codeblocks/" "calsol_workspace/" "config.vcg" ".gitconfig" ".PlayOnLinux/" "examples.desktop" ".gitk" ".face" ".quicksynergy/" ".libreoffice/" "optar-1-4-x86_64.pkg.tar.xz" ".irssi/" ".vim/" "Bitcasa/" "node_modules/" ".macromedia/" ".vimperator/" ".vmware/" ".Xauthority" ".dia/" "maths_workspace/" "test-0000.avi" ".steampid" ".sbclrc" "Documents/" ".esd_auth" "Screenshots/" "papers/" ".mplayer/" ".ipython/" "Pictures/" ".bitcasa/" ".python27_compiled/" ".adobe/" "bin/" ".icons/" "Desktop/" "callgrind.out.12998" "bash/" ".xsession-errors" ".sane/" "domainname.pdf" ".thumbnails/" ".mono/" "netform_workspace/" ".cache/" ".pentadactyl/" "wingMorphing_workspace/" ".recently-used" ".subversion/" "xms" ".VirtualBox/" "cmu_workspace/" ".psensor/" ".m2/" ".xmobarrc" ".slime/" ".gksu.lock" ".texmf-var/" ".emacs.d.pre-prelude.tar.bak" ".dropbox.bak/" "callgrind.out.11510" ".ghc/" ".wine/" ".rviz/" "Dropbox.bak/" "../" "./")
+
+ ("/home/ajc/octave_workspace/" (20642 5848) "plot.m" "math.m" "octave-core" "../" "./" "hello.m")
 
  ("/home/ajc/.emacs.d/" (20641 39496) "backups/" "auto-save-list/" "slime/" "snippets/" "plugins/" "hacklist" "autosaves/" "ac-comphist.dat" "color-theme" "themes/" "../" "./" "init.el")
 
@@ -95,8 +97,6 @@
  ("/home/ajc/diatimic_workspace/" (20638 44516) "diatimic-lean/" "t1.fasl" "jquery.min.js" "bak/" "Bootstrap, from Twitter_files/" "jquery-timer.zip" "Bootstrap, from Twitter.html" "Template · Bootstrap_files/" "bootstrap-responsive.css" "Template · Bootstrap.html" "test.lisp" "milestone1/" "diatimic/" "test/" "../" "t1.lisp" "./" "demo.html")
 
  ("/home/ajc/lisp_workspace/" (20640 51490) "s5.lisp" "s11.lisp" "s7.lisp" "s8.lisp" "s4.lisp" "httptest.fasl" "kittens/" "hello.fasl" "s3.lisp" "s9.lisp" "kittens.fasl" "httptest.lisp" "s6.lisp" "s2.lisp" "retro-games.lisp" "s1.lisp" "kittens.lisp" "../" "./" "hello.lisp")
-
- ("/home/ajc/blai_workspace/" (20640 50593) "blai/" "../" "./")
 
  ("/home/ajc/bin/stylecop/csharp-mode-0.8.6/" (20639 1384) "csharp-mode-autoloads.el" "csharp-mode-pkg.el" "csharp-mode.el" "../" "./")
 

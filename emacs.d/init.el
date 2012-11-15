@@ -220,8 +220,13 @@
 (add-hook 'slime-repl-mode-hook
           '(lambda ()
              (autopair-mode -1)
-             (whitespace-mode t)
+             (whitespace-mode f)
              (electric-pair-mode -1)))
+
+(when (load "slime-autoloads" t)
+  (setq slime-auto-connect 'always)
+  (slime-setup '(slime-fancy slime-asdf inferior-slime)))
+
 
 (defun all-lisp-mode-hook ()
   (setq indent-tabs-mode nil)
