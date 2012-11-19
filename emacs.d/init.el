@@ -146,12 +146,6 @@
   (flymake-mode 1)
   (yas/minor-mode-on)
   (setq default-tab-width 4)
-  ; Set indentation level to 4 spaces (instead of 2)
-  (setq c-basic-offset 4)
-; Set the extra indentation before a substatement (e.g. the opening brace in
-; the consequent block of an if statement) to 0 (instead of '+)
-  (c-set-offset 'substatement-open 0)
-
   (require 'rfringe)  ;; handy for flymake
   (require 'flymake-cursor) ;; also handy for flymake
   )
@@ -213,7 +207,7 @@
  '(python-python-command "python2")
  '(save-place t nil (saveplace))
  '(show-trailing-whitespace t)
-; '(tab-always-indent (quote complete))
+ '(tab-always-indent (quote complete))
  '(x-select-enable-clipboard t)
  '(yas/global-mode t nil (yasnippet))
  '(yas/snippet-dirs (quote ("~/.emacs.d/snippets")) nil (yasnippet)))
@@ -293,11 +287,6 @@
 
 (require 'whitespace)
 
-(defun cleanup ()
-  (interactive)
-  (whitespace-cleanup)
-  (delete-trailing-whitespace))
-
 (setq frame-title-format '(buffer-file-name "%f" ("%b")))
 
 (require 'smart-tabs-mode)
@@ -358,11 +347,6 @@
 ; scrollbar on right()
 (set-scroll-bar-mode 'right)
 
-;; Indenting
-(setq tab-width 4)
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-(setq indent-line-function 'insert-tab)
 
 
 ;; Scheme
@@ -386,24 +370,13 @@
   (untabify (point-min) (point-max)))
 
 
-(defun my-c-mode-common-hook ()
-  (setq c-basic-offset 4)
-  (c-set-offset 'substatement-open 0))
-(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
+;; BSD style brace placement
+(setq c-default-style "bsd"
+  c-basic-offset 4)
 
-;; (defun fix-java-mode ()
-;; (define-key java-mode-map "\C-m" 'newline-and-indent)
-;; ; (set-c-style "Linux")
-;; (c-set-offset 'substatement-open 0)
-;; (c-set-offset 'inline-open -4)
-;; (c-set-offset 'topmost-intro -4)
-;; (c-set-offset 'defun-block-intro 4)
-;; (c-set-offset 'statement-block-intro 4)
-;; (c-set-offset 'brace-list-open 0)
-;; (c-set-offset 'class-open 0)
-;; (setq c-brace-offset -4)
-;; ;; was c-basic-offset
-;; (custom-set-variables '(basic-c-offset 0)))
-;; (add-hook 'java-mode-hook 'fix-java-mode)
-;; (setq auto-mode-alist (cons '("\\.cs\\'" . java-mode) auto-mode-alist))
+;; Indenting
+(setq tab-width 4)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
