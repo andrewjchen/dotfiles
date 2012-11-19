@@ -128,7 +128,6 @@
 ;; (setq auto-mode-alist
 ;;       (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))o
 ;; Basic code required for C# mode
-(require 'flymake)
 (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
 (setq auto-mode-alist  (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
 
@@ -139,14 +138,33 @@
 (defun my-csharp-get-value-from-comments (marker-string line-limit)
   my-csharp-default-compiler)
 
-(add-hook 'csharp-mode-hook (lambda ()
-                              (if my-csharp-default-compiler
-                                  (progn
-                                    (fset 'orig-csharp-get-value-from-comments
-                                          (symbol-function 'csharp-get-value-from-comments))
-                                    (fset 'csharp-get-value-from-comments
-                                          (symbol-function 'my-csharp-get-value-from-comments))))
-                              (flymake-mode)))
+(defun my-csharp-mode-fn ()
+  "my function that runs when csharp-mode is initialized for a buffer."
+  (turn-on-font-lock)
+  (turn-on-auto-revert-mode) ;; helpful when also using Visual Studio
+  (setq indent-tabs-mode nil) ;; tabs are evil
+  (flymake-mode 1)
+  (yas/minor-mode-on)
+  (setq default-tab-width 4)
+  ; Set indentation level to 4 spaces (instead of 2)
+  (setq c-basic-offset 4)
+; Set the extra indentation before a substatement (e.g. the opening brace in
+; the consequent block of an if statement) to 0 (instead of '+)
+  (c-set-offset 'substatement-open 0)
+
+  (require 'rfringe)  ;; handy for flymake
+  (require 'flymake-cursor) ;; also handy for flymake
+  )
+(add-hook  'csharp-mode-hook 'my-csharp-mode-fn t)
+
+;; (add-hook 'csharp-mode-hook (lambda ()
+;;                               (if my-csharp-default-compiler
+;;                                   (progn
+;;                                     (fset 'orig-csharp-get-value-from-comments
+;;                                           (symbol-function 'csharp-get-value-from-comments))
+;;                                     (fset 'csharp-get-value-from-comments
+;;                                           (symbol-function 'my-csharp-get-value-from-comments))))
+;;                               (flymake-mode)))
 
 
 (require 'markdown-mode)
@@ -164,7 +182,8 @@
 (setq auto-mode-alist (cons '("wscript" . python-mode) auto-mode-alist))
 (setq c-default-style (quote ((java-mode . "java")
                               (awk-mode . "awk")
-                              (other . "linux"))))
+                              (other . "linux")
+                              )))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -194,7 +213,7 @@
  '(python-python-command "python2")
  '(save-place t nil (saveplace))
  '(show-trailing-whitespace t)
- '(tab-always-indent (quote complete))
+; '(tab-always-indent (quote complete))
  '(x-select-enable-clipboard t)
  '(yas/global-mode t nil (yasnippet))
  '(yas/snippet-dirs (quote ("~/.emacs.d/snippets")) nil (yasnippet)))
@@ -259,7 +278,11 @@
   (setq tab-stop-list (quote (2 4 6 8 10 12 14 16 18 20 22 24 26 28 30)))
   (setq evil-shift-width 2))
 
-(add-hook 'c-mode-common-hook 'std-indent-mode)
+;(add-hook 'c-mode-common-hook 'std-indent-mode)
+(defun my-c-mode-common-hook ()
+  (setq c-basic-offset 4)
+  (c-set-offset 'substatement-open 0))
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 (add-hook 'lisp-mode-hook 'custom-indent-mode)
 
 (tool-bar-mode -1)
@@ -322,12 +345,65 @@
 
 (add-hook 'c-mode-common-hook 'setup-compile-command)
 
+;; Javascript escape
 (setq js-indent-level 2)
 
 ;;; Hide menu bar
 (global-set-key (kbd "<f12>") 'menu-bar-mode)
-;(global-unset-key (kbd "ESC"))
 (menu-bar-mode 0)
+
+;; Disabling escape
+(global-set-key (kbd "<escape>") 'keyboard-quit)
+
 ; scrollbar on right()
 (set-scroll-bar-mode 'right)
 
+;; Indenting
+(setq tab-width 4)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
+
+
+;; Scheme
+;(add-hook 'slime-load-hook (lambda () (require 'slime-scheme)))
+(setf scheme-program-name "stk" )
+
+;; Turn on warn highlighting for characters outside of the 'width' char limit
+(defun font-lock-width-keyword (width)
+  "Return a font-lock style keyword for a string beyond width WIDTH
+   that uses 'font-lock-warning-face'."
+  `((,(format "^%s\\(.+\\)" (make-string width ?.))
+     (1 font-lock-warning-face t))))
+
+(font-lock-add-keywords 'csharp-mode (font-lock-width-keyword 80))
+
+(defun iwb ()
+  "indent whole buffer"
+  (interactive)
+  (delete-trailing-whitespace)
+  (indent-region (point-min) (point-max) nil)
+  (untabify (point-min) (point-max)))
+
+
+(defun my-c-mode-common-hook ()
+  (setq c-basic-offset 4)
+  (c-set-offset 'substatement-open 0))
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+
+;; (defun fix-java-mode ()
+;; (define-key java-mode-map "\C-m" 'newline-and-indent)
+;; ; (set-c-style "Linux")
+;; (c-set-offset 'substatement-open 0)
+;; (c-set-offset 'inline-open -4)
+;; (c-set-offset 'topmost-intro -4)
+;; (c-set-offset 'defun-block-intro 4)
+;; (c-set-offset 'statement-block-intro 4)
+;; (c-set-offset 'brace-list-open 0)
+;; (c-set-offset 'class-open 0)
+;; (setq c-brace-offset -4)
+;; ;; was c-basic-offset
+;; (custom-set-variables '(basic-c-offset 0)))
+;; (add-hook 'java-mode-hook 'fix-java-mode)
+;; (setq auto-mode-alist (cons '("\\.cs\\'" . java-mode) auto-mode-alist))
