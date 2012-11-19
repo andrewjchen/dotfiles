@@ -1,4 +1,0 @@
-#[l,a] = meshgrid( [0:10:120], [0:500:12000]);
-[t,u] = meshgrid([-2:0.5:4], [-4:0.5:8]);
-grid on
-quiver(l,a, 0.5*ones(size(t)))

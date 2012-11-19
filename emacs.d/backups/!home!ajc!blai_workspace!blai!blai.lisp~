@@ -1,6 +1,0 @@
-;;;; blai.lisp
-
-(in-package #:blai)
-
-;;; "blai" goes here. Hacks and glory await!
-

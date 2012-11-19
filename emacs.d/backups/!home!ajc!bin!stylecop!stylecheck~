@@ -1,8 +1,0 @@
-#!/bin/bash
-
-TMP=$1.stylecop.xml
-stylecop -c /home/nikita/bin/stylecop/StyleCopSettings.xml -o $TMP -f "$@"
-python /home/ajc/bin/stylecop/process_stylecop.py $TMP
-rm $TMP
-
-
