@@ -125,3 +125,4 @@ fi
 #source ~/ros_workspace/ros_setup
 #source ~/rankmy_workspace/setup.sh
 
+EDITOR=emacs; export EDITOR
