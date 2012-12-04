@@ -28,3 +28,4 @@ if [ -d "$HOME/bin/stylecop" ] ; then
     PATH="$HOME/bin/stylecop:$PATH"
 fi
 
+PATH="$HOME/bin/bak:$PATH"
