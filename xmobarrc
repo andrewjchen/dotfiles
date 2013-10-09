@@ -1,62 +1,59 @@
-
-            Config { font = "Terminal"
-                   , bgColor = "black"
-                   , fgColor = "grey"
-                   , position = Top
-                   --, position = Static { xpos = 0 , ypos = 0, width = 1440, height = 14 }
-                   , lowerOnStart = True
-                   , commands = [
-                         Run Network "wlan0" [
-            				"-L","0",
-            				"-H","32",
-            				"--normal","green",
-            				"--high","red"] 10
-
-                        , Run Network "eth1" ["-L","0",
-            				"-H","32",
-            				"--normal","green",
-            				"--high","red"] 10
-
-                        , Run MultiCpu [ "-t", "<total0>\t <total1>\t <total2>\t <total3> ",
-            				"-L", "3",
-            				"-H", "50",
-            				"--normal", "green",
-            				"--high", "red"] 10
-                        , Run Memory ["-t","Mem:<used> <usedratio>%",
+Config {
+        font = "Terminal"
+        , bgColor = "#404040"
+        , fgColor = "grey"
+        , position = Top
+        --, position = Static { xpos = 0 , ypos = 0, width = 1440, height = 14 }
+        , lowerOnStart = True
+        , commands = [
+                Run Network "wlan0" [
+            			"-L","0",
+            			"-H","32",
+            			"--normal","green",
+            			"--high","red"] 10
+                , Run Network "eth1" [
+                                "-L","0",
+            			"-H","32",
+            			"--normal","green",
+            			"--high","red"] 10
+                , Run MultiCpu [ "-t", "<total0>\t <total1>\t <total2>\t <total3> ",
+       				"-L", "3",
+      				"-H", "50",
+       				"--normal", "green",
+       				"--high", "red"] 10
+                , Run Memory ["-t","Mem:<used> <usedratio>%",
                                 "-L", "3",
-            					"-H", "3000",
-            					"--normal", "green",
-            					"--high", "red"      ] 10
-
-                        , Run Swap [ ] 10
-
-               		    , Run Date "%I:%M:%S" "date" 10
-
-            		    , Run StdinReader
-
-                        , Run BatteryP ["BAT0"] [
-                            "-t", "<acstatus><watts> <left>% /<timeleft>",
-                            "-L", "30", "-H", "80", "-p", "3",
-                            "--low", "red", "--normal", "green", "--high", "blue",
---                           "--", "-c", "energy_full", "-O", "<fc=green>On</fc> - ", "-o", "",
-                           "--", "-O", "<fc=green>On</fc> - ", "-o", "",
+            	        	"-H", "7000",
+                                "--normal", "green",
+                                "--high", "red"      ] 10
+                , Run Swap [ ] 10
+                , Run Date "%I:%M:%S" "date" 10
+                , Run StdinReader
+                , Run BatteryP ["BAT0"] [
+                           "-t", "<acstatus><watts> <left>% /<timeleft>",
+                           "-L", "30", "-H", "80", "-p", "3",
+                            "--low", "red", "--normal", "green", "--high", "#00aaff",
+                           "--", "-c", "energy_full", "-O", "<fc=green>On</fc> - ", "-o", "",
+ --                           "--", "-O", "<fc=green>On</fc> - ", "-o", "",
                            "-L", "-15", "-H", "-5",
-                           "-l", "red", "-m", "green", "-h", "blue"]
+                           "-l", "red", "-m", "green", "-h", "blue",
+                           "--", "-c", "energy_left"  ]
                           10
 
-            		    , Run Com "cat" ["/proc/loadavg", "| awk '{print $1 }' " ]  "loadavg" 10
-
-                        , Run ThermalZone 0 [
-                            "-t","<temp> C",
-                            "-L","40",
-                            "-H","79",
-                            "-h","red",
-                            "-n","yellow",
-                            "-l","green"] 10
+                , Run Com "cat" ["/proc/loadavg", "| awk '{print $1 }' " ]  "loadavg" 10
+                , Run ThermalZone 0 [
+                                "-t","<temp> C",
+                                "-L","40",
+                                "-H","79",
+                                "-h","red",
+                                "-n","yellow",
+                                "-l","green"] 10
                         ]
 
-                   , sepChar = "%"
-                   , alignSep = "}{"
-                   , template = "%StdinReader% }{ %multicpu%  | %memory% - %swap% | LA %loadavg% | %thermal0% | %wlan0% <fc=#ee9a00>%date%</fc> %battery%"
+
+        , sepChar = "%"
+        , alignSep = "}{"
+        , template = 
+                "%StdinReader% }{ %multicpu% | %memory% - %swap% | LA %loadavg% | %thermal0% | %wlan0% <fc=#ee9a00>%date%</fc> %battery%"
                    }
 
