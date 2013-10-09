@@ -1,0 +1,6 @@
+#!/bin/bash
+
+feh --bg-scale ~/.wallpaper/real.magicmountain.jpg&
+nm-applet&
+jupiter&
+/usr/bin/emacs --daemon&
