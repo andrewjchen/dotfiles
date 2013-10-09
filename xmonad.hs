@@ -38,8 +38,8 @@
             , startupHook = setWMName "LG3D"
             , modMask            = mod4Mask
             , workspaces         = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-            , normalBorderColor  = "#000000"
-            , focusedBorderColor = "#00FF00"
+            , normalBorderColor  = "#424242"
+            , focusedBorderColor = "#00aaff"
             --, focusedBorderColor = "#0066FF"
             , manageHook         = myManageHook --composeAll [],
             --, manageHook         = composeAll []  --myManageHook,--composeAll [],
@@ -52,16 +52,16 @@
     logHook' h0 h1 = dynamicLogWithPP xmobarPP {
                                      ppOutput = hPutStrLn h0,
                                      ppTitle = xmobarColor "green" "" . shorten 50,
-                                     ppHiddenNoWindows = xmobarColor "gray" "",
-                                     ppHidden = xmobarColor "white" "",
-                                     ppVisible = xmobarColor "white" "" . wrap "<" ">",
-                                     ppCurrent = xmobarColor "yellow" "" . wrap "[" "]"
+                                     ppHiddenNoWindows = xmobarColor "#808080" "",
+                                     ppHidden = xmobarColor "#bbbbbb" "",
+                                     ppVisible = xmobarColor "white" "#006293" . wrap " " " ",
+                                     ppCurrent = xmobarColor "white" "#00aaff" . wrap " " " "
                                  }
                         >>
                         dynamicLogWithPP xmobarPP {
                                      ppOutput = hPutStrLn h1,
                                      ppTitle = xmobarColor "green" "" . shorten 50,
-                                     ppHiddenNoWindows = xmobarColor "gray" "",
+                                     ppHiddenNoWindows = xmobarColor "#808080" "",
                                      ppHidden = xmobarColor "#bbbbbb" "",
                                      ppVisible = xmobarColor "white" "#006293" . wrap " " " ",
                                      ppCurrent = xmobarColor "white" "#00aaff" . wrap " " " " }
