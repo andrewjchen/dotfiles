@@ -2,14 +2,18 @@
 #stalonetray&
 sleep 1
 #feh --bg-scale ~/.wallpaper/mandelbrot-blue.jpg&
-feh --bg-scale ~/.wallpaper/orien.fixed.jpg&
+#feh --bg-scale ~/.wallpaper/orien.fixed.jpg&
+feh --bg-scale ~/.wallpaper/real.magicmountain.jpg&
+
 #feh --bg-scale ~/.wallpaper/homestuck.wk.png&
 xsetroot -cursor_name left_ptr&
-trayer --edge top --align center --widthtype pixel --width 100 --SetDockType false --SetPartialStrut false  --transparent true --alpha 0 --tint 0x000000 --expand false --heighttype pixel --height 8 &
+trayer --edge top --align center --widthtype pixel --width 100 --SetDockType false --SetPartialStrut false  --transparent true --alpha 0 --tint 0x424242 --expand false --heighttype pixel --height 8 &
 #~/bash/networkmanager&
-sudo nm-applet&
+#synclient TouchpadOff=1
+nm-applet&
 #synergys
 
-~/disableTouchpad.sh&
+#~/disableTouchpad.sh&
 eject -i 1&
-
+emacs --daemon
+urxvtd&
