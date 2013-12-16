@@ -27,6 +27,8 @@
     import qualified XMonad.StackSet as W
     import qualified Data.Map        as M
 
+    import XMonad.Hooks.EwmhDesktops
+
 
     myBorderWidth   = 1
     main = do
@@ -34,14 +36,14 @@
         h1 <- spawnPipe "/usr/bin/xmobar /home/ajc/.xmobarrc -x 1"
         xmonad $ withUrgencyHookC FocusHook urgentConfig $ myConfig h0 h1
     myConfig h0 h1 =  defaultConfig {
-            terminal           = "urxvt"
-            , startupHook = setWMName "LG3D"
+            terminal             = "urxvt"
+            , startupHook        = setWMName "LG3D"
             , modMask            = mod4Mask
             , workspaces         = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-            , normalBorderColor  = "#424242"
-            , focusedBorderColor = "#00aaff"
-            --, focusedBorderColor = "#0066FF"
+            , normalBorderColor  = "#404040"
+            , focusedBorderColor = "#00ff00"
             , manageHook         = myManageHook --composeAll [],
+            , handleEventHook    = XMonad.Hooks.EwmhDesktops.fullscreenEventHook
             --, manageHook         = composeAll []  --myManageHook,--composeAll [],
             , borderWidth        = myBorderWidth
             , keys               = myKeys
@@ -51,7 +53,7 @@
         }
     logHook' h0 h1 = dynamicLogWithPP xmobarPP {
                                      ppOutput = hPutStrLn h0,
-                                     ppTitle = xmobarColor "green" "" . shorten 50,
+                                     ppTitle = xmobarColor "#00ff00" "" . shorten 50,
                                      ppHiddenNoWindows = xmobarColor "#808080" "",
                                      ppHidden = xmobarColor "#bbbbbb" "",
                                      ppVisible = xmobarColor "white" "#006293" . wrap " " " ",
@@ -60,7 +62,7 @@
                         >>
                         dynamicLogWithPP xmobarPP {
                                      ppOutput = hPutStrLn h1,
-                                     ppTitle = xmobarColor "green" "" . shorten 50,
+                                     ppTitle = xmobarColor "#00ff00" "" . shorten 50,
                                      ppHiddenNoWindows = xmobarColor "#808080" "",
                                      ppHidden = xmobarColor "#bbbbbb" "",
                                      ppVisible = xmobarColor "white" "#006293" . wrap " " " ",
@@ -120,10 +122,10 @@
         , ((modMask             , xK_z          ), sendMessage MirrorExpand)
         , ((modMask  .|. controlMask              , xK_s    ), sendMessage  Arrange         )
         , ((modMask  .|. controlMask .|. shiftMask, xK_s    ), sendMessage  DeArrange       )
-        , ((modMask  .|. controlMask              , xK_Left ), sendMessage (MoveLeft      1))
-        , ((modMask  .|. controlMask              , xK_Right), sendMessage (MoveRight     1))
-        , ((modMask  .|. controlMask              , xK_Down ), sendMessage (MoveDown      1))
-        , ((modMask  .|. controlMask              , xK_Up   ), sendMessage (MoveUp        1))
+--        , ((modMask  .|. controlMask              , xK_Left ), sendMessage (MoveLeft      1))
+--        , ((modMask  .|. controlMask              , xK_Right), sendMessage (MoveRight     1))
+--        , ((modMask  .|. controlMask              , xK_Down ), sendMessage (MoveDown      1))
+--        , ((modMask  .|. controlMask              , xK_Up   ), sendMessage (MoveUp        1))
         , ((modMask                  .|. shiftMask, xK_Left ), sendMessage (IncreaseLeft  1))
         , ((modMask                  .|. shiftMask, xK_Right), sendMessage (IncreaseRight 1))
         , ((modMask                  .|. shiftMask, xK_Down ), sendMessage (IncreaseDown  1))
@@ -137,6 +139,8 @@
         , ((modMask                         , xK_Delete         ), spawn "synclient TouchpadOff=1")
         , ((modMask                         , xK_Insert         ), spawn "synclient TouchpadOff=0")
         --, ((modMask                         , xK_Insert         ), spawn "xinput set-prop 12 \"Device Enabled\" 1")
+        , ((modMask                         , xK_Pause         ), spawn "xrandr --output VGA1 --auto --left-of LVDS1")
+        , ((modMask                         , xK_Scroll_Lock         ), spawn "xrandr --output VGA1 --off")
         --screenoff
         , ((modMask                         , xK_Escape         ), spawn "sleep 1 && xset dpms force off")
         --fan controlg
